@@ -5,6 +5,10 @@ VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrintingHouse", "PrintingHouse\PrintingHouse.csproj", "{E0324D6E-754A-4A98-9551-FB36E8417F05}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrintingHouse.Infrastructure", "PrintingHouse.Infrastructure\PrintingHouse.Infrastructure.csproj", "{3A8EA6CE-7F53-43E3-BE71-74887A76046A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrintingHouse.Core", "PrintingHouse.Core\PrintingHouse.Core.csproj", "{0DA9A620-E3C6-4BF6-802C-5CBD1F3F82DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{E0324D6E-754A-4A98-9551-FB36E8417F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0324D6E-754A-4A98-9551-FB36E8417F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0324D6E-754A-4A98-9551-FB36E8417F05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A8EA6CE-7F53-43E3-BE71-74887A76046A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A8EA6CE-7F53-43E3-BE71-74887A76046A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A8EA6CE-7F53-43E3-BE71-74887A76046A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A8EA6CE-7F53-43E3-BE71-74887A76046A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DA9A620-E3C6-4BF6-802C-5CBD1F3F82DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DA9A620-E3C6-4BF6-802C-5CBD1F3F82DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DA9A620-E3C6-4BF6-802C-5CBD1F3F82DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DA9A620-E3C6-4BF6-802C-5CBD1F3F82DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
