@@ -39,7 +39,7 @@ namespace PrintingHouse.Infrastructure.Data.Entities
         public string MerchantId { get; set; } = null!;
 
         [ForeignKey(nameof(MerchantId))]
-        public IdentityUser Merchant { get; set; } = null!;
+        public Employee Merchant { get; set; } = null!;
 
         [Required]
         public ICollection<Article> Articles { get; set; }

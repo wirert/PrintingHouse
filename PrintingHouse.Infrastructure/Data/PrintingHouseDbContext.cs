@@ -5,7 +5,10 @@ using PrintingHouse.Infrastructure.Data.Entities;
 
 namespace PrintingHouse.Infrastructure.Data
 {
-    public class PrintingHouseDbContext : IdentityDbContext
+    /// <summary>
+    /// Application database context
+    /// </summary>
+    public class PrintingHouseDbContext : IdentityDbContext<Employee>
     {
         public PrintingHouseDbContext(DbContextOptions<PrintingHouseDbContext> options)
             : base(options)
