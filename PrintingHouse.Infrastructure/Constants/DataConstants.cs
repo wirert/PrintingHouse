@@ -92,6 +92,19 @@
             /// Last name minimum lenght
             /// </summary>
             public const int MinLastNameLenght = 2;
+
+            /// <summary>
+            /// Username maximum lenght
+            /// </summary>
+            public const int MaxUserNameLenght = 15;
+            /// <summary>
+            /// Username minimum lenght
+            /// </summary>
+            public const int MinUserNameLenght = 5;
+
+            public const string UserNameErrorMessage = "Username must be between {2} and {1} symbols!";
+            public const string FirstNameErrorMessage = "First name must be between {2} and {1} symbols!";
+            public const string LastNameErrorMessage = "Last name must be between {2} and {1} symbols!";
         }
     }
 }

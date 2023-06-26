@@ -13,12 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\" />
-    <Folder Include="Models\" />
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="PrintingHouseCoreDocumentation">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
