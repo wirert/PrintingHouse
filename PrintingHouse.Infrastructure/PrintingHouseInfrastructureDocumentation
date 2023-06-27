@@ -99,6 +99,16 @@
             Last name minimum lenght
             </summary>
         </member>
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Employee.MaxUserNameLenght">
+            <summary>
+            Username maximum lenght
+            </summary>
+        </member>
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Employee.MinUserNameLenght">
+            <summary>
+            Username minimum lenght
+            </summary>
+        </member>
         <member name="T:PrintingHouse.Infrastructure.Data.Common.IRepository">
             <summary>
             Abstraction of repository access methods

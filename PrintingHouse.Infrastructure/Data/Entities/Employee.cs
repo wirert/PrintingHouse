@@ -11,7 +11,7 @@ namespace PrintingHouse.Infrastructure.Data.Entities
     /// Extention of identity user
     /// </summary>
     [Comment("Extention of identity user")]
-    public class Employee : IdentityUser
+    public class Employee : IdentityUser<Guid>
     {
         [Comment("Employee first name")]
         [Required]

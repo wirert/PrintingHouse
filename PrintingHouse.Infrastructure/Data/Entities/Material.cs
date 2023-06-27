@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 using PrintingHouse.Infrastructure.Data.Entities.Enums;
@@ -9,6 +9,12 @@ namespace PrintingHouse.Infrastructure.Data.Entities
     [Comment("Мaterial on which it is printed")]
     public class Material
     {
+        public Material()
+        {
+            Machines = new HashSet<Machine>();
+            Articles = new HashSet<Article>();
+        }
+
         [Comment("Primary key")]
         [Key]
         public int Id { get; set; }
@@ -31,10 +37,17 @@ namespace PrintingHouse.Infrastructure.Data.Entities
 
         [Comment("Material price")]
         [Required]
+        [Column(TypeName = "money")]
         public decimal Price { get; set; }
 
         [Comment("Material current quantit in stock")]
         [Required]
         public int InStock { get; set; }
+
+        public ICollection<Machine> Machines { get; set; }
+
+        public ICollection<Article> Articles { get; set; }
+
+        public bool IsActive { get; set; } = true;
     }
 }

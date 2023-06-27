@@ -36,7 +36,7 @@ namespace PrintingHouse.Infrastructure.Data.Entities
 
         [Comment("Client's merchant id")]
         [Required]
-        public string MerchantId { get; set; } = null!;
+        public Guid MerchantId { get; set; }
 
         [ForeignKey(nameof(MerchantId))]
         public Employee Merchant { get; set; } = null!;

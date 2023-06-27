@@ -4,5 +4,70 @@
         <name>PrintingHouse.Core</name>
     </assembly>
     <members>
+        <member name="T:PrintingHouse.Core.Models.Account.LoginViewModel">
+            <summary>
+            Login view model
+            </summary>
+        </member>
+        <member name="P:PrintingHouse.Core.Models.Account.LoginViewModel.UserName">
+            <summary>
+            Employee login username 
+            </summary>
+        </member>
+        <member name="P:PrintingHouse.Core.Models.Account.LoginViewModel.Password">
+            <summary>
+            Employee login password
+            </summary>
+        </member>
+        <member name="P:PrintingHouse.Core.Models.Account.LoginViewModel.ReturnUrl">
+            <summary>
+            Return URL, when there is redirection to login page from another page which requre login
+            </summary>
+        </member>
+        <member name="P:PrintingHouse.Core.Models.Account.LoginViewModel.IsPersistent">
+            <summary>
+            Check box value on page
+            </summary>
+        </member>
+        <member name="T:PrintingHouse.Core.Models.Account.RegisterViewModel">
+            <summary>
+            Register new employee view model
+            </summary>
+        </member>
+        <member name="P:PrintingHouse.Core.Models.Account.RegisterViewModel.UserName">
+            <summary>
+            Employee Username for login
+            </summary>
+        </member>
+        <member name="P:PrintingHouse.Core.Models.Account.RegisterViewModel.Email">
+            <summary>
+            Employee Email
+            </summary>
+        </member>
+        <member name="P:PrintingHouse.Core.Models.Account.RegisterViewModel.Password">
+            <summary>
+            Employee password
+            </summary>
+        </member>
+        <member name="P:PrintingHouse.Core.Models.Account.RegisterViewModel.PasswordRepeat">
+            <summary>
+            Employee confurm password
+            </summary>
+        </member>
+        <member name="P:PrintingHouse.Core.Models.Account.RegisterViewModel.FirstName">
+            <summary>
+            Employee first name
+            </summary>
+        </member>
+        <member name="P:PrintingHouse.Core.Models.Account.RegisterViewModel.LastName">
+            <summary>
+            Employee last name
+            </summary>
+        </member>
+        <member name="P:PrintingHouse.Core.Models.Account.RegisterViewModel.PhoneNumber">
+            <summary>
+            Employee phone number
+            </summary>
+        </member>
     </members>
 </doc>

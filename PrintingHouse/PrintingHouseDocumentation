@@ -94,5 +94,37 @@
                 directly from your code. This API may change or be removed in future releases.
             </summary>
         </member>
+        <member name="M:PrintingHouse.Controllers.AccountController.Register">
+            <summary>
+            Register action for registration of users
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PrintingHouse.Controllers.AccountController.Register(PrintingHouse.Core.Models.Account.RegisterViewModel)">
+            <summary>
+            Register action for registration of users
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PrintingHouse.Controllers.AccountController.Login(System.String)">
+            <summary>
+            User Logging in
+            </summary>
+            <param name="returnUrl"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PrintingHouse.Controllers.AccountController.Login(PrintingHouse.Core.Models.Account.LoginViewModel)">
+            <summary>
+            User Logging in
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PrintingHouse.Controllers.AccountController.Logout">
+            <summary>
+            User log out action
+            </summary>
+            <returns></returns>
+        </member>
     </members>
 </doc>

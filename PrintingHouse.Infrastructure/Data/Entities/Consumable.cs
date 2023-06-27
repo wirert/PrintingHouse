@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PrintingHouse.Infrastructure.Data.Entities.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PrintingHouse.Infrastructure.Data.Entities
 {
@@ -28,6 +30,7 @@ namespace PrintingHouse.Infrastructure.Data.Entities
 
         [Comment("Consumable price")]
         [Required]
+        [Column(TypeName = "money")]
         public decimal Price { get; set; }
 
         [Required]

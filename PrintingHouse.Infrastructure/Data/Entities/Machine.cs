@@ -11,8 +11,7 @@ namespace PrintingHouse.Infrastructure.Data.Entities
     {
         public Machine()
         {
-            MachinesArticles = new HashSet<MachineArticle>();
-            Status = MachineStatus.Working;
+           Status = MachineStatus.Working;
         }
 
         [Comment("Primary key")]
@@ -30,20 +29,22 @@ namespace PrintingHouse.Infrastructure.Data.Entities
         [Required]
         public DateTime PrintTime { get; set; }
 
-        [Comment("Machine working color model")]
+        [Comment("Machine working color model id")]
         [Required]
-        public ColorModel ColorModel { get; set; }
+        public int ColorModelId { get; set; }
+
+        [ForeignKey(nameof(ColorModelId))]
+        [Required]
+        public ColorModel ColorModel { get; set; } = null!;
 
         [Comment("Machine printing material id.")]
         [Required]
         public int MaterialId { get; set; }
 
         [ForeignKey(nameof(MaterialId))]
-        public Material Material { get; set; } = null!;
+        public Material Material { get; set; } = null!;        
 
-        public ICollection<MachineArticle> MachinesArticles { get; set; }
-
-        [Comment("Current status of the machine")]
+        [Comment("Current status of the machine (has default value)")]
         [Required]
         public MachineStatus Status { get; set; }
 

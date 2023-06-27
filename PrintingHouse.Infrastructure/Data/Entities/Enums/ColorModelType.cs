@@ -1,6 +1,6 @@
 ﻿namespace PrintingHouse.Infrastructure.Data.Entities.Enums
 {
-    public enum ColorModel
+    public enum ColorModelType
     {
         RGB,
         CMYK

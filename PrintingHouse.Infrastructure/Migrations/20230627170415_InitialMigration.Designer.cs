@@ -12,22 +12,23 @@ using PrintingHouse.Infrastructure.Data;
 namespace PrintingHouse.Infrastructure.Migrations
 {
     [DbContext(typeof(PrintingHouseDbContext))]
-    [Migration("20230624134919_AddedTables")]
-    partial class AddedTables
+    [Migration("20230627170415_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.16")
+                .HasAnnotation("ProductVersion", "6.0.18")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -51,7 +52,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -65,9 +66,8 @@ namespace PrintingHouse.Infrastructure.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -76,10 +76,247 @@ namespace PrintingHouse.Infrastructure.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Article", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasComment("Article primary key.");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int")
+                        .HasComment("Article owner id");
+
+                    b.Property<int>("ColorModelId")
+                        .HasColumnType("int")
+                        .HasComment("Article color model id");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit")
+                        .HasComment("Soft delete boolean property");
+
+                    b.Property<int>("MaterialId")
+                        .HasColumnType("int")
+                        .HasComment("Article material");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)")
+                        .HasComment("Article name.");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("ColorModelId");
+
+                    b.HasIndex("MaterialId");
+
+                    b.ToTable("Articles");
+
+                    b.HasComment("Particular client article ready for print.");
+                });
+
+            modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.ArticleConsumable", b =>
+                {
+                    b.Property<int>("ArticleId")
+                        .HasColumnType("int")
+                        .HasComment("Article id");
+
+                    b.Property<int>("ConsumableId")
+                        .HasColumnType("int")
+                        .HasComment("Consumable id");
+
+                    b.Property<double>("ConsumableQuantity")
+                        .HasColumnType("float")
+                        .HasComment("Required consumable quantity for single print of article");
+
+                    b.HasKey("ArticleId", "ConsumableId");
+
+                    b.HasIndex("ConsumableId");
+
+                    b.ToTable("ArticlesConsumables");
+
+                    b.HasComment("Article consumable with quantity (connecting table");
+                });
+
+            modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Client", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasComment("Client primary key");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(70)
+                        .HasColumnType("nvarchar(70)")
+                        .HasComment("Client e-mail");
+
+                    b.Property<Guid>("MerchantId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasComment("Client's merchant id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)")
+                        .HasComment("Client name");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasComment("Client phone number");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MerchantId");
+
+                    b.ToTable("Clients");
+
+                    b.HasComment("Printing house client");
+                });
+
+            modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.ColorModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("Name")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ColorModels");
+                });
+
+            modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Consumable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasComment("Consumable primary key");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("InStock")
+                        .HasColumnType("int")
+                        .HasComment("Consumable current quantit in stock");
+
+                    b.Property<int>("MyProperty")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("money")
+                        .HasComment("Consumable price");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int")
+                        .HasComment("Consumable type (enumeration)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Consumables");
+
+                    b.HasComment("Machine consumable");
+                });
+
+            modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Employee", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -94,6 +331,22 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasComment("Employee first name");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit")
+                        .HasComment("Is active employee");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasComment("Employee last name");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -139,225 +392,8 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserLogins", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Article", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasComment("Article primary key.");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int")
-                        .HasComment("Article owner id");
-
-                    b.Property<int>("ColorModel")
-                        .HasColumnType("int")
-                        .HasComment("Article color model");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit")
-                        .HasComment("Soft delete boolean property");
-
-                    b.Property<int>("Material")
-                        .HasColumnType("int")
-                        .HasComment("Article material");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)")
-                        .HasComment("Article name.");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("Articles");
-
-                    b.HasComment("Particular client article ready for print.");
-                });
-
-            modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.ArticleConsumable", b =>
-                {
-                    b.Property<int>("ArticleId")
-                        .HasColumnType("int")
-                        .HasComment("Article id");
-
-                    b.Property<int>("ConsumableId")
-                        .HasColumnType("int")
-                        .HasComment("Consumable id");
-
-                    b.Property<double>("ConsumableQuantity")
-                        .HasColumnType("float")
-                        .HasComment("Required consumable quantity for single print of article");
-
-                    b.HasKey("ArticleId", "ConsumableId");
-
-                    b.HasIndex("ConsumableId");
-
-                    b.ToTable("ArticlesConsumables");
-
-                    b.HasComment("Article consumable with quantity (connecting table");
-                });
-
-            modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Client", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasComment("Client primary key");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(70)
-                        .HasColumnType("nvarchar(70)")
-                        .HasComment("Client e-mail");
-
-                    b.Property<string>("MerchantId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)")
-                        .HasComment("Client's merchant id");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)")
-                        .HasComment("Client name");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasComment("Client phone number");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MerchantId");
-
-                    b.ToTable("Clients");
-
-                    b.HasComment("Printing house client");
-                });
-
-            modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Consumable", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasComment("Consumable primary key");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("InStock")
-                        .HasColumnType("int")
-                        .HasComment("Consumable current quantit in stock");
-
-                    b.Property<int>("MyProperty")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)")
-                        .HasComment("Consumable price");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int")
-                        .HasComment("Consumable type (enumeration)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Consumables");
-
-                    b.HasComment("Machine consumable");
+                    b.HasComment("Extention of identity user");
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Machine", b =>
@@ -369,9 +405,9 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("ColorModel")
+                    b.Property<int>("ColorModelId")
                         .HasColumnType("int")
-                        .HasComment("Machine working color model");
+                        .HasComment("Machine working color model id");
 
                     b.Property<int>("MaterialId")
                         .HasColumnType("int")
@@ -392,34 +428,17 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int")
-                        .HasComment("Current status of the machine");
+                        .HasComment("Current status of the machine (has default value)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ColorModelId");
 
                     b.HasIndex("MaterialId");
 
                     b.ToTable("Machines");
 
                     b.HasComment("Printing machine");
-                });
-
-            modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.MachineArticle", b =>
-                {
-                    b.Property<int>("MachineId")
-                        .HasColumnType("int")
-                        .HasComment("Machine primary key");
-
-                    b.Property<int>("ArticleId")
-                        .HasColumnType("int")
-                        .HasComment("Article primary key");
-
-                    b.HasKey("MachineId", "ArticleId");
-
-                    b.HasIndex("ArticleId");
-
-                    b.ToTable("MachinesArticles");
-
-                    b.HasComment("Connecting table between machines and articles (many to many)");
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Material", b =>
@@ -435,6 +454,9 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasComment("Material current quantit in stock");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<double>("Lenght")
                         .HasColumnType("float")
                         .HasComment("Material lenght");
@@ -444,7 +466,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .HasComment("Material measure unit (enumeration)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)")
+                        .HasColumnType("money")
                         .HasComment("Material price");
 
                     b.Property<int>("Type")
@@ -505,51 +527,51 @@ namespace PrintingHouse.Infrastructure.Migrations
                     b.HasComment("Order from client for print");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.Employee", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.Employee", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.Employee", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.Employee", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -564,7 +586,23 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.ColorModel", "ColorModel")
+                        .WithMany("Articles")
+                        .HasForeignKey("ColorModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.Material", "Material")
+                        .WithMany("Articles")
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Client");
+
+                    b.Navigation("ColorModel");
+
+                    b.Navigation("Material");
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.ArticleConsumable", b =>
@@ -588,7 +626,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Client", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Merchant")
+                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.Employee", "Merchant")
                         .WithMany()
                         .HasForeignKey("MerchantId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -599,32 +637,21 @@ namespace PrintingHouse.Infrastructure.Migrations
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Machine", b =>
                 {
-                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.Material", "Material")
-                        .WithMany()
-                        .HasForeignKey("MaterialId")
+                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.ColorModel", "ColorModel")
+                        .WithMany("Machines")
+                        .HasForeignKey("ColorModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.Material", "Material")
+                        .WithMany("Machines")
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ColorModel");
 
                     b.Navigation("Material");
-                });
-
-            modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.MachineArticle", b =>
-                {
-                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.Article", "Article")
-                        .WithMany("MachinesArticles")
-                        .HasForeignKey("ArticleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.Machine", "Machine")
-                        .WithMany("MachinesArticles")
-                        .HasForeignKey("MachineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Article");
-
-                    b.Navigation("Machine");
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Order", b =>
@@ -642,8 +669,6 @@ namespace PrintingHouse.Infrastructure.Migrations
                 {
                     b.Navigation("ArticleConsumables");
 
-                    b.Navigation("MachinesArticles");
-
                     b.Navigation("Orders");
                 });
 
@@ -652,14 +677,23 @@ namespace PrintingHouse.Infrastructure.Migrations
                     b.Navigation("Articles");
                 });
 
+            modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.ColorModel", b =>
+                {
+                    b.Navigation("Articles");
+
+                    b.Navigation("Machines");
+                });
+
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Consumable", b =>
                 {
                     b.Navigation("ArticleConsumables");
                 });
 
-            modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Machine", b =>
+            modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Material", b =>
                 {
-                    b.Navigation("MachinesArticles");
+                    b.Navigation("Articles");
+
+                    b.Navigation("Machines");
                 });
 #pragma warning restore 612, 618
         }

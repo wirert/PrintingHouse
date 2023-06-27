@@ -15,7 +15,6 @@ namespace PrintingHouse.Infrastructure.Data.Entities
         {
             ArticleConsumables = new HashSet<ArticleConsumable>();
             Orders = new HashSet<Order>();
-            MachinesArticles = new HashSet<MachineArticle>();
         }
 
         [Comment("Article primary key.")]
@@ -29,11 +28,19 @@ namespace PrintingHouse.Infrastructure.Data.Entities
 
         [Comment("Article material")]
         [Required]
-        public MaterialType Material { get; set; }
+        public int MaterialId { get; set; }
 
-        [Comment("Article color model")]
         [Required]
-        public ColorModel ColorModel { get; set; }
+        [ForeignKey(nameof(MaterialId))]
+        public Material Material { get; set; } = null!;
+
+        [Comment("Article color model id")]
+        [Required]
+        public int ColorModelId { get; set; }
+
+        [ForeignKey(nameof(ColorModelId))]
+        [Required]
+        public ColorModel ColorModel { get; set; } = null!;
 
         [Comment("Article owner id")]
         [Required]
@@ -45,8 +52,6 @@ namespace PrintingHouse.Infrastructure.Data.Entities
         public ICollection<ArticleConsumable> ArticleConsumables { get; set; }
 
         public ICollection<Order> Orders { get; set; }
-
-        public ICollection<MachineArticle> MachinesArticles { get; set; }
 
         [Comment("Soft delete boolean property")]
         [Required]
