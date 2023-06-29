@@ -42,6 +42,11 @@
             /// Client e-mail minimum lenght
             /// </summary>
             public const int MinEmailLenght = 10;
+
+            /// <summary>
+            /// Client phone number maximum lenght
+            /// </summary>
+            public const int MaxPhoneLenght = 20;
         }
 
         /// <summary>
@@ -68,6 +73,52 @@
             /// Machine name minimum lenght
             /// </summary>
             public const int MinNameLenght = 2;
+        }
+
+        /// <summary>
+        /// ColorModel model constants
+        /// </summary>
+        public static class ColorModel
+        {
+            /// <summary>
+            /// ColorModel name maximum lenght
+            /// </summary>
+            public const int MaxNameLenght = 10;
+            /// <summary>
+            /// ColorModel minimum lenght
+            /// </summary>
+            public const int MinNameLenght = 1;
+        }
+
+        /// <summary>
+        /// Consumable model constants
+        /// </summary>
+        public static class Consumable
+        {
+            /// <summary>
+            /// Consumable type name maximum lenght
+            /// </summary>
+            public const int MaxTypeLenght = 10;
+            /// <summary>
+            /// Consumable type minimum lenght
+            /// </summary>
+            public const int MinTypeLenght = 1;
+        }
+
+
+        /// <summary>
+        /// Consumable model constants
+        /// </summary>
+        public static class Material
+        {
+            /// <summary>
+            /// Material type name maximum lenght
+            /// </summary>
+            public const int MaxTypeLenght = 15;
+            /// <summary>
+            /// Material type minimum lenght
+            /// </summary>
+            public const int MinTypeLenght = 2;
         }
 
         /// <summary>

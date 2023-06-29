@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 using Microsoft.EntityFrameworkCore;
 
 using PrintingHouse.Infrastructure.Data.Entities.Enums;
+using static PrintingHouse.Infrastructure.Constants.DataConstants.Material;
 
 namespace PrintingHouse.Infrastructure.Data.Entities
 {
@@ -19,9 +21,10 @@ namespace PrintingHouse.Infrastructure.Data.Entities
         [Key]
         public int Id { get; set; }
 
-        [Comment("Material type (enumeration)")]
+        [Comment("Material type name")]
         [Required]
-        public MaterialType Type { get; set; }
+        [MaxLength(MaxTypeLenght)]
+        public string Type { get; set; } = null!;
 
         [Comment("Material width")]
         [Required]
@@ -48,6 +51,8 @@ namespace PrintingHouse.Infrastructure.Data.Entities
 
         public ICollection<Article> Articles { get; set; }
 
+        [Comment("Soft delete property")]
+        [Required]
         public bool IsActive { get; set; } = true;
     }
 }

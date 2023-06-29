@@ -32,11 +32,13 @@ namespace PrintingHouse.Infrastructure.Data
             builder.Entity<Machine>()
                 .HasOne(m => m.Material)
                 .WithMany(mt => mt.Machines)
+                .HasForeignKey(m => m.MaterialId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Article>()
                 .HasOne(a => a.Material)
                 .WithMany(m => m.Articles)
+                .HasForeignKey(a => a.MaterialId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);

@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using PrintingHouse.Infrastructure.Data.Entities.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+
+using static PrintingHouse.Infrastructure.Constants.DataConstants.Consumable;
 
 namespace PrintingHouse.Infrastructure.Data.Entities
 {
@@ -18,11 +20,10 @@ namespace PrintingHouse.Infrastructure.Data.Entities
         [Key]
         public int Id { get; set; }
 
-        [Comment("Consumable type (enumeration)")]
-        [Required] 
-        public ConsumableType Type { get; set; }
-
-        public int MyProperty { get; set; }
+        [Comment("Consumable type name")]
+        [Required]
+        [MaxLength(MaxTypeLenght)]
+        public string Type { get; set; } = null!;
 
         [Comment("Consumable current quantit in stock")]
         [Required]
@@ -33,7 +34,6 @@ namespace PrintingHouse.Infrastructure.Data.Entities
         [Column(TypeName = "money")]
         public decimal Price { get; set; }
 
-        [Required]
         public ICollection<ArticleConsumable> ArticleConsumables { get; set; }
 
     }

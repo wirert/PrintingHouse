@@ -1,13 +1,12 @@
-﻿using PrintingHouse.Infrastructure.Data.Entities.Enums;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+
+using Microsoft.EntityFrameworkCore;
+
+using static PrintingHouse.Infrastructure.Constants.DataConstants.ColorModel;
 
 namespace PrintingHouse.Infrastructure.Data.Entities
 {
+    [Comment("Color model")]
     public class ColorModel
     {
         public ColorModel()
@@ -16,11 +15,14 @@ namespace PrintingHouse.Infrastructure.Data.Entities
             Articles = new HashSet<Article>();
         }
 
+        [Comment("Primary key")]
         [Key] 
         public int Id { get; set; }
 
+        [Comment("Color model name")]
         [Required]
-        public ColorModelType Name { get; set; }
+        [MaxLength(MaxNameLenght)]
+        public string Name { get; set; } = null!;
 
         public ICollection<Machine> Machines { get; set; }
 

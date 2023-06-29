@@ -26,6 +26,10 @@ namespace PrintingHouse.Infrastructure.Data.Entities
         [MaxLength(MaxNameLenght)]
         public string Name { get; set; } = null!;
 
+        [Comment("Url to design image")]
+        [Required]
+        public string DesignUrl { get; set; } = null!;
+
         [Comment("Article material")]
         [Required]
         public int MaterialId { get; set; }
@@ -54,7 +58,6 @@ namespace PrintingHouse.Infrastructure.Data.Entities
         public ICollection<Order> Orders { get; set; }
 
         [Comment("Soft delete boolean property")]
-        [Required]
         public bool IsDeleted { get; set; } = false;
     }
 }

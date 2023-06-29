@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-
+using PrintingHouse.Core.Contracts;
+using PrintingHouse.Core.Services;
 using PrintingHouse.Infrastructure.Data;
+using PrintingHouse.Infrastructure.Data.Common;
 using PrintingHouse.Infrastructure.Data.Entities;
-using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddDefaultIdentity<Employee>(options =>
     options.Password.RequireUppercase = builder.Configuration.GetValue<bool>("Identity:RequireUppercase");
 })
     .AddEntityFrameworkStores<PrintingHouseDbContext>();
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddApplicationServices();

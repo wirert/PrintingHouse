@@ -3,7 +3,7 @@
     /// <summary>
     /// Order Status enumeration
     /// </summary>
-    public enum Status
+    public enum OrderStatus
     {
         Waiting,
         InProgress,

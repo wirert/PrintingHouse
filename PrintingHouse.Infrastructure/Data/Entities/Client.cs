@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using static PrintingHouse.Infrastructure.Constants.DataConstants.Client;
@@ -32,6 +31,7 @@ namespace PrintingHouse.Infrastructure.Data.Entities
 
         [Comment("Client phone number")]
         [Required]
+        [MaxLength(MaxPhoneLenght)]
         public string PhoneNumber { get; set; } = null!;
 
         [Comment("Client's merchant id")]
@@ -41,7 +41,9 @@ namespace PrintingHouse.Infrastructure.Data.Entities
         [ForeignKey(nameof(MerchantId))]
         public Employee Merchant { get; set; } = null!;
 
-        [Required]
         public ICollection<Article> Articles { get; set; }
+
+        [Comment("Soft delete propery")]
+        public bool IsDeleted { get; set; } = false;
     }
 }

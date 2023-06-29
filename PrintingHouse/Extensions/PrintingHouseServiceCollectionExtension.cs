@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using PrintingHouse.Core.Contracts;
+﻿using PrintingHouse.Core.Contracts;
 using PrintingHouse.Core.Services;
 using PrintingHouse.Infrastructure.Data.Common;
-using PrintingHouse.Infrastructure.Data.Entities;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

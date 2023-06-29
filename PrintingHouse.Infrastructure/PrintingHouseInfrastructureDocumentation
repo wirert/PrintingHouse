@@ -49,6 +49,11 @@
             Client e-mail minimum lenght
             </summary>
         </member>
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Client.MaxPhoneLenght">
+            <summary>
+            Client phone number maximum lenght
+            </summary>
+        </member>
         <member name="T:PrintingHouse.Infrastructure.Constants.DataConstants.Order">
             <summary>
             Order model constants
@@ -72,6 +77,51 @@
         <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Machine.MinNameLenght">
             <summary>
             Machine name minimum lenght
+            </summary>
+        </member>
+        <member name="T:PrintingHouse.Infrastructure.Constants.DataConstants.ColorModel">
+            <summary>
+            ColorModel model constants
+            </summary>
+        </member>
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ColorModel.MaxNameLenght">
+            <summary>
+            ColorModel name maximum lenght
+            </summary>
+        </member>
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ColorModel.MinNameLenght">
+            <summary>
+            ColorModel minimum lenght
+            </summary>
+        </member>
+        <member name="T:PrintingHouse.Infrastructure.Constants.DataConstants.Consumable">
+            <summary>
+            Consumable model constants
+            </summary>
+        </member>
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Consumable.MaxTypeLenght">
+            <summary>
+            Consumable type name maximum lenght
+            </summary>
+        </member>
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Consumable.MinTypeLenght">
+            <summary>
+            Consumable type minimum lenght
+            </summary>
+        </member>
+        <member name="T:PrintingHouse.Infrastructure.Constants.DataConstants.Material">
+            <summary>
+            Consumable model constants
+            </summary>
+        </member>
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Material.MaxTypeLenght">
+            <summary>
+            Material type name maximum lenght
+            </summary>
+        </member>
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Material.MinTypeLenght">
+            <summary>
+            Material type minimum lenght
             </summary>
         </member>
         <member name="T:PrintingHouse.Infrastructure.Constants.DataConstants.Employee">
@@ -305,19 +355,9 @@
             Extention of identity user
             </summary>
         </member>
-        <member name="T:PrintingHouse.Infrastructure.Data.Entities.Enums.ConsumableType">
-            <summary>
-            Enumeration of consumables
-            </summary>
-        </member>
         <member name="T:PrintingHouse.Infrastructure.Data.Entities.Enums.MachineStatus">
             <summary>
             Machine status enumeration 
-            </summary>
-        </member>
-        <member name="T:PrintingHouse.Infrastructure.Data.Entities.Enums.MaterialType">
-            <summary>
-            Type of printing material enumeration.
             </summary>
         </member>
         <member name="T:PrintingHouse.Infrastructure.Data.Entities.Enums.MeasureUnit">
@@ -325,7 +365,7 @@
             Enumeration of printing materials measure units
             </summary>
         </member>
-        <member name="T:PrintingHouse.Infrastructure.Data.Entities.Enums.Status">
+        <member name="T:PrintingHouse.Infrastructure.Data.Entities.Enums.OrderStatus">
             <summary>
             Order Status enumeration
             </summary>

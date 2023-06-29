@@ -23,8 +23,7 @@ namespace PrintingHouse.Infrastructure.Data.Entities
         [MaxLength(MaxLastNameLenght)]
         public string LastName { get; set; } = null!;
 
-        [Comment("Is active employee")]
-        [Required]
+        [Comment("Is active employee (soft delete property)")]        
         public bool IsActive { get; set; } = true;
     }
 }

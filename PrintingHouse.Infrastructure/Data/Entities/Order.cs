@@ -35,7 +35,7 @@ namespace PrintingHouse.Infrastructure.Data.Entities
 
         [Comment("Order current status")]
         [Required]
-        public Status Status { get; set; }
+        public OrderStatus Status { get; set; }
 
         [Comment("Additional information about the order.")]
         [MaxLength(MaxCommentLenght)]
