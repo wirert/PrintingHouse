@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using PrintingHouse.Core.Contracts;
-using PrintingHouse.Core.Services;
+using Minio;
+
 using PrintingHouse.Infrastructure.Data;
-using PrintingHouse.Infrastructure.Data.Common;
 using PrintingHouse.Infrastructure.Data.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,8 +25,17 @@ builder.Services.AddDefaultIdentity<Employee>(options =>
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddApplicationServices();
+builder.Services.AddMinIo(options =>
+    options.WithEndpoint(builder.Configuration.GetValue<string>("MinIo:Endpoint"))
+            .WithCredentials(
+                builder.Configuration.GetValue<string>("MinIo:AccessKey"),
+                builder.Configuration.GetValue<string>("MinIo:SecretKey"))
+            .Build());
 
-builder.Services.ConfigureApplicationCookie(cfg => cfg.LoginPath = "/Account/Login");
+builder.Services.ConfigureApplicationCookie(cfg =>
+{
+    cfg.LoginPath = "/Account/Login";
+});
 
 var app = builder.Build();
 

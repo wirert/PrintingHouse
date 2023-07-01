@@ -1,12 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-
-using static PrintingHouse.Infrastructure.Constants.DataConstants.Employee;
-
-namespace PrintingHouse.Infrastructure.Data.Entities
+﻿namespace PrintingHouse.Infrastructure.Data.Entities
 {
+    using System.ComponentModel.DataAnnotations;
+
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+
+    using static Constants.DataConstants.Employee;
+
     /// <summary>
     /// Extention of identity user
     /// </summary>
@@ -14,14 +14,12 @@ namespace PrintingHouse.Infrastructure.Data.Entities
     public class Employee : IdentityUser<Guid>
     {
         [Comment("Employee first name")]
-        [Required]
         [MaxLength(MaxFirstNameLenght)]
-        public string FirstName { get; set; } = null!;
+        public string? FirstName { get; set; }
 
         [Comment("Employee last name")]
-        [Required]
         [MaxLength(MaxLastNameLenght)]
-        public string LastName { get; set; } = null!;
+        public string? LastName { get; set; }
 
         [Comment("Is active employee (soft delete property)")]        
         public bool IsActive { get; set; } = true;

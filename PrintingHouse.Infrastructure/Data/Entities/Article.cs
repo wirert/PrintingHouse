@@ -1,34 +1,35 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-using Microsoft.EntityFrameworkCore;
-
-using PrintingHouse.Infrastructure.Data.Entities.Enums;
-using static PrintingHouse.Infrastructure.Constants.DataConstants.Article;
-
-namespace PrintingHouse.Infrastructure.Data.Entities
+﻿namespace PrintingHouse.Infrastructure.Data.Entities
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
+    using Microsoft.EntityFrameworkCore;
+
+    using static Constants.DataConstants.Article;
+
     [Comment("Particular client article ready for print.")]
     public class Article
     {
         public Article()
         {
+            Id = Guid.NewGuid();
             ArticleConsumables = new HashSet<ArticleConsumable>();
             Orders = new HashSet<Order>();
         }
 
         [Comment("Article primary key.")]
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Comment("Article name.")]
         [Required]
         [MaxLength(MaxNameLenght)]
         public string Name { get; set; } = null!;
 
-        [Comment("Url to design image")]
+        [Comment("Name of design image")]
         [Required]
-        public string DesignUrl { get; set; } = null!;
+        [MaxLength(MaxImageNameLenght)]
+        public string ImageName { get; set; } = null!;
 
         [Comment("Article material")]
         [Required]

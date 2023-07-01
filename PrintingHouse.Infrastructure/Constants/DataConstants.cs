@@ -18,6 +18,14 @@
             /// Article name minimum lenght
             /// </summary>
             public const int MinNameLenght = 5;
+            /// <summary>
+            /// Article design image name maximum lenght
+            /// </summary>
+            public const int MaxImageNameLenght = 60;
+            /// <summary>
+            /// Article design image name minimum lenght
+            /// </summary>
+            public const int MinImageNameLenght = 1;
         }
 
         /// <summary>
