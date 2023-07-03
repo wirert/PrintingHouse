@@ -2,6 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using PrintingHouse.Infrastructure.Data.Common.Contracts;
 
 namespace PrintingHouse.Infrastructure.Data.Common
 {

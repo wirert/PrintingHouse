@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Minio;
 
@@ -20,17 +21,13 @@ builder.Services.AddDefaultIdentity<Employee>(options =>
     options.Password.RequireLowercase = builder.Configuration.GetValue<bool>("Identity:RequireLowercase");
     options.Password.RequireUppercase = builder.Configuration.GetValue<bool>("Identity:RequireUppercase");
 })
+    .AddRoles<IdentityRole<Guid>>()
     .AddEntityFrameworkStores<PrintingHouseDbContext>();
 
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddApplicationServices();
-builder.Services.AddMinIo(options =>
-    options.WithEndpoint(builder.Configuration.GetValue<string>("MinIo:Endpoint"))
-            .WithCredentials(
-                builder.Configuration.GetValue<string>("MinIo:AccessKey"),
-                builder.Configuration.GetValue<string>("MinIo:SecretKey"))
-            .Build());
+builder.Services.AddMinIo(builder.Configuration);
 
 builder.Services.ConfigureApplicationCookie(cfg =>
 {

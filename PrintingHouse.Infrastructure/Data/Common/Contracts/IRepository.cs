@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace PrintingHouse.Infrastructure.Data.Common
+namespace PrintingHouse.Infrastructure.Data.Common.Contracts
 {
     /// <summary>
     /// Abstraction of repository access methods

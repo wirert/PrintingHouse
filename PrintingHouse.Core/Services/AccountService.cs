@@ -1,6 +1,6 @@
 ﻿using PrintingHouse.Core.Contracts;
 using PrintingHouse.Core.Models.Account;
-using PrintingHouse.Infrastructure.Data.Common;
+using PrintingHouse.Infrastructure.Data.Common.Contracts;
 
 namespace PrintingHouse.Core.Services
 {

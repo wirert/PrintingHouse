@@ -3,61 +3,42 @@
     using System;
     using System.Threading.Tasks;
 
-    using Minio;
-
     using Contracts;
+    using Infrastructure.Data.Common.Contracts;
 
     public class FileService : IFileService
     {
-        private readonly IMinioClient minio;
+        private readonly IMinIoRepository repo;
 
-        public FileService(IMinioClient _minio)
+        public FileService(IMinIoRepository _repo)
         {
-            minio = _minio;
+            repo = _repo;
         }
 
         public async Task<MemoryStream> GetFileAsync(Guid BucketName, string fileName)
         {
-            var bucketExistArgs = new BucketExistsArgs().WithBucket(BucketName.ToString());
-            if (await minio.BucketExistsAsync(bucketExistArgs) == false)
+            try
             {
-                throw new ArgumentException("There is no such file in store or id is incorrect");
+               var result = await repo.GetFileAsync(BucketName, fileName);
+
+               return result;
             }
-
-            using var result = new MemoryStream();
-
-            var args = new GetObjectArgs()
-                .WithBucket(BucketName.ToString())
-                .WithObject(fileName)
-                .WithCallbackStream(async stream =>
-                {
-                   await stream.CopyToAsync(result);
-                });
-
-            return result;
+            catch (Exception e)
+            {
+                throw new ApplicationException("Can't get the file from Database", e);
+            }
         }
 
         public async Task SaveFileAsync(Guid BucketName, string fileName, byte[] content)
         {
-
-            var bucketExistArgs = new BucketExistsArgs().WithBucket(BucketName.ToString());
-            if (await minio.BucketExistsAsync(bucketExistArgs) == false)
+            try
             {
-                var makeBucketArgs = new MakeBucketArgs()
-                    .WithBucket(BucketName.ToString());
-
-                await minio.MakeBucketAsync(makeBucketArgs);
+                await repo.AddFileAsync(BucketName, fileName, content);
             }
-
-            var putObjectArgs = new PutObjectArgs()
-                .WithBucket(BucketName.ToString())
-                .WithObject(fileName)
-                .WithContentType("application/octet-stream")
-                .WithStreamData(new MemoryStream(content));
-
-            await minio.PutObjectAsync(putObjectArgs);
-
-
+            catch (Exception e)
+            {
+                throw new ApplicationException("Database failed to save file", e);
+            }
         }
     }
 }
