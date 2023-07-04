@@ -37,7 +37,11 @@
 
         [Required]
         [ForeignKey(nameof(MaterialId))]
-        public Material Material { get; set; } = null!;
+        public virtual Material Material { get; set; } = null!;
+
+        [Comment("Required material lenght")]
+        [Required]
+        public double RequiredMaterial { get; set; }
 
         [Comment("Article color model id")]
         [Required]
@@ -45,18 +49,18 @@
 
         [ForeignKey(nameof(ColorModelId))]
         [Required]
-        public ColorModel ColorModel { get; set; } = null!;
+        public virtual ColorModel ColorModel { get; set; } = null!;
 
         [Comment("Article owner id")]
         [Required]
         public int ClientId { get; set; }
 
         [ForeignKey(nameof(ClientId))]
-        public Client Client { get; set; } = null!;        
+        public virtual Client Client { get; set; } = null!;
 
-        public ICollection<ArticleConsumable> ArticleConsumables { get; set; }
+        public virtual ICollection<ArticleConsumable> ArticleConsumables { get; set; }
 
-        public ICollection<Order> Orders { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
 
         [Comment("Soft delete boolean property")]
         public bool IsDeleted { get; set; } = false;

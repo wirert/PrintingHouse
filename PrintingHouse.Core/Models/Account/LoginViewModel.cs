@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using static PrintingHouse.Infrastructure.Constants.DataConstants.Employee;
-
-namespace PrintingHouse.Core.Models.Account
+﻿namespace PrintingHouse.Core.Models.Account
 {
+    using System.ComponentModel.DataAnnotations;
+
+    using static Constants.ModelMessageConstants.ApplicationUser;
+    using static Infrastructure.Constants.DataConstants.ApplicationUser;
+
     /// <summary>
     /// Login view model
     /// </summary>

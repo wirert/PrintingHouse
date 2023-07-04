@@ -1,7 +1,7 @@
-﻿using System.Linq.Expressions;
-
-namespace PrintingHouse.Infrastructure.Data.Common.Contracts
+﻿namespace PrintingHouse.Infrastructure.Data.Common.Contracts
 {
+    using System.Linq.Expressions;
+
     /// <summary>
     /// Abstraction of repository access methods
     /// </summary>

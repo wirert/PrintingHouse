@@ -1,11 +1,12 @@
-﻿using System.Linq.Expressions;
-
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using PrintingHouse.Infrastructure.Data.Common.Contracts;
-
-namespace PrintingHouse.Infrastructure.Data.Common
+﻿namespace PrintingHouse.Infrastructure.Data.Common
 {
+    using System.Linq.Expressions;
+
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.ChangeTracking;
+
+    using Contracts;
+
     /// <summary>
     /// Implementation of repository access methods
     /// for Relational Database Engine

@@ -4,6 +4,16 @@
         <name>PrintingHouse.Core</name>
     </assembly>
     <members>
+        <member name="T:PrintingHouse.Core.Constants.ModelMessageConstants">
+            <summary>
+            Error message constants for model validation
+            </summary>
+        </member>
+        <member name="T:PrintingHouse.Core.Constants.ModelMessageConstants.ApplicationUser">
+            <summary>
+            Application user error messages
+            </summary>
+        </member>
         <member name="T:PrintingHouse.Core.Models.Account.LoginViewModel">
             <summary>
             Login view model

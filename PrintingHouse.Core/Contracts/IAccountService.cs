@@ -5,5 +5,6 @@ namespace PrintingHouse.Core.Contracts
     public interface IAccountService
     {
         Task RegisterEmployee(RegisterViewModel model);
+        
     }
 }

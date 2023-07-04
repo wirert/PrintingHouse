@@ -1,13 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-using Microsoft.EntityFrameworkCore;
-
-using PrintingHouse.Infrastructure.Data.Entities.Enums;
-using static PrintingHouse.Infrastructure.Constants.DataConstants.Material;
-
-namespace PrintingHouse.Infrastructure.Data.Entities
+﻿namespace PrintingHouse.Infrastructure.Data.Entities
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
+    using Microsoft.EntityFrameworkCore;
+
+    using Entities.Enums;
+    using static Constants.DataConstants.Material;
+
     [Comment("Мaterial on which it is printed")]
     public class Material
     {
@@ -47,9 +47,9 @@ namespace PrintingHouse.Infrastructure.Data.Entities
         [Required]
         public int InStock { get; set; }
 
-        public ICollection<Machine> Machines { get; set; }
+        public virtual ICollection<Machine> Machines { get; set; }
 
-        public ICollection<Article> Articles { get; set; }
+        public virtual ICollection<Article> Articles { get; set; }
 
         [Comment("Soft delete property")]
         [Required]

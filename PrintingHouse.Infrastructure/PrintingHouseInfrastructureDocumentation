@@ -24,6 +24,16 @@
             Article name minimum lenght
             </summary>
         </member>
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Article.MaxImageNameLenght">
+            <summary>
+            Article design image name maximum lenght
+            </summary>
+        </member>
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Article.MinImageNameLenght">
+            <summary>
+            Article design image name minimum lenght
+            </summary>
+        </member>
         <member name="T:PrintingHouse.Infrastructure.Constants.DataConstants.Client">
             <summary>
             Client model constants
@@ -124,124 +134,193 @@
             Material type minimum lenght
             </summary>
         </member>
-        <member name="T:PrintingHouse.Infrastructure.Constants.DataConstants.Employee">
+        <member name="T:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser">
             <summary>
-            Employee model constants
+            Application user model constants
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Employee.MaxFirstNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MaxFirstNameLenght">
             <summary>
             First name maximum lenght
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Employee.MinFirstNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MinFirstNameLenght">
             <summary>
             First name minimum lenght
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Employee.MaxLastNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MaxLastNameLenght">
             <summary>
             Last name maximum lenght
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Employee.MinLastNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MinLastNameLenght">
             <summary>
             Last name minimum lenght
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Employee.MaxUserNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MaxUserNameLenght">
             <summary>
             Username maximum lenght
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Employee.MinUserNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MinUserNameLenght">
             <summary>
             Username minimum lenght
             </summary>
         </member>
-        <member name="T:PrintingHouse.Infrastructure.Data.Common.IRepository">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MaxImageNameLenght">
+            <summary>
+            Article design image name maximum lenght
+            </summary>
+        </member>
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MinImageNameLenght">
+            <summary>
+            Article design image name minimum lenght
+            </summary>
+        </member>
+        <member name="T:PrintingHouse.Infrastructure.Constants.DataConstants.Position">
+            <summary>
+            Office position model constants
+            </summary>
+        </member>
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Position.MaxPositionLenght">
+            <summary>
+            Office position maximum lenght
+            </summary>
+        </member>
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Position.MinPositionLenght">
+            <summary>
+            Office position minimum lenght
+            </summary>
+        </member>
+        <member name="T:PrintingHouse.Infrastructure.Data.Common.Contracts.IMinIoRepository">
             <summary>
             Abstraction of repository access methods
             </summary>
         </member>
-        <member name="M:PrintingHouse.Infrastructure.Data.Common.IRepository.All``1">
+        <member name="M:PrintingHouse.Infrastructure.Data.Common.Contracts.IMinIoRepository.AddFileAsync(System.Guid,System.String,System.Byte[])">
+            <summary>
+            Adds object to the MinIO database
+            </summary>
+            <param name="BucketName">MinIO bucket name (guid)</param>
+            <param name="fileName">The name of the object</param>
+            <param name="content">Content to add (Byte array)</param>
+        </member>
+        <member name="M:PrintingHouse.Infrastructure.Data.Common.Contracts.IMinIoRepository.GetFileAsync(System.Guid,System.String)">
+            <summary>
+            Get object form database by bucket name and object name
+            </summary>
+            <param name="BucketName">Bucket name (guid)</param>
+            <param name="fileName">Object name</param>
+            <returns>Byte array</returns>
+        </member>
+        <member name="T:PrintingHouse.Infrastructure.Data.Common.Contracts.IRepository">
+            <summary>
+            Abstraction of repository access methods
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Infrastructure.Data.Common.Contracts.IRepository.All``1">
             <summary>
             All records in a table
             </summary>
             <returns>Queryable expression tree</returns>
         </member>
-        <member name="M:PrintingHouse.Infrastructure.Data.Common.IRepository.All``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+        <member name="M:PrintingHouse.Infrastructure.Data.Common.Contracts.IRepository.All``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             All records in a table
             </summary>
             <returns>Queryable expression tree</returns>
         </member>
-        <member name="M:PrintingHouse.Infrastructure.Data.Common.IRepository.AllReadonly``1">
+        <member name="M:PrintingHouse.Infrastructure.Data.Common.Contracts.IRepository.AllReadonly``1">
             <summary>
             The result collection won't be tracked by the context
             </summary>
             <returns>Expression tree</returns>
         </member>
-        <member name="M:PrintingHouse.Infrastructure.Data.Common.IRepository.AllReadonly``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+        <member name="M:PrintingHouse.Infrastructure.Data.Common.Contracts.IRepository.AllReadonly``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             The result collection won't be tracked by the context
             </summary>
             <returns>Expression tree</returns>
         </member>
-        <member name="M:PrintingHouse.Infrastructure.Data.Common.IRepository.GetByIdAsync``1(System.Object)">
+        <member name="M:PrintingHouse.Infrastructure.Data.Common.Contracts.IRepository.GetByIdAsync``1(System.Object)">
             <summary>
             Gets specific record from database by primary key
             </summary>
             <param name="id">record identificator</param>
             <returns>Single record</returns>
         </member>
-        <member name="M:PrintingHouse.Infrastructure.Data.Common.IRepository.AddAsync``1(``0)">
+        <member name="M:PrintingHouse.Infrastructure.Data.Common.Contracts.IRepository.AddAsync``1(``0)">
             <summary>
             Adds entity to the database
             </summary>
             <param name="entity">Entity to add</param>
         </member>
-        <member name="M:PrintingHouse.Infrastructure.Data.Common.IRepository.AddRangeAsync``1(System.Collections.Generic.IEnumerable{``0})">
+        <member name="M:PrintingHouse.Infrastructure.Data.Common.Contracts.IRepository.AddRangeAsync``1(System.Collections.Generic.IEnumerable{``0})">
             <summary>
             Ads collection of entities to the database
             </summary>
             <param name="entities">Enumerable list of entities</param>
         </member>
-        <member name="M:PrintingHouse.Infrastructure.Data.Common.IRepository.Update``1(``0)">
+        <member name="M:PrintingHouse.Infrastructure.Data.Common.Contracts.IRepository.Update``1(``0)">
             <summary>
             Updates a record in database
             </summary>
             <param name="entity">Entity for record to be updated</param>
         </member>
-        <member name="M:PrintingHouse.Infrastructure.Data.Common.IRepository.UpdateRange``1(System.Collections.Generic.IEnumerable{``0})">
+        <member name="M:PrintingHouse.Infrastructure.Data.Common.Contracts.IRepository.UpdateRange``1(System.Collections.Generic.IEnumerable{``0})">
             <summary>
             Updates set of records in the database
             </summary>
             <param name="entities">Enumerable collection of entities to be updated</param>
         </member>
-        <member name="M:PrintingHouse.Infrastructure.Data.Common.IRepository.DeleteAsync``1(System.Object)">
+        <member name="M:PrintingHouse.Infrastructure.Data.Common.Contracts.IRepository.DeleteAsync``1(System.Object)">
             <summary>
             Deletes a record from database
             </summary>
             <param name="id">Identificator of record to be deleted</param>
         </member>
-        <member name="M:PrintingHouse.Infrastructure.Data.Common.IRepository.Delete``1(``0)">
+        <member name="M:PrintingHouse.Infrastructure.Data.Common.Contracts.IRepository.Delete``1(``0)">
             <summary>
             Deletes a record from database
             </summary>
             <param name="entity">Entity representing record to be deleted</param>
         </member>
-        <member name="M:PrintingHouse.Infrastructure.Data.Common.IRepository.Detach``1(``0)">
+        <member name="M:PrintingHouse.Infrastructure.Data.Common.Contracts.IRepository.Detach``1(``0)">
             <summary>
             Detaches given entity from the context
             </summary>
             <param name="entity">Entity to be detached</param>
         </member>
-        <member name="M:PrintingHouse.Infrastructure.Data.Common.IRepository.SaveChangesAsync">
+        <member name="M:PrintingHouse.Infrastructure.Data.Common.Contracts.IRepository.SaveChangesAsync">
             <summary>
             Saves all made changes in trasaction
             </summary>
             <returns>Error code</returns>
+        </member>
+        <member name="T:PrintingHouse.Infrastructure.Data.Common.MinIoRepository">
+            <summary>
+            Implementation of repository access methods
+            for MinIO object store database
+            </summary>   
+        </member>
+        <member name="M:PrintingHouse.Infrastructure.Data.Common.MinIoRepository.AddFileAsync(System.Guid,System.String,System.Byte[])">
+            <summary>
+            Adds object to the MinIO database
+            </summary>
+            <param name="BucketName">MinIO bucket name (guid)</param>
+            <param name="fileName">The name of the object</param>
+            <param name="content">Content to add (Byte array)</param>
+            <returns></returns>
+        </member>
+        <member name="M:PrintingHouse.Infrastructure.Data.Common.MinIoRepository.GetFileAsync(System.Guid,System.String)">
+            <summary>
+            Get object form database by bucket name and object name
+            </summary>
+            <param name="BucketName">Bucket name (guid)</param>
+            <param name="fileName">Object name</param>
+            <returns>Byte array</returns>
         </member>
         <member name="T:PrintingHouse.Infrastructure.Data.Common.Repository">
             <summary>
@@ -350,7 +429,7 @@
             <typeparam name="T">Generic parameter of type class</typeparam>
             <param name="deleteWhereClause">Delegate function as lambda expression to filter result</param>
         </member>
-        <member name="T:PrintingHouse.Infrastructure.Data.Entities.Employee">
+        <member name="T:PrintingHouse.Infrastructure.Data.Entities.Account.ApplicationUser">
             <summary>
             Extention of identity user
             </summary>

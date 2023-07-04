@@ -15,6 +15,7 @@ namespace PrintingHouse.Core.Services
 
         public Task RegisterEmployee(RegisterViewModel model)
         {
+            
             throw new NotImplementedException();
         }
     }

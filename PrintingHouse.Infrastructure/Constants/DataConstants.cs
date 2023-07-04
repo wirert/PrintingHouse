@@ -130,9 +130,9 @@
         }
 
         /// <summary>
-        /// Employee model constants
+        /// Application user model constants
         /// </summary>
-        public static class Employee
+        public static class ApplicationUser
         {
             /// <summary>
             /// First name maximum lenght
@@ -161,9 +161,29 @@
             /// </summary>
             public const int MinUserNameLenght = 5;
 
-            public const string UserNameErrorMessage = "Username must be between {2} and {1} symbols!";
-            public const string FirstNameErrorMessage = "First name must be between {2} and {1} symbols!";
-            public const string LastNameErrorMessage = "Last name must be between {2} and {1} symbols!";
+            /// <summary>
+            /// Article design image name maximum lenght
+            /// </summary>
+            public const int MaxImageNameLenght = 60;
+            /// <summary>
+            /// Article design image name minimum lenght
+            /// </summary>
+            public const int MinImageNameLenght = 1;
+        }
+
+        /// <summary>
+        /// Office position model constants
+        /// </summary>
+        public static class Position
+        {
+            /// <summary>
+            /// Office position maximum lenght
+            /// </summary>
+            public const int MaxPositionLenght = 20;
+            /// <summary>
+            /// Office position minimum lenght
+            /// </summary>
+            public const int MinPositionLenght = 3;
         }
     }
 }

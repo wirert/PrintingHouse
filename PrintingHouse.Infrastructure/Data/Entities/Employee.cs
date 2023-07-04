@@ -1,27 +1,42 @@
 ﻿namespace PrintingHouse.Infrastructure.Data.Entities
 {
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
-    using static Constants.DataConstants.Employee;
+    using Account;
 
-    /// <summary>
-    /// Extention of identity user
-    /// </summary>
-    [Comment("Extention of identity user")]
-    public class Employee : IdentityUser<Guid>
+    [Comment("Employee entity")]
+    public class Employee
     {
-        [Comment("Employee first name")]
-        [MaxLength(MaxFirstNameLenght)]
-        public string? FirstName { get; set; }
+        public Employee()
+        {
+            Clients = new HashSet<Client>();
+        }
 
-        [Comment("Employee last name")]
-        [MaxLength(MaxLastNameLenght)]
-        public string? LastName { get; set; }
+        [Comment("Primary key")]
+        [Key]
+        public int Id { get; set; }
 
-        [Comment("Is active employee (soft delete property)")]        
+        [Comment("Employee office position id")]
+        [Required]
+        public int PositionId { get; set; }
+
+        [ForeignKey(nameof(PositionId))]        
+        public virtual Position Position { get; set; } = null!;
+
+        [Comment("Employee application user id")]
+        [Required]
+        public Guid ApplicationUserId { get; set; }
+
+        [ForeignKey(nameof(ApplicationUserId))]
+        public virtual ApplicationUser ApplicationUser { get; set; } = null!;
+
+        public virtual ICollection<Client> Clients { get; set; }
+
+        [Comment("Soft delete property")]
+        [Required]
         public bool IsActive { get; set; } = true;
     }
 }

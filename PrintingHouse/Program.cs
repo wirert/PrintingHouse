@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Minio;
 
 using PrintingHouse.Infrastructure.Data;
-using PrintingHouse.Infrastructure.Data.Entities;
+using PrintingHouse.Infrastructure.Data.Entities.Account;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +10,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<PrintingHouseDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<Employee>(options =>
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
     options.SignIn.RequireConfirmedAccount = builder.Configuration.GetValue<bool>("Identity:RequireConfirmedAccount");
     options.SignIn.RequireConfirmedPhoneNumber = builder.Configuration.GetValue<bool>("Identity:RequireConfirmedPhoneNumber");
@@ -59,7 +58,13 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
+        pattern: "{controller=Home}/{action=Index}/{id?}"
+        );
+
+    endpoints.MapControllerRoute(
+         name: "areas",
+         pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+        );
 
     endpoints.MapRazorPages();
 });

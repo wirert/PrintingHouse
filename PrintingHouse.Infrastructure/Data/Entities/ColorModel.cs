@@ -1,11 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using Microsoft.EntityFrameworkCore;
-
-using static PrintingHouse.Infrastructure.Constants.DataConstants.ColorModel;
-
-namespace PrintingHouse.Infrastructure.Data.Entities
+﻿namespace PrintingHouse.Infrastructure.Data.Entities
 {
+    using System.ComponentModel.DataAnnotations;
+
+    using Microsoft.EntityFrameworkCore;
+
+    using static Constants.DataConstants.ColorModel;
+
     [Comment("Color model")]
     public class ColorModel
     {
@@ -24,8 +24,8 @@ namespace PrintingHouse.Infrastructure.Data.Entities
         [MaxLength(MaxNameLenght)]
         public string Name { get; set; } = null!;
 
-        public ICollection<Machine> Machines { get; set; }
+        public virtual ICollection<Machine> Machines { get; set; }
 
-        public ICollection<Article> Articles { get; set; }
+        public virtual ICollection<Article> Articles { get; set; }
     }
 }

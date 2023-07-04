@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-using Microsoft.EntityFrameworkCore;
-using PrintingHouse.Infrastructure.Data.Entities.Enums;
-
-namespace PrintingHouse.Infrastructure.Data.Entities
+﻿namespace PrintingHouse.Infrastructure.Data.Entities
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
+    using Microsoft.EntityFrameworkCore;
+
+    using Entities.Enums;
+
     [Comment("Printing machine")]
     public class Machine
     {
@@ -27,7 +28,7 @@ namespace PrintingHouse.Infrastructure.Data.Entities
 
         [Comment("Machine printing time for single unit")]
         [Required]
-        public DateTime PrintTime { get; set; }
+        public TimeSpan PrintTime { get; set; }
 
         [Comment("Machine working color model id")]
         [Required]
@@ -35,14 +36,18 @@ namespace PrintingHouse.Infrastructure.Data.Entities
 
         [ForeignKey(nameof(ColorModelId))]
         [Required]
-        public ColorModel ColorModel { get; set; } = null!;
+        public virtual ColorModel ColorModel { get; set; } = null!;
 
         [Comment("Machine printing material id.")]
         [Required]
         public int MaterialId { get; set; }
 
         [ForeignKey(nameof(MaterialId))]
-        public Material Material { get; set; } = null!;        
+        public virtual Material Material { get; set; } = null!;
+
+        [Comment("Material required for single print")]
+        [Required]
+        public double MaterialPerPrint { get; set; }
 
         [Comment("Current status of the machine (has default value)")]
         [Required]

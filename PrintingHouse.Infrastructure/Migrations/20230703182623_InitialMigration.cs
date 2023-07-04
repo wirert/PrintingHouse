@@ -28,9 +28,10 @@ namespace PrintingHouse.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false, comment: "Employee first name"),
-                    LastName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false, comment: "Employee last name"),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false, comment: "Is active employee"),
+                    FirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true, comment: "Employee first name"),
+                    LastName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true, comment: "Employee last name"),
+                    PictureName = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: true, comment: "Picture name of the user (nullable)"),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, comment: "Is active employee (soft delete property)"),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -56,14 +57,15 @@ namespace PrintingHouse.Infrastructure.Migrations
                 name: "ColorModels",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false, comment: "Primary key")
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false, comment: "Color model name")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ColorModels", x => x.Id);
-                });
+                },
+                comment: "Color model");
 
             migrationBuilder.CreateTable(
                 name: "Consumables",
@@ -71,8 +73,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false, comment: "Consumable primary key")
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<int>(type: "int", nullable: false, comment: "Consumable type (enumeration)"),
-                    MyProperty = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false, comment: "Consumable type name"),
                     InStock = table.Column<int>(type: "int", nullable: false, comment: "Consumable current quantit in stock"),
                     Price = table.Column<decimal>(type: "money", nullable: false, comment: "Consumable price")
                 },
@@ -88,13 +89,13 @@ namespace PrintingHouse.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false, comment: "Primary key")
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<int>(type: "int", nullable: false, comment: "Material type (enumeration)"),
+                    Type = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false, comment: "Material type name"),
                     Width = table.Column<double>(type: "float", nullable: false, comment: "Material width"),
                     Lenght = table.Column<double>(type: "float", nullable: false, comment: "Material lenght"),
                     MeasureUnit = table.Column<int>(type: "int", nullable: false, comment: "Material measure unit (enumeration)"),
                     Price = table.Column<decimal>(type: "money", nullable: false, comment: "Material price"),
                     InStock = table.Column<int>(type: "int", nullable: false, comment: "Material current quantit in stock"),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, comment: "Soft delete property")
                 },
                 constraints: table =>
                 {
@@ -209,27 +210,25 @@ namespace PrintingHouse.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Clients",
+                name: "Employees",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false, comment: "Client primary key")
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false, comment: "Client name"),
-                    Email = table.Column<string>(type: "nvarchar(70)", maxLength: 70, nullable: false, comment: "Client e-mail"),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false, comment: "Client phone number"),
-                    MerchantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Client's merchant id")
+                    Position = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Department = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    ApplicationUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Clients", x => x.Id);
+                    table.PrimaryKey("PK_Employees", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Clients_AspNetUsers_MerchantId",
-                        column: x => x.MerchantId,
+                        name: "FK_Employees_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                },
-                comment: "Printing house client");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Machines",
@@ -263,12 +262,36 @@ namespace PrintingHouse.Infrastructure.Migrations
                 comment: "Printing machine");
 
             migrationBuilder.CreateTable(
+                name: "Clients",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false, comment: "Client primary key")
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false, comment: "Client name"),
+                    Email = table.Column<string>(type: "nvarchar(70)", maxLength: 70, nullable: false, comment: "Client e-mail"),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false, comment: "Client phone number"),
+                    MerchantId = table.Column<int>(type: "int", nullable: false, comment: "Client's merchant id"),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, comment: "Soft delete propery")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clients", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Clients_Employees_MerchantId",
+                        column: x => x.MerchantId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                },
+                comment: "Printing house client");
+
+            migrationBuilder.CreateTable(
                 name: "Articles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false, comment: "Article primary key.")
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Article primary key."),
                     Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false, comment: "Article name."),
+                    ImageName = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false, comment: "Name of design image"),
                     MaterialId = table.Column<int>(type: "int", nullable: false, comment: "Article material"),
                     ColorModelId = table.Column<int>(type: "int", nullable: false, comment: "Article color model id"),
                     ClientId = table.Column<int>(type: "int", nullable: false, comment: "Article owner id"),
@@ -302,7 +325,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                 name: "ArticlesConsumables",
                 columns: table => new
                 {
-                    ArticleId = table.Column<int>(type: "int", nullable: false, comment: "Article id"),
+                    ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Article id"),
                     ConsumableId = table.Column<int>(type: "int", nullable: false, comment: "Consumable id"),
                     ConsumableQuantity = table.Column<double>(type: "float", nullable: false, comment: "Required consumable quantity for single print of article")
                 },
@@ -330,7 +353,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false, comment: "Order primary key")
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ArticleId = table.Column<int>(type: "int", nullable: false, comment: "Order article id"),
+                    ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Order article id"),
                     Quantity = table.Column<int>(type: "int", nullable: false, comment: "Order article quantity"),
                     OrderTime = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "DateTime of order creation"),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true, comment: "Order expected end date if required from the client"),
@@ -414,6 +437,11 @@ namespace PrintingHouse.Infrastructure.Migrations
                 column: "MerchantId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Employees_ApplicationUserId",
+                table: "Employees",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Machines_ColorModelId",
                 table: "Machines",
                 column: "ColorModelId");
@@ -472,6 +500,9 @@ namespace PrintingHouse.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Materials");
+
+            migrationBuilder.DropTable(
+                name: "Employees");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

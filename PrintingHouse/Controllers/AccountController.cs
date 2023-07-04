@@ -3,19 +3,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PrintingHouse.Core.Models.Account;
 using PrintingHouse.Infrastructure.Constants;
-using PrintingHouse.Infrastructure.Data.Entities;
+using PrintingHouse.Infrastructure.Data.Entities.Account;
 using System.Data;
 
 namespace PrintingHouse.Controllers
 {
     public class AccountController : BaseController
     {
-        private readonly UserManager<Employee> userManager;
-        private readonly SignInManager<Employee> signInManager;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
         public AccountController(
-            UserManager<Employee> _userManager,
-            SignInManager<Employee> _signInManager)
+            UserManager<ApplicationUser> _userManager,
+            SignInManager<ApplicationUser> _signInManager)
         {
             userManager = _userManager;
             signInManager = _signInManager;
@@ -47,13 +47,13 @@ namespace PrintingHouse.Controllers
                 return View(model);
             }
 
-            var user = new Employee()
+            var user = new ApplicationUser()
             {
                 Email = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                EmailConfirmed = true,
-                UserName = model.UserName
+                UserName = model.UserName,
+                PhoneNumber = model.PhoneNumber
             };
 
             var result = await userManager.CreateAsync(user, model.Password);
@@ -93,7 +93,7 @@ namespace PrintingHouse.Controllers
         /// <summary>
         /// User Logging in
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="model">Log in view model</param>
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]

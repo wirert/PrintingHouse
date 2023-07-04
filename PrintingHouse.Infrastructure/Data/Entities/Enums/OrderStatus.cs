@@ -5,12 +5,11 @@
     /// </summary>
     public enum OrderStatus
     {
-        Waiting,
-        InProgress,
-        Completed,
-        NoConsumable,
-        Canceled,
-        Problem,
-
+        Waiting = 0,
+        InProgress = 1,
+        Completed = 2,
+        NoConsumable = 3,
+        Canceled = 4,
+        Problem = 5
     }
 }

@@ -1,11 +1,17 @@
 ﻿namespace PrintingHouse.Infrastructure.Data.Common
 {
-    using Contracts;
-    using Minio;
     using System;
     using System.IO;
     using System.Threading.Tasks;
 
+    using Minio;
+
+    using Contracts;
+
+    /// <summary>
+    /// Implementation of repository access methods
+    /// for MinIO object store database
+    /// </summary>   
     public class MinIoRepository : IMinIoRepository
     {
        public readonly IMinioClient minioClient;
@@ -15,6 +21,13 @@
             minioClient = _minioClient;
         }
 
+        /// <summary>
+        /// Adds object to the MinIO database
+        /// </summary>
+        /// <param name="BucketName">MinIO bucket name (guid)</param>
+        /// <param name="fileName">The name of the object</param>
+        /// <param name="content">Content to add (Byte array)</param>
+        /// <returns></returns>
         public async Task AddFileAsync(Guid BucketName, string fileName, byte[] content)
         {
             var bucketExistArgs = new BucketExistsArgs().WithBucket(BucketName.ToString());
@@ -35,6 +48,12 @@
             await minioClient.PutObjectAsync(putObjectArgs);
         }
 
+        /// <summary>
+        /// Get object form database by bucket name and object name
+        /// </summary>
+        /// <param name="BucketName">Bucket name (guid)</param>
+        /// <param name="fileName">Object name</param>
+        /// <returns>Byte array</returns>
         public async Task<MemoryStream> GetFileAsync(Guid BucketName, string fileName)
         {
             var bucketExistArgs = new BucketExistsArgs().WithBucket(BucketName.ToString());

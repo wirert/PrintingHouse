@@ -1,13 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-
-using static PrintingHouse.Infrastructure.Constants.DataConstants.Consumable;
-
-namespace PrintingHouse.Infrastructure.Data.Entities
+﻿namespace PrintingHouse.Infrastructure.Data.Entities
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Metadata.Internal;
+
+    using static Constants.DataConstants.Consumable;
+
     [Comment("Machine consumable")]
     public class Consumable
     {
@@ -34,7 +34,6 @@ namespace PrintingHouse.Infrastructure.Data.Entities
         [Column(TypeName = "money")]
         public decimal Price { get; set; }
 
-        public ICollection<ArticleConsumable> ArticleConsumables { get; set; }
-
+        public virtual ICollection<ArticleConsumable> ArticleConsumables { get; set; }
     }
 }

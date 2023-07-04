@@ -27,7 +27,7 @@
             <summary>
             User Logging in
             </summary>
-            <param name="model"></param>
+            <param name="model">Log in view model</param>
             <returns></returns>
         </member>
         <member name="M:PrintingHouse.Controllers.AccountController.Logout">
@@ -35,6 +35,26 @@
             User log out action
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtension">
+            <summary>
+            Adds extention methods to the ServiceCollection of application
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtension.AddApplicationServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Register required services in the IoC container
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtension.AddMinIo(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Register MinIO in the IoC container
+            </summary>
+            <param name="services">Registered services</param>
+            <param name="configuration">Application configuration</param>
+            <returns>Registered services with added MinIO</returns>
         </member>
     </members>
 </doc>

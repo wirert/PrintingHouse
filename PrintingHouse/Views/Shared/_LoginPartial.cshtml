@@ -1,8 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using PrintingHouse.Infrastructure.Data.Entities;
+@using PrintingHouse.Infrastructure.Data.Entities.Account;
 
-@inject SignInManager<Employee> SignInManager
-@inject UserManager<Employee> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))

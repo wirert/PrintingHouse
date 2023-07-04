@@ -1,12 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-using Microsoft.EntityFrameworkCore;
-
-using static PrintingHouse.Infrastructure.Constants.DataConstants.Client;
-
-namespace PrintingHouse.Infrastructure.Data.Entities
+﻿namespace PrintingHouse.Infrastructure.Data.Entities
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
+    using Microsoft.EntityFrameworkCore;
+
+    using static Constants.DataConstants.Client;
+
     [Comment("Printing house client")]
     public class Client
     {
@@ -36,12 +36,12 @@ namespace PrintingHouse.Infrastructure.Data.Entities
 
         [Comment("Client's merchant id")]
         [Required]
-        public Guid MerchantId { get; set; }
+        public int MerchantId { get; set; }
 
         [ForeignKey(nameof(MerchantId))]
-        public Employee Merchant { get; set; } = null!;
+        public virtual Employee Merchant { get; set; } = null!;
 
-        public ICollection<Article> Articles { get; set; }
+        public virtual ICollection<Article> Articles { get; set; }
 
         [Comment("Soft delete propery")]
         public bool IsDeleted { get; set; } = false;

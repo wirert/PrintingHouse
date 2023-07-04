@@ -1,13 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-using Microsoft.EntityFrameworkCore;
-
-using PrintingHouse.Infrastructure.Data.Entities.Enums;
-using static PrintingHouse.Infrastructure.Constants.DataConstants.Order;
-
-namespace PrintingHouse.Infrastructure.Data.Entities
+﻿namespace PrintingHouse.Infrastructure.Data.Entities
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
+    using Microsoft.EntityFrameworkCore;
+
+    using Entities.Enums;
+    using static Constants.DataConstants.Order;
+
     [Comment("Order from client for print")]
     public class Order
     {
@@ -17,10 +17,10 @@ namespace PrintingHouse.Infrastructure.Data.Entities
 
         [Comment("Order article id")]
         [Required]
-        public int ArticleId { get; set; }
+        public Guid ArticleId { get; set; }
 
         [ForeignKey(nameof(ArticleId))]
-        public Article Article { get; set; } = null!;
+        public virtual Article Article { get; set; } = null!;
 
         [Comment("Order article quantity")]
         [Required]

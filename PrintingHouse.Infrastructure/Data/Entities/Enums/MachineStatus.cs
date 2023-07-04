@@ -5,10 +5,10 @@
     /// </summary>
     public enum MachineStatus
     {
-        Working,
-        WaitForConsumable,
-        WaitForMaterial,
-        Broken,
-        Scrapped
+        Working = 0,
+        WaitForConsumable = 1,
+        WaitForMaterial = 2,
+        Broken = 3,
+        Scrapped = 4
     }
 }
