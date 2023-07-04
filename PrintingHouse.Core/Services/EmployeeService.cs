@@ -19,9 +19,16 @@
             repo = _repo;
         }
 
-        public Task AddAsync(AddEmployeeViewModel model)
+        public async Task AddAsync(AddEmployeeViewModel model)
         {
-            throw new NotImplementedException();
+            var employee = new Employee()
+            {
+                ApplicationUserId = model.ApplicationUserId,
+                PositionId = model.PositionId
+            };
+
+            await repo.AddAsync(employee);
+            await repo.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Guid>> GetAllEmployeesUserIdAsync()

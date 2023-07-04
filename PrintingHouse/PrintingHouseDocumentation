@@ -36,6 +36,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:PrintingHouse.Controllers.AccountController.CreateRoles">
+            <summary>
+            Create roles
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtension">
             <summary>
             Adds extention methods to the ServiceCollection of application

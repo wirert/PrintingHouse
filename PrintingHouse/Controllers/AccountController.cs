@@ -1,24 +1,31 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using PrintingHouse.Core.Models.Account;
-using PrintingHouse.Infrastructure.Constants;
-using PrintingHouse.Infrastructure.Data.Entities.Account;
-using System.Data;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace PrintingHouse.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+
+    using Core.Models.Account;
+    using Infrastructure.Constants;
+    using Infrastructure.Data.Entities.Account;
+
+    using static Core.Constants.RoleNamesConstants;
+
     public class AccountController : BaseController
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly RoleManager<IdentityRole<Guid>> roleManager;
 
         public AccountController(
             UserManager<ApplicationUser> _userManager,
-            SignInManager<ApplicationUser> _signInManager)
+            SignInManager<ApplicationUser> _signInManager,
+            RoleManager<IdentityRole<Guid>> _roleManager)
         {
             userManager = _userManager;
             signInManager = _signInManager;
+            roleManager = _roleManager;
         }
 
         /// <summary>
@@ -135,6 +142,23 @@ namespace PrintingHouse.Controllers
             await signInManager.SignOutAsync();
 
             return RedirectToAction("Index", "Home");
-        }        
+        }
+
+        /// <summary>
+        /// Create roles
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Roles = Admin)]
+        public async Task<IActionResult> CreateRoles()
+        {
+            await roleManager.CreateAsync(new IdentityRole<Guid>(Admin));
+            await roleManager.CreateAsync(new IdentityRole<Guid>(Employee));
+            await roleManager.CreateAsync(new IdentityRole<Guid>(Manager));
+            await roleManager.CreateAsync(new IdentityRole<Guid>(Merchant));
+            await roleManager.CreateAsync(new IdentityRole<Guid>(Supervisor));
+           
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
