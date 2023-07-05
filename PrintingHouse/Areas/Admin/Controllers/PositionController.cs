@@ -51,7 +51,7 @@
                 }
             }
 
-            return RedirectToAction("Add", "Employee", new { area = nameof(Admin) });
+            return RedirectToAction("All", "Employee");
         }
     }
 }

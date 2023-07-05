@@ -8,7 +8,7 @@
         [Required]
         public Guid ApplicationUserId { get; set; }
 
-        [Required]
+        [Required]        
         public int PositionId { get; set; }
 
         [Required]

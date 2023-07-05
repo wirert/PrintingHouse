@@ -5,7 +5,7 @@
 
     using static Core.Constants.RoleNamesConstants;
 
-    [Area("Admin")]
+    [Area(nameof(Admin))]
     [Authorize(Roles = Admin)]
     public class BaseController : Controller
     {

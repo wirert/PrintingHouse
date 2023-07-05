@@ -14,8 +14,6 @@
 
         public string Position { get; set; } = null!;
 
-        public string Access { get; set; } = null!;
-
         [Display(Name = "Phone number")]
         public string PhoneNumber { get; set; } = null!;
     }

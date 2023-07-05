@@ -6,6 +6,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     using PrintingHouse.Core.Models;
+    using static Core.Constants.RoleNamesConstants;
 
     public class HomeController : BaseController
     {
@@ -19,6 +20,11 @@
         [AllowAnonymous]
         public IActionResult Index()
         {
+            if (User.IsInRole(Admin))
+            {
+                return RedirectToAction("Index", "Home", new { area = Admin });
+            }
+
             return View();
         }
 

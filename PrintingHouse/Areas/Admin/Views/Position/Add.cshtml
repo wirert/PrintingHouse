@@ -1,7 +1,7 @@
 ﻿@model AddPositionViewModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Add new Position";
 }
 
 @if (!ViewData.ModelState.IsValid && ViewData.ModelState["Error"] != null)
@@ -23,7 +23,7 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div>
-                <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Submit</button>
+                <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary mt-4">Submit</button>
             </div>
 
         </form>

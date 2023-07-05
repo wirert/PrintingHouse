@@ -1,0 +1,43 @@
+﻿@model IEnumerable<AllEmployeeViewModel>
+
+<h1>@ViewBag.Title</h1>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Employee number</th>
+            <th scope="col">Name</th>
+            <th scope="col">Position</th>
+            <th scope="col">Phone number</th>            
+            <th scope="col">Change position</th>
+            <th scope="col">Dismiss</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in Model)
+        {
+            <tr>
+                <td>@employee.EmployeeNumber</td>
+                <td>@employee.FullName</td>
+                <td>@employee.Position</td>
+                <td>@employee.PhoneNumber</td>
+                <td>
+                    <form asp-asp-area="Admin" asp-controller="Employee" asp-action="Edit" method="get">
+                        <input name="id" type="hidden" value="@employee.EmployeeNumber" />
+                        <input name="userId" type="hidden" value="@employee.Id" />
+                        <button class="btn btn-warning" type="submit">Reassign</button>
+                    </form>
+                </td>
+                <td>
+                    <form asp-asp-area="Admin" asp-controller="Employee" asp-action="Delete">
+                        <input name="id" type="hidden" value="@employee.EmployeeNumber" />
+                        <button class="btn btn-danger" type="submit">Dismiss</button>
+                    </form>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+<a asp-asp-area="Admin" asp-controller="Employee" asp-action="Add" class="btn btn-dark">Add new employee</a>
