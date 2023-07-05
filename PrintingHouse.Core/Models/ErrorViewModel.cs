@@ -1,4 +1,4 @@
-namespace PrintingHouse.Models
+namespace PrintingHouse.Core.Models
 {
     public class ErrorViewModel
     {

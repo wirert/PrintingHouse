@@ -1,6 +1,6 @@
 ﻿namespace PrintingHouse.Core.Contracts
 {
-    using PrintingHouse.Core.Models.Employee;
+    using PrintingHouse.Core.AdminModels.Employee;
 
     public interface IEmployeeService
     {

@@ -4,7 +4,7 @@
 }
 
 
-<h1>@ViewData["Title"]</h1>
+
 
 @if (!ViewData.ModelState.IsValid && ViewData.ModelState["Error"] != null)
 {
@@ -13,50 +13,56 @@
     </div>
 }
 
-<div class="row">
-    <div class="col-md-4">
-        <section>
-            <form id="account" method="post">                
-                <hr />                
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="mb-3">
-                    <label asp-for="ApplicationUserId" class="form-label">Select employee:</label>
-                    <select asp-for="ApplicationUserId" class="form-control">
-                        @foreach (var board in Model.Users)
-                        {
-                            <option value="@board.Id">@board.FullName</option>
-                        }
-                    </select>
-                    <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
-                </div>                
-                <div class="mb-3">
-                    <label asp-for="Role" class="form-label">Select access level:</label>
-                    <select asp-for="Role" class="form-control">
-                        @foreach (var access in Model.AccessLevels)
-                        {
-                            <option value="@access">@access</option>
-                        }
-                    </select>
-                    <span asp-validation-for="Role" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="PositionId" class="form-label">Select position:</label>
-                    <select asp-for="PositionId" class="form-control">
-                        @foreach (var position in Model.Positions)
-                        {
-                            <option value="@position.Id">@position.Name</option>
-                        }
-                    </select>
-                    <span asp-validation-for="PositionId" class="text-danger"></span>
-                </div>
-                <div>
-                    <button asp-area="Admin" asp-action="AddPosition" asp-controller="Employee" type="button" class="w-100 btn btn-lg btn-secondary mt-2">Add new position</button>
-                </div>         
-                <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary mt-2">Set</button>
-                </div>
-               
-            </form>
-        </section>
-    </div>
+
+<div class="row col-md-4">
+    <h1 class="mb-4">@ViewData["Title"]</h1>
+    <section>
+        <form id="account" method="post">
+           
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="ApplicationUserId" class="form-label">Select employee:</label>
+                <select asp-for="ApplicationUserId" class="form-control">
+                    @foreach (var board in Model.Users)
+                    {
+                        <option value="@board.Id">@board.FullName</option>
+                    }
+                </select>
+                <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="PositionId" class="form-label">Select position:</label>
+                <select asp-for="PositionId" class="form-control">
+                    @foreach (var position in Model.Positions)
+                    {
+                        <option value="@position.Id">@position.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="PositionId" class="text-danger"></span>
+            </div>
+            <div>
+                <button asp-area="Admin" asp-action="Add" asp-controller="Position" type="button" class="w-100 btn btn-sm mb-4 btn-secondary">Add new position</button>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Role" class="form-label">Select access level:</label>
+                <select asp-for="Role" class="form-control">
+                    @foreach (var access in Model.AccessLevels)
+                    {
+                        <option value="@access">@access</option>
+                    }
+                </select>
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+
+            <div>
+                <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary mt-2">Set</button>
+            </div>
+
+        </form>
+    </section>
 </div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

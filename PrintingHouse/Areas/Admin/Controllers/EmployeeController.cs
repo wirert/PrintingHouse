@@ -4,8 +4,8 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
+    using Core.AdminModels.Employee;
     using Core.Contracts;
-    using Core.Models.Employee;
     using Infrastructure.Data.Entities.Account;
     using static Core.Constants.MessageConstants;
 
@@ -37,6 +37,13 @@
             var employeeUserIds = await employeeService.GetAllEmployeesUserIdAsync();
 
             var users = await accountService.GetAllNewEmployees(employeeUserIds);
+
+            if (users.Count() == 0)
+            {
+                TempData[WarningMessage] = "There are no new registered employees.";
+
+                return RedirectToAction("All");
+            }
 
             var roles = await roleManager.Roles.Select(r => r.Name).ToArrayAsync();
 
@@ -78,10 +85,10 @@
 
             if (ModelState.IsValid)
             {
-                var result = await userManager.AddToRoleAsync(user!, model.Role);
-
                 try
                 {
+                    var result = await userManager.AddToRoleAsync(user!, model.Role);
+
                     if (result.Succeeded)
                     {
                         await employeeService.AddAsync(model);
@@ -91,11 +98,15 @@
                         return RedirectToAction("All");
                     }
 
-                    this.ModelState.AddModelError(string.Empty, "Unexpected error occurred while trying to add access for user!");
+                    ModelState.AddModelError(string.Empty, "Unexpected error occurred while trying to add access for user!");
+                }
+                catch(InvalidOperationException)
+                {
+                    ModelState.AddModelError(string.Empty, "Unexpected error occurred while trying to add access for user!");
                 }
                 catch (Exception)
                 {
-                    this.ModelState.AddModelError(string.Empty, "Unexpected error occurred while trying to add employee!");
+                    ModelState.AddModelError(string.Empty, "Unexpected error occurred while trying to add employee!");
                 }
             }            
 
@@ -109,6 +120,13 @@
             model.AccessLevels = roles;
 
             return View(model);
+        }
+
+        public async Task<IActionResult> All()
+        {
+
+
+            return View();
         }
     }
 }

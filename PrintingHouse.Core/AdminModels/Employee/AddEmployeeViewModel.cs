@@ -1,12 +1,12 @@
-﻿namespace PrintingHouse.Core.Models.Employee
+﻿namespace PrintingHouse.Core.AdminModels.Employee
 {
-    using PrintingHouse.Core.Models.Position;
+    using PrintingHouse.Core.AdminModels.Position;
     using System.ComponentModel.DataAnnotations;
 
     public class AddEmployeeViewModel
     {
         [Required]
-        public Guid ApplicationUserId { get; set; }        
+        public Guid ApplicationUserId { get; set; }
 
         [Required]
         public int PositionId { get; set; }

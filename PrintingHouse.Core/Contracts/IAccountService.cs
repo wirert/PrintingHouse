@@ -1,13 +1,10 @@
-﻿using PrintingHouse.Core.Models.Account;
-using PrintingHouse.Core.Models.Employee;
+﻿using PrintingHouse.Core.AdminModels.Employee;
+using PrintingHouse.Core.Models.Account;
 
 namespace PrintingHouse.Core.Contracts
 {
     public interface IAccountService
     {
-        Task RegisterEmployee(RegisterViewModel model);
-
-        Task<IEnumerable<AllUsersViewModel>> GetAllNewEmployees(IEnumerable<Guid> employeeUserIds);
-        
+        Task<IEnumerable<AllUsersViewModel>> GetAllNewEmployees(IEnumerable<Guid> employeeUserIds);        
     }
 }

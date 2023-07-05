@@ -5,8 +5,8 @@
 
     using Microsoft.EntityFrameworkCore;
 
+    using AdminModels.Employee;
     using Contracts;
-    using Models.Employee;
     using Infrastructure.Data.Common.Contracts;
     using Infrastructure.Data.Entities;
 

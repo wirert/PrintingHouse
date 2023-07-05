@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using PrintingHouse.Models;
-using System.Diagnostics;
-
-namespace PrintingHouse.Controllers
+﻿namespace PrintingHouse.Controllers
 {
+    using System.Diagnostics;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+
+    using PrintingHouse.Core.Models;
+
     public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;

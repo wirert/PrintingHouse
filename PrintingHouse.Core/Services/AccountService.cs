@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using PrintingHouse.Core.AdminModels.Employee;
 using PrintingHouse.Core.Contracts;
 using PrintingHouse.Core.Models.Account;
-using PrintingHouse.Core.Models.Employee;
 using PrintingHouse.Infrastructure.Data.Common.Contracts;
 using PrintingHouse.Infrastructure.Data.Entities.Account;
 
@@ -32,12 +32,6 @@ namespace PrintingHouse.Core.Services
                         FullName = $"{u.FirstName} {u.LastName}"
                     })
                     .ToListAsync();
-        }
-
-        public Task RegisterEmployee(RegisterViewModel model)
-        {
-            
-            throw new NotImplementedException();
         }
     }
 }
