@@ -39,11 +39,9 @@ namespace PrintingHouse.Infrastructure.Data
 
             builder.Entity<ArticleConsumable>().HasKey(k => new {k.ArticleId, k.ConsumableId});
 
-            builder.Entity<Machine>()
-                .HasOne(m => m.Material)
-                .WithMany(mt => mt.Machines)
-                .HasForeignKey(m => m.MaterialId)
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Employee>().HasIndex(e => e.ApplicationUserId).IsUnique();
+
+            
 
             builder.Entity<Article>()
                 .HasOne(a => a.Material)

@@ -27,7 +27,7 @@
         public virtual Position Position { get; set; } = null!;
 
         [Comment("Employee application user id")]
-        [Required]
+        [Required]        
         public Guid ApplicationUserId { get; set; }
 
         [ForeignKey(nameof(ApplicationUserId))]

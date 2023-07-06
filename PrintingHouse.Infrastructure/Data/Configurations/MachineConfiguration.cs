@@ -10,6 +10,12 @@
     {
         public void Configure(EntityTypeBuilder<Machine> builder)
         {
+            builder
+                .HasOne(m => m.Material)
+                .WithMany(mt => mt.Machines)
+                .HasForeignKey(m => m.MaterialId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.HasData(CreateMachines());
         }
 
