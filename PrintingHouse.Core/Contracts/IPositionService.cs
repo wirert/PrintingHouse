@@ -1,6 +1,6 @@
 ﻿namespace PrintingHouse.Core.Contracts
 {
-    using PrintingHouse.Core.AdminModels.Position;
+    using AdminModels.Position;
 
     public interface IPositionService
     {

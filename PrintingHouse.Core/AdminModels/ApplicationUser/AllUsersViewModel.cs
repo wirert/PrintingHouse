@@ -1,4 +1,4 @@
-﻿namespace PrintingHouse.Core.AdminModels.Employee
+﻿namespace PrintingHouse.Core.AdminModels.ApplicationUser
 {
     public class AllUsersViewModel
     {

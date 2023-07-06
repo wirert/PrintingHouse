@@ -1,7 +1,9 @@
 ﻿namespace PrintingHouse.Core.AdminModels.Employee
 {
-    using PrintingHouse.Core.AdminModels.Position;
     using System.ComponentModel.DataAnnotations;
+
+    using ApplicationUser;
+    using Position;
 
     public class AddEmployeeViewModel
     {

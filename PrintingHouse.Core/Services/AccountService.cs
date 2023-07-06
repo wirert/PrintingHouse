@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using PrintingHouse.Core.AdminModels.Employee;
+using PrintingHouse.Core.AdminModels.ApplicationUser;
 using PrintingHouse.Core.Contracts;
 using PrintingHouse.Core.Models.Account;
 using PrintingHouse.Infrastructure.Data.Common.Contracts;
