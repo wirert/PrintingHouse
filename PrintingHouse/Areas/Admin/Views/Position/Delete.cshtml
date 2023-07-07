@@ -1,0 +1,24 @@
+﻿@model IEnumerable<PositionViewModel>
+@{
+    ViewBag.Title = "Delete position";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<div class="row col-md-4">
+    <form method="post">
+        <div class="mb-3">
+            <label name="PositionId" class="form-label">Select position:</label>
+            <select name="PositionId" class="form-control">
+                @foreach (var position in Model)
+                {
+                    <option value="@position.Id">@position.Name</option>
+                }
+            </select>
+        </div>
+        <div>
+            <button type="submit" class="w-100 btn btn-lg btn-danger mt-2">Delete</button>
+        </div>
+
+    </form>
+</div>

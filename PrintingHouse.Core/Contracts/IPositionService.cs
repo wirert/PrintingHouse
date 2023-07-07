@@ -4,8 +4,10 @@
 
     public interface IPositionService
     {
-        Task<IEnumerable<AllPositionViewModel>> GetAllAsync();
+        Task<IEnumerable<PositionViewModel>> GetAllAsync();
 
         Task AddNewAsync(AddPositionViewModel viewModel);
+
+        Task DeleteAsync (int positionId);
     }
 }

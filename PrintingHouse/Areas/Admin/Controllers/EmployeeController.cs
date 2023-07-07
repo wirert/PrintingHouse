@@ -71,7 +71,7 @@
             
             var user = await userManager.FindByIdAsync(model.ApplicationUserId.ToString());
 
-            if (user == null)
+            if (user == null || user.IsActive == false)
             {
                 ModelState.AddModelError(nameof(model.ApplicationUserId), "Selected user does not exist!");
             }
@@ -178,7 +178,7 @@
 
             var user = await userManager.FindByIdAsync(model.ApplicationUserId.ToString());            
 
-            if (user == null)
+            if (user == null || user.IsActive == false)
             {
                 ModelState.AddModelError(nameof(model.ApplicationUserId), "Selected employee does not exist!");
             }

@@ -16,7 +16,7 @@
         [Required]
         public string Role { get; set; } = null!;
 
-        public IEnumerable<AllPositionViewModel> Positions { get; set; } = Enumerable.Empty<AllPositionViewModel>();
+        public IEnumerable<PositionViewModel> Positions { get; set; } = Enumerable.Empty<PositionViewModel>();
 
         public IEnumerable<string> AccessLevels { get; set; } = Enumerable.Empty<string>();
 

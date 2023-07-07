@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using PrintingHouse.Core.AdminModels.ApplicationUser;
-using PrintingHouse.Core.Contracts;
-using PrintingHouse.Core.Models.Account;
-using PrintingHouse.Infrastructure.Data.Common.Contracts;
-using PrintingHouse.Infrastructure.Data.Entities.Account;
-
-namespace PrintingHouse.Core.Services
+﻿namespace PrintingHouse.Core.Services
 {
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+
+    using AdminModels.ApplicationUser;
+    using Contracts;
+    using Infrastructure.Data.Common.Contracts;
+    using Infrastructure.Data.Entities.Account;
+
     public class AccountService : IAccountService
     {
         private readonly IRepository repo;

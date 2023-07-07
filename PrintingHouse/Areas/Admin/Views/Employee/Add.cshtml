@@ -3,17 +3,6 @@
     ViewData["Title"] = "Add new employee";
 }
 
-
-
-
-@if (!ViewData.ModelState.IsValid && ViewData.ModelState["Error"] != null)
-{
-    <div class="alert alert-danger" role="alert">
-        @ViewData.ModelState["Error"]!.Errors.First().ErrorMessage
-    </div>
-}
-
-
 <div class="row col-md-4">
     <h1 class="mb-4">@ViewData["Title"]</h1>
     <section>

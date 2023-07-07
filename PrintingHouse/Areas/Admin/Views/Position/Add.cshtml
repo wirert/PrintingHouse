@@ -4,30 +4,21 @@
     ViewData["Title"] = "Add new Position";
 }
 
-@if (!ViewData.ModelState.IsValid && ViewData.ModelState["Error"] != null)
-{
-    <div class="alert alert-danger" role="alert">
-        @ViewData.ModelState["Error"]!.Errors.First().ErrorMessage
-    </div>
-}
-
 <div class="row-cols-md-4 ">
     <h1>@ViewData["Title"]</h1>
-    <section>
-        <form id="account" method="post">
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
-                <input asp-for="Name" class="form-control" autocomplete="name" aria-required="true" />
-                <label asp-for="Name" class="form-label"></label>
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div>
-                <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary mt-4">Submit</button>
-            </div>
+    <form method="post">
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-floating">
+            <input asp-for="Name" class="form-control" autocomplete="name" aria-required="true" />
+            <label asp-for="Name" class="form-label"></label>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div>
+            <button type="submit" class="w-100 btn btn-lg btn-primary mt-4">Submit</button>
+        </div>
 
-        </form>
-    </section>
+    </form>
 </div>
 
 

@@ -41,10 +41,27 @@
             await repo.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<AllPositionViewModel>> GetAllAsync()
+        public async Task DeleteAsync(int positionId)
+        {
+           var position = await repo.All<Position>()
+                .Include(p => p.Employees)
+                .Where(p => p.Id == positionId)
+                .FirstAsync();
+
+            if (position.Employees.Count > 0)
+            {
+                throw new InvalidOperationException("There are employees on this position!");
+            }
+
+            position.IsActive = false;
+
+            await repo.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<PositionViewModel>> GetAllAsync()
         {
             return await repo.AllReadonly<Position>(p => p.IsActive == true)
-                .Select(p => new AllPositionViewModel()
+                .Select(p => new PositionViewModel()
                 {
                     Id = p.Id,
                     Name = p.Name

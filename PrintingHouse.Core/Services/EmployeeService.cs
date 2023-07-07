@@ -65,7 +65,7 @@
         {
             var employee = await repo.GetByIdAsync<Employee>(id);
 
-            if (employee == null)
+            if (employee == null || employee.IsActive == false)
             {
                 return null;
             }

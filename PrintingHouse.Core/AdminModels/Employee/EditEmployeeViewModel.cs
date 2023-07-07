@@ -23,7 +23,7 @@
 
         public string? Role { get; set; }
 
-        public IEnumerable<AllPositionViewModel> Positions { get; set; } = Enumerable.Empty<AllPositionViewModel>();
+        public IEnumerable<PositionViewModel> Positions { get; set; } = Enumerable.Empty<PositionViewModel>();
 
         public IEnumerable<string> Roles { get; set; } = Enumerable.Empty<string>();        
     }

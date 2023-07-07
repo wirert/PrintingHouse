@@ -3,21 +3,10 @@
     ViewData["Title"] = "Change employee position";
 }
 
-
-
-
-@*@if (!ViewData.ModelState.IsValid && ViewData.ModelState["Error"] != null)
-{
-    <div class="alert alert-danger" role="alert">
-        @ViewData.ModelState["Error"]!.Errors.First().ErrorMessage
-    </div>
-}*@
-
-
 <div class="row col-md-4">
     <h1 class="mb-4">@ViewData["Title"]</h1>
     <section>
-        <form id="account" method="post">
+        <form method="post">
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="mb-3">
@@ -58,7 +47,7 @@
             </div>
 
             <div>
-                <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary mt-2">Set</button>
+                <button type="submit" class="w-100 btn btn-lg btn-primary mt-2">Set</button>
             </div>
 
         </form>

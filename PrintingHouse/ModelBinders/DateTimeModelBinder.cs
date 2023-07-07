@@ -12,6 +12,7 @@
         {
             customDateFormat = _customDateFormat;
         }
+
         public Task BindModelAsync(ModelBindingContext bindingContext)
         {
             ValueProviderResult valueResult = bindingContext
