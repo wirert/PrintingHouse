@@ -256,7 +256,13 @@
                     throw new ArgumentException("Problem removing user access level!");
                 }
 
-                var result = await userManager.DeleteAsync(employeeUser);
+                
+                employeeUser.FirstName = null;
+                employeeUser.LastName = null;
+                employeeUser.PhoneNumber = null;                
+                employeeUser.IsActive = false;
+
+                var result = await userManager.SetEmailAsync(employeeUser, null);
 
                 if (!result.Succeeded)
                 {
@@ -265,7 +271,7 @@
 
                 await employeeService.DeleteAsync(id);
 
-                TempData[SuccessMessage] = $"{employee.FullName} was successfully dismissed and his/her account closed.";
+                TempData[SuccessMessage] = $"Employee was successfully dismissed and his/her account closed.";
             }
             catch (ArgumentException ae)
             {
