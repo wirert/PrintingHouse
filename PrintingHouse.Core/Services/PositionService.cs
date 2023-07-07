@@ -48,7 +48,7 @@
                 .Where(p => p.Id == positionId)
                 .FirstAsync();
 
-            if (position.Employees.Count > 0)
+            if (position.Employees.Count(e => e.IsActive) > 0)
             {
                 throw new InvalidOperationException("There are employees on this position!");
             }

@@ -13,5 +13,7 @@
         Task<EditEmployeeViewModel> GetByIdAsync(int id);
 
         Task EditAsync(EditEmployeeViewModel model);
+
+        Task DeleteAsync(int id);
     }
 }

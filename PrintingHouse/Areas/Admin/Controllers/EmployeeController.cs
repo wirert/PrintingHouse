@@ -233,5 +233,50 @@
 
             return View(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete([FromForm]int id)
+        {
+            try
+            {
+                var employee = await employeeService.GetByIdAsync(id);
+
+                if (employee == null)
+                {
+                    throw new ArgumentException("There is no such employee!");
+                }
+
+                var employeeUser = await userManager.FindByIdAsync(employee.ApplicationUserId.ToString());
+
+                var userRoles = await userManager.GetRolesAsync(employeeUser!);
+                var removeRolesResult = await userManager.RemoveFromRolesAsync(employeeUser!, userRoles);
+
+                if (!removeRolesResult.Succeeded)
+                {
+                    throw new ArgumentException("Problem removing user access level!");
+                }
+
+                var result = await userManager.DeleteAsync(employeeUser);
+
+                if (!result.Succeeded)
+                {
+                    throw new ArgumentException($"Failed to delete user from the system. Try again later!");
+                }
+
+                await employeeService.DeleteAsync(id);
+
+                TempData[SuccessMessage] = $"{employee.FullName} was successfully dismissed and his/her account closed.";
+            }
+            catch (ArgumentException ae)
+            {
+                TempData[ErrorMessage] = ae.Message;                
+            }
+            catch (Exception)
+            {
+                TempData[ErrorMessage] = "Unexpected error occurred while trying to delete employee from the system!";
+            }
+
+            return RedirectToAction("All", "Employee");
+        }
     }
 }

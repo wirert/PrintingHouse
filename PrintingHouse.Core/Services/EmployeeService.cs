@@ -31,6 +31,15 @@
             await repo.SaveChangesAsync();
         }
 
+        public async Task DeleteAsync(int id)
+        {
+            var employee = await repo.GetByIdAsync<Employee>(id);
+
+            employee.IsActive = false;
+
+            await repo.SaveChangesAsync();
+        }
+
         public async Task EditAsync(EditEmployeeViewModel model)
         {
             var employee = await repo.GetByIdAsync<Employee>(model.Id);
@@ -78,5 +87,7 @@
             };
                 
         }
+
+
     }
 }
