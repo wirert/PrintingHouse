@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 using PrintingHouse.Core.Constants;
 using PrintingHouse.Infrastructure.Data;
 using PrintingHouse.Infrastructure.Data.Entities.Account;
@@ -27,6 +29,8 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 builder.Services.AddControllersWithViews()
     .AddMvcOptions(options =>
     {
+        options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+
         options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
         options.ModelBinderProviders.Insert(1, new DoubleModelBinderProvider());
         options.ModelBinderProviders.Insert(2, new DateTimeModelBinderProvider(FormattingConstants.DateTimeFormat));

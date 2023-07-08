@@ -60,6 +60,7 @@
         }
 
         [HttpPost]
+        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Add(AddEmployeeViewModel model)
         {
             var positions = await positionService.GetAllAsync();
@@ -122,6 +123,7 @@
             return View(model);
         }
 
+        [HttpGet]
         public async Task<IActionResult> All()
         {
             var model = await employeeService.GetAllAsync();
@@ -167,6 +169,7 @@
         }
 
         [HttpPost]
+        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Edit(EditEmployeeViewModel model)
         {
             var positions = await positionService.GetAllAsync();
@@ -235,6 +238,7 @@
         }
 
         [HttpPost]
+        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Delete([FromForm]int id)
         {
             try
