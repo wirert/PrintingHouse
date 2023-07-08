@@ -63,6 +63,6 @@
         public virtual ICollection<Order> Orders { get; set; }
 
         [Comment("Soft delete boolean property")]
-        public bool IsDeleted { get; set; } = false;
+        public bool IsActive { get; set; } = true;
     }
 }

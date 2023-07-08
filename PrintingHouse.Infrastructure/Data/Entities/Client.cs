@@ -44,6 +44,6 @@
         public virtual ICollection<Article> Articles { get; set; }
 
         [Comment("Soft delete propery")]
-        public bool IsDeleted { get; set; } = false;
+        public bool IsActive { get; set; } = true;
     }
 }

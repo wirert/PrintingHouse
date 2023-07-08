@@ -24,6 +24,7 @@
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IPositionService, PositionService>();
+            services.AddScoped<IClientService, ClientService>();
 
             return services;
         }

@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using PrintingHouse.Infrastructure.Data.Configurations;
-using PrintingHouse.Infrastructure.Data.Entities;
-using PrintingHouse.Infrastructure.Data.Entities.Account;
-
-namespace PrintingHouse.Infrastructure.Data
+﻿namespace PrintingHouse.Infrastructure.Data
 {
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore;
+
+    using Configurations;
+    using Entities;
+    using Entities.Account;
+
     /// <summary>
     /// Application database context
     /// </summary>
@@ -39,9 +40,7 @@ namespace PrintingHouse.Infrastructure.Data
 
             builder.Entity<ArticleConsumable>().HasKey(k => new {k.ArticleId, k.ConsumableId});
 
-            builder.Entity<Employee>().HasIndex(e => e.ApplicationUserId).IsUnique();
-
-            
+            builder.Entity<Employee>().HasIndex(e => e.ApplicationUserId).IsUnique();            
 
             builder.Entity<Article>()
                 .HasOne(a => a.Material)
