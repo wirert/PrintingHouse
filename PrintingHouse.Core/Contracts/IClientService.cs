@@ -5,5 +5,7 @@
     public interface IClientService
     {
         Task AddNewAsync(AddClientViewModel model);
+
+        Task<bool> ExistByName(string name);
     }
 }

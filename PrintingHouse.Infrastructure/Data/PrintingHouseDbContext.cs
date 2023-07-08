@@ -40,7 +40,9 @@
 
             builder.Entity<ArticleConsumable>().HasKey(k => new {k.ArticleId, k.ConsumableId});
 
-            builder.Entity<Employee>().HasIndex(e => e.ApplicationUserId).IsUnique();            
+            builder.Entity<Employee>().HasIndex(e => e.ApplicationUserId).IsUnique(); 
+            
+            builder.Entity<Client>().HasIndex(e => e.Name).IsUnique();            
 
             builder.Entity<Article>()
                 .HasOne(a => a.Material)

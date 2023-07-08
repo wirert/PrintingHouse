@@ -88,6 +88,13 @@
                 
         }
 
+        public async Task<int> GetIdByUserIdAsync(Guid userId)
+        {
+            var employee = await repo
+                .All<Employee>(e => e.ApplicationUserId == userId)
+                .FirstAsync();
 
+            return employee.Id;
+        }
     }
 }
