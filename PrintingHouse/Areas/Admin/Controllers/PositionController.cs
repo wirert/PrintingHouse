@@ -24,7 +24,6 @@
         }
 
         [HttpPost]
-        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Add(AddPositionViewModel model)
         {
             if (!ModelState.IsValid)
@@ -66,7 +65,6 @@
         }
 
         [HttpPost]
-        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Delete(int positionId)
         {
             try
