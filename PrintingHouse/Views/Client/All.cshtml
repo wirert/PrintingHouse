@@ -35,7 +35,7 @@
                         </div>
                     </td>
                     <td>
-                        @if (User.IsInRole(Merchant) || User.IsInRole(Admin) || User.IsInRole(Supervisor) || User.IsInRole(Manager))
+                        @if (User.IsInRole(Merchant) || User.IsInRole(Admin))
                         {
                             <form asp-asp-area="" asp-controller="Client" asp-action="Delete">
                                 <input name="id" type="hidden" value="@client.Id" />
