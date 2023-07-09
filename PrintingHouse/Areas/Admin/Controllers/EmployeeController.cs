@@ -34,92 +34,100 @@
         [HttpGet]
         public async Task<IActionResult> Add()
         {
-            var employeeUserIds = await employeeService.GetAllEmployeesUserIdAsync();
-
-            var users = await accountService.GetAllNewEmployees(employeeUserIds);
-
-            if (users.Count() == 0)
+            try
             {
-                TempData[WarningMessage] = "There are no new registered employees.";
+                var employeeUserIds = await employeeService.GetAllEmployeesUserIdAsync();
 
-                return RedirectToAction("All");
+                var users = await accountService.GetAllNewEmployees(employeeUserIds);
+
+                if (users.Count() == 0)
+                {
+                    TempData[WarningMessage] = "There are no new registered employees.";
+
+                    return RedirectToAction("All");
+                }
+
+                var roles = await roleManager.Roles.Select(r => r.Name).ToArrayAsync();
+
+                var positions = await positionService.GetAllAsync();
+
+                var model = new AddEmployeeViewModel()
+                {
+                    Users = users,
+                    AccessLevels = roles,
+                    Positions = positions
+                };
+
+                return View(model);
             }
-
-            var roles = await roleManager.Roles.Select(r => r.Name).ToArrayAsync();
-
-            var positions = await positionService.GetAllAsync();
-
-            var model = new AddEmployeeViewModel()
+            catch (Exception)
             {
-                Users = users,
-                AccessLevels = roles,
-                Positions = positions
-            };
+                TempData[ErrorMessage] = "Unexpected error! Try again later.";
 
-            return View(model);
+                return RedirectToAction("All", "Employee");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Add(AddEmployeeViewModel model)
         {
-            var positions = await positionService.GetAllAsync();
 
-            if (positions.All(p => p.Id != model.PositionId))
+            try
             {
-                ModelState.AddModelError(nameof(model.PositionId), "Selected position does not exist!");
-            }
-            
-            var user = await userManager.FindByIdAsync(model.ApplicationUserId.ToString());
+                var positions = await positionService.GetAllAsync();
 
-            if (user == null || user.IsActive == false)
-            {
-                ModelState.AddModelError(nameof(model.ApplicationUserId), "Selected user does not exist!");
-            }
-
-            var role = roleManager.FindByNameAsync(model.Role);
-
-            if (role == null)
-            {
-                ModelState.AddModelError(nameof(model.Role), "Selected role does not exist!");
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                if (positions.All(p => p.Id != model.PositionId))
                 {
-                    var result = await userManager.AddToRoleAsync(user!, model.Role);
-
-                    if (result.Succeeded)
-                    {
-                        await employeeService.AddAsync(model);
-
-                        TempData[SuccessMessage] = "Employee was added successfully!";
-
-                        return RedirectToAction("All");
-                    }
-
-                    ModelState.AddModelError(string.Empty, "Unexpected error occurred while trying to add access for user!");
+                    ModelState.AddModelError(nameof(model.PositionId), "Selected position does not exist!");
                 }
-                catch(InvalidOperationException)
+
+                var user = await userManager.FindByIdAsync(model.ApplicationUserId.ToString());
+
+                if (user == null || user.IsActive == false)
                 {
-                    ModelState.AddModelError(string.Empty, "Unexpected error occurred while trying to add access for user!");
+                    ModelState.AddModelError(nameof(model.ApplicationUserId), "Selected user does not exist!");
                 }
-                catch (Exception)
+
+                var role = await roleManager.FindByNameAsync(model.Role);
+
+                if (role == null)
                 {
-                    ModelState.AddModelError(string.Empty, "Unexpected error occurred while trying to add employee!");
+                    ModelState.AddModelError(nameof(model.Role), "Selected role does not exist!");
                 }
-            }            
 
-            var employeeUserIds = await employeeService.GetAllEmployeesUserIdAsync();
+                if (!ModelState.IsValid)
+                {
+                    var employeeUserIds = await employeeService.GetAllEmployeesUserIdAsync();
 
-            var users = await accountService.GetAllNewEmployees(employeeUserIds);
-            var roles = await roleManager.Roles.Select(r => r.Name).ToArrayAsync();
+                    var users = await accountService.GetAllNewEmployees(employeeUserIds);
+                    var roles = await roleManager.Roles.Select(r => r.Name).ToArrayAsync();
 
-            model.Users = users;
-            model.Positions = positions;
-            model.AccessLevels = roles;
+                    model.Users = users;
+                    model.Positions = positions;
+                    model.AccessLevels = roles;
 
-            return View(model);
+                    return View(model);
+                }
+
+                var result = await userManager.AddToRoleAsync(user!, model.Role);
+
+                if (!result.Succeeded)
+                {
+                    throw new Exception();
+                }
+
+                await employeeService.AddAsync(model);
+
+                TempData[SuccessMessage] = "Employee was added successfully!";
+
+                return RedirectToAction("All");
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Unexpected error occurred while trying to add employee!");
+
+                return RedirectToAction("All", "Employee");
+            }
         }
 
         public async Task<IActionResult> All()
@@ -131,19 +139,19 @@
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
-        {
-            var model = await employeeService.GetByIdAsync(id);
-
-            if (model == null)
-            {
-                TempData[ErrorMessage] = "Employee with such Id does not exist!";
-
-                return RedirectToAction("All");
-            }
-
+        {            
             try
             {
-                var user = await userManager.FindByIdAsync(model.ApplicationUserId.ToString());                
+                var model = await employeeService.GetByIdAsync(id);
+
+                if (model == null)
+                {
+                    TempData[ErrorMessage] = "Employee with such Id does not exist!";
+
+                    return RedirectToAction("All");
+                }
+
+                var user = await userManager.FindByIdAsync(model.ApplicationUserId.ToString());
 
                 var roles = await roleManager.Roles.Select(r => r.Name).ToArrayAsync();
                 var positions = await positionService.GetAllAsync();
@@ -163,79 +171,80 @@
                 TempData[ErrorMessage] = "Something went wrong! Try again.";
 
                 return RedirectToAction("All");
-            } 
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(EditEmployeeViewModel model)
         {
-            var positions = await positionService.GetAllAsync();
-
-            if (positions.All(p => p.Id != model.PositionId))
+            try
             {
-                ModelState.AddModelError(nameof(model.PositionId), "Selected position does not exist!");
-            }
+                var positions = await positionService.GetAllAsync();
 
-            var user = await userManager.FindByIdAsync(model.ApplicationUserId.ToString());            
-
-            if (user == null || user.IsActive == false)
-            {
-                ModelState.AddModelError(nameof(model.ApplicationUserId), "Selected employee does not exist!");
-            }
-
-            var role = roleManager.FindByNameAsync(model.Role);
-
-            if (role == null)
-            {
-                ModelState.AddModelError(nameof(model.Role), "Selected role does not exist!");
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                if (positions.All(p => p.Id != model.PositionId))
                 {
-                    var userRoles = await userManager.GetRolesAsync(user!);
+                    ModelState.AddModelError(nameof(model.PositionId), "Selected position does not exist!");
+                }
+
+                var user = await userManager.FindByIdAsync(model.ApplicationUserId.ToString());
+
+                if (user == null || user.IsActive == false)
+                {
+                    ModelState.AddModelError(nameof(model.ApplicationUserId), "Selected employee does not exist!");
+                }
+
+                var role = await roleManager.FindByNameAsync(model.Role);
+
+                if (role == null)
+                {
+                    ModelState.AddModelError(nameof(model.Role), "Selected role does not exist!");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    var roles = await roleManager.Roles.Select(r => r.Name).ToArrayAsync();
+
+                    model.Positions = positions;
+                    model.Roles = roles;
+
+                    return View(model);
+                }
+
+                var userRoles = await userManager.GetRolesAsync(user!);
+
+                if (userRoles.Any())
+                {
                     var removeRolesResult = await userManager.RemoveFromRolesAsync(user!, userRoles);
 
                     if (!removeRolesResult.Succeeded)
                     {
-                        throw new InvalidOperationException();
+                        throw new Exception();
                     }
-
-                    var addRoleResult = await userManager.AddToRoleAsync(user!, model.Role);
-
-                    if (!addRoleResult.Succeeded)
-                    {
-                        throw new InvalidOperationException();
-                        
-                    }
-
-                    await employeeService.EditAsync(model);
-
-                    TempData[SuccessMessage] = "Position was changed successfully!";
-
-                    return RedirectToAction("All");
                 }
-                catch (InvalidOperationException)
+
+                var addRoleResult = await userManager.AddToRoleAsync(user!, model.Role);
+
+                if (!addRoleResult.Succeeded)
                 {
-                    ModelState.AddModelError(string.Empty, "Unexpected error occurred while trying to add access for user!");
+                    throw new Exception();
                 }
-                catch (Exception)
-                {
-                    ModelState.AddModelError(string.Empty, "Unexpected error occurred while trying to change position!");
-                }
+
+                await employeeService.ChnagePositionAsync(model);
+
+                TempData[SuccessMessage] = "Position was changed successfully!";
+
+                return RedirectToAction("All", "Employee");
             }
+            catch (Exception)
+            {
+                TempData[ErrorMessage] = "Unexpected error occurred while trying to change position!";
 
-            var roles = await roleManager.Roles.Select(r => r.Name).ToArrayAsync();
-
-            model.Positions = positions;
-            model.Roles = roles;
-
-            return View(model);
+                return RedirectToAction("All", "Employee");
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete([FromForm]int id)
+        public async Task<IActionResult> Delete([FromForm] int id)
         {
             try
             {
@@ -256,10 +265,10 @@
                     throw new ArgumentException("Problem removing user access level!");
                 }
 
-                
+
                 employeeUser.FirstName = null;
                 employeeUser.LastName = null;
-                employeeUser.PhoneNumber = null;                
+                employeeUser.PhoneNumber = null;
                 employeeUser.IsActive = false;
 
                 var result = await userManager.SetEmailAsync(employeeUser, null);
@@ -275,7 +284,7 @@
             }
             catch (ArgumentException ae)
             {
-                TempData[ErrorMessage] = ae.Message;                
+                TempData[ErrorMessage] = ae.Message;
             }
             catch (Exception)
             {

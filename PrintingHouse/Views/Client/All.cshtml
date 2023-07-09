@@ -35,10 +35,14 @@
                         </div>
                     </td>
                     <td>
-                        <form asp-asp-area="" asp-controller="Client" asp-action="Delete">
-                            <input name="id" type="hidden" value="@client.Id" />
-                            <button class="btn btn-danger" type="submit">Remove</button>
-                        </form>
+                        @if (User.IsInRole(Merchant) || User.IsInRole(Admin) || User.IsInRole(Supervisor) || User.IsInRole(Manager))
+                        {
+                            <form asp-asp-area="" asp-controller="Client" asp-action="Delete">
+                                <input name="id" type="hidden" value="@client.Id" />
+                                <button class="btn btn-danger" type="submit">Remove</button>
+                            </form>
+                        }
+                        
                     </td>
                     
                 </tr>

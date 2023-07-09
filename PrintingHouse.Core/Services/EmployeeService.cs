@@ -40,9 +40,14 @@
             await repo.SaveChangesAsync();
         }
 
-        public async Task EditAsync(EditEmployeeViewModel model)
+        public async Task ChnagePositionAsync(EditEmployeeViewModel model)
         {
             var employee = await repo.GetByIdAsync<Employee>(model.Id);
+
+            if (employee.PositionId == model.PositionId)
+            {
+                return;
+            }
 
             employee.PositionId = model.PositionId;
 

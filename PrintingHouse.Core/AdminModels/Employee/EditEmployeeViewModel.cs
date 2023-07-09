@@ -17,8 +17,6 @@
         [Required]
         public int PositionId { get; set; }
 
-        public string? PositionName { get; set; }
-
         public string? OldPositionName { get; set; }
 
         public string? Role { get; set; }

@@ -12,7 +12,7 @@
 
         Task<EditEmployeeViewModel> GetByIdAsync(int id);
 
-        Task EditAsync(EditEmployeeViewModel model);
+        Task ChnagePositionAsync(EditEmployeeViewModel model);
 
         Task DeleteAsync(int id);
 

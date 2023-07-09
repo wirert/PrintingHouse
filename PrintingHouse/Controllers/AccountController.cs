@@ -150,9 +150,7 @@
         {
             await roleManager.CreateAsync(new IdentityRole<Guid>(Admin));
             await roleManager.CreateAsync(new IdentityRole<Guid>(Employee));
-            await roleManager.CreateAsync(new IdentityRole<Guid>(Manager));
             await roleManager.CreateAsync(new IdentityRole<Guid>(Merchant));
-            //await roleManager.CreateAsync(new IdentityRole<Guid>(Supervisor));
            
 
             return RedirectToAction("Index", "Home");
