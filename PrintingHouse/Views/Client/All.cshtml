@@ -1,0 +1,55 @@
+﻿@model IEnumerable<AllClientViewModel>
+@{
+    ViewBag.Title = "All clients";
+}
+<div class="table-responsive-sm">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Client name</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Phone number</th>
+                <th scope="col">Merchant</th>
+                <th scope="col">Articles</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var client in Model)
+            {
+                <tr>
+                    <td>@client.Name</td>
+                    <td>@client.Email</td>
+                    <td>@client.PhoneNumber</td>
+                    <td>@client.MerchantName</td>
+                    <td>
+                        <div>Count: @client.Articles</div>
+                        <div>
+                            @if (@client.Articles > 0)
+                            {
+                                <form asp-asp-area="" asp-controller="Article" asp-action="All" method="get">
+                                    <input name="id" type="hidden" value="@client.Id" />
+                                    <button class="btn btn-sm btn-info" type="submit">View articles</button>
+                                </form>
+                            }                            
+                        </div>
+                    </td>
+                    <td>
+                        <form asp-asp-area="" asp-controller="Client" asp-action="Delete">
+                            <input name="id" type="hidden" value="@client.Id" />
+                            <button class="btn btn-danger" type="submit">Remove</button>
+                        </form>
+                    </td>
+                    
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+
+
+@if (User.IsInRole(Merchant))
+{
+    <a asp-asp-area="" asp-controller="Client" asp-action="Add" class="btn btn-dark">Add new client</a>
+}

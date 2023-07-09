@@ -1,12 +1,14 @@
 ﻿namespace PrintingHouse.Core.Services
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
+
+    using Microsoft.EntityFrameworkCore;
 
     using Contracts;
     using Models.Client;
     using Infrastructure.Data.Common.Contracts;
     using Infrastructure.Data.Entities;
-    using Microsoft.EntityFrameworkCore;
 
     public class ClientService : IClientService
     {
@@ -36,6 +38,21 @@
             return await repo
                 .AllReadonly<Client>(c => c.Name == name)
                 .AnyAsync();
+        }
+
+        public async Task<IEnumerable<AllClientViewModel>> GetAllAsync()
+        {
+            return await repo.AllReadonly<Client>(c => c.IsActive)
+                .Select(c => new AllClientViewModel()
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    PhoneNumber = c.PhoneNumber,
+                    Email = c.Email,
+                    MerchantName = $"{c.Merchant.ApplicationUser.FirstName!} {c.Merchant.ApplicationUser.LastName!}",
+                    Articles = c.Articles.Count
+                })
+                .ToArrayAsync();
         }
     }
 }

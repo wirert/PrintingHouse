@@ -13,6 +13,7 @@
         public Client()
         {
             Articles = new HashSet<Article>();
+            IsActive = true;
         }
 
         [Comment("Client primary key")]
@@ -44,6 +45,6 @@
         public virtual ICollection<Article> Articles { get; set; }
 
         [Comment("Soft delete propery")]
-        public bool IsActive { get; set; } = true;
+        public bool IsActive { get; set; }
     }
 }

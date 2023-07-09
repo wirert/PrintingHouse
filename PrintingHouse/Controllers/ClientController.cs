@@ -70,7 +70,9 @@
         [HttpGet]
         public async Task<IActionResult> All()
         {
-            return View();
+            var clients = await clientService.GetAllAsync();
+
+            return View(clients);
         }
     }
 }

@@ -7,5 +7,7 @@
         Task AddNewAsync(AddClientViewModel model);
 
         Task<bool> ExistByName(string name);
+
+        Task<IEnumerable<AllClientViewModel>> GetAllAsync();
     }
 }
