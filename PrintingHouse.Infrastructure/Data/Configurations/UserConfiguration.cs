@@ -32,7 +32,8 @@
                 Email = "admin@mail.com",
                 NormalizedEmail = "ADMIN@MAIL.COM",
                 FirstName = "Admin",
-                LastName = "Petrov"
+                LastName = "Petrov",
+                SecurityStamp = "d2ecdcca-b1e6-4015-aaa1-17c22a17e6b3"
             };
 
             user.PasswordHash =
@@ -48,7 +49,8 @@
                 Email = "merchant1@mail.com",
                 NormalizedEmail = "MERCHANT1@MAIL.COM",
                 FirstName = "Merchant",
-                LastName = "Georgiev"
+                LastName = "Georgiev",
+                SecurityStamp = "ff91b260-0ab1-48c3-b7dd-ecb740dfce74"
             };
 
             user.PasswordHash =
@@ -64,7 +66,8 @@
                 Email = "empl1@mail.com",
                 NormalizedEmail = "EMPL1@MAIL.COM",
                 FirstName = "Empl",
-                LastName = "Nikolov"
+                LastName = "Nikolov",
+                SecurityStamp = "455036d5-b858-4330-83bb-d9bbe1e7d7a0"
             };
 
             user.PasswordHash =

@@ -413,9 +413,9 @@ namespace PrintingHouse.Infrastructure.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PictureName", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"), 0, "2db0853c-fd7f-4cad-878b-1d3a557adf16", "admin@mail.com", false, "Admin", "Petrov", false, null, "ADMIN@MAIL.COM", "ADMIN123", "AQAAAAEAACcQAAAAEHmHA5wdwtOSjyuYqpFbsMmFfOawrBY+gyaHRSiCUcLIcIx9eiRSemCu/jaSidNXKg==", null, false, null, null, false, "Admin123" },
-                    { new Guid("6afbf121-61d4-42ca-a9c1-5ac694442d83"), 0, "4e92c515-e34e-433f-84a9-39e2221edd22", "empl1@mail.com", false, "Empl", "Nikolov", false, null, "EMPL1@MAIL.COM", "EMPLOYEE1", "AQAAAAEAACcQAAAAELd8z/CDLCCt5DECCjJdxI2SOukYIPyid+mFlx5M349EDo+mPWxwQSC3W1Q1XP/ZsA==", null, false, null, null, false, "Employee1" },
-                    { new Guid("e7065dbb-0c70-48da-902c-9f6f2536c505"), 0, "4171f9e1-f0f4-4e56-9a94-ce6d5bc5bf0d", "merchant1@mail.com", false, "Merchant", "Georgiev", false, null, "MERCHANT1@MAIL.COM", "MERCHANT1", "AQAAAAEAACcQAAAAEGtBVxxFoxPFdwKF+o5EfJ5Wi5RoH6KZHCZWNqa/6GsJ7FmFUvGcPLraU88f/k83kg==", null, false, null, null, false, "Merchant1" }
+                    { new Guid("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"), 0, "e5f89b31-e136-4fa5-af85-6d894587d1df", "admin@mail.com", false, "Admin", "Petrov", false, null, "ADMIN@MAIL.COM", "ADMIN123", "AQAAAAEAACcQAAAAEInWF6oTX2iEiojPVpBv3VMgZypmuYVTue7NClyQjvjIuHRzW/uEzCFqiMOci6GXEw==", null, false, null, "d2ecdcca-b1e6-4015-aaa1-17c22a17e6b3", false, "Admin123" },
+                    { new Guid("6afbf121-61d4-42ca-a9c1-5ac694442d83"), 0, "5eee9b54-3fe0-49ae-9e73-06ccb35c2aef", "empl1@mail.com", false, "Empl", "Nikolov", false, null, "EMPL1@MAIL.COM", "EMPLOYEE1", "AQAAAAEAACcQAAAAEEx5yhBKtCJfxQF/zUe9cV2xf+kBb2r2QkRC9P32A1vHS1prp+aTJfKGdOG4CnzBfw==", null, false, null, "455036d5-b858-4330-83bb-d9bbe1e7d7a0", false, "Employee1" },
+                    { new Guid("e7065dbb-0c70-48da-902c-9f6f2536c505"), 0, "1996cdb1-a667-423e-abc4-966b97ca4175", "merchant1@mail.com", false, "Merchant", "Georgiev", false, null, "MERCHANT1@MAIL.COM", "MERCHANT1", "AQAAAAEAACcQAAAAEHIr25deIQOlw8IJUoHP50xNyegO9SEd4TJLKIOc0IMS+87mh+5vMgYuCDZvqsfwZQ==", null, false, null, "ff91b260-0ab1-48c3-b7dd-ecb740dfce74", false, "Merchant1" }
                 });
 
             migrationBuilder.InsertData(
@@ -467,6 +467,27 @@ namespace PrintingHouse.Infrastructure.Migrations
                 table: "Employees",
                 columns: new[] { "Id", "ApplicationUserId", "IsActive", "PositionId" },
                 values: new object[] { 1, new Guid("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"), true, 1 });
+
+            migrationBuilder.InsertData(
+                table: "MaterialsColorModels",
+                columns: new[] { "ColorModelId", "MaterialId" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 2, 2 },
+                    { 2, 3 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Machines",
+                columns: new[] { "Id", "ColorModelId", "MaterialId", "MaterialPerPrint", "Model", "Name", "PrintTime" },
+                values: new object[,]
+                {
+                    { 1, 2, 2, 5.0, null, "Machine 1", new TimeSpan(0, 0, 3, 0, 0) },
+                    { 2, 2, 2, 5.0, null, "Machine 2", new TimeSpan(0, 0, 2, 30, 0) },
+                    { 3, 1, 1, 1.0, null, "Machine 3", new TimeSpan(0, 0, 0, 3, 0) },
+                    { 4, 2, 3, 1.0, null, "Machine 4", new TimeSpan(0, 0, 40, 0, 0) }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ArticleColors_ColorId",

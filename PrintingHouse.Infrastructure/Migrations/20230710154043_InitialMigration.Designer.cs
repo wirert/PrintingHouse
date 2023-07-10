@@ -12,7 +12,7 @@ using PrintingHouse.Infrastructure.Data;
 namespace PrintingHouse.Infrastructure.Migrations
 {
     [DbContext(typeof(PrintingHouseDbContext))]
-    [Migration("20230710142759_InitialMigration")]
+    [Migration("20230710154043_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -252,7 +252,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = new Guid("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2db0853c-fd7f-4cad-878b-1d3a557adf16",
+                            ConcurrencyStamp = "e5f89b31-e136-4fa5-af85-6d894587d1df",
                             Email = "admin@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
@@ -261,8 +261,9 @@ namespace PrintingHouse.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@MAIL.COM",
                             NormalizedUserName = "ADMIN123",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHmHA5wdwtOSjyuYqpFbsMmFfOawrBY+gyaHRSiCUcLIcIx9eiRSemCu/jaSidNXKg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEInWF6oTX2iEiojPVpBv3VMgZypmuYVTue7NClyQjvjIuHRzW/uEzCFqiMOci6GXEw==",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "d2ecdcca-b1e6-4015-aaa1-17c22a17e6b3",
                             TwoFactorEnabled = false,
                             UserName = "Admin123"
                         },
@@ -270,7 +271,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = new Guid("e7065dbb-0c70-48da-902c-9f6f2536c505"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4171f9e1-f0f4-4e56-9a94-ce6d5bc5bf0d",
+                            ConcurrencyStamp = "1996cdb1-a667-423e-abc4-966b97ca4175",
                             Email = "merchant1@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Merchant",
@@ -279,8 +280,9 @@ namespace PrintingHouse.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MERCHANT1@MAIL.COM",
                             NormalizedUserName = "MERCHANT1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGtBVxxFoxPFdwKF+o5EfJ5Wi5RoH6KZHCZWNqa/6GsJ7FmFUvGcPLraU88f/k83kg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHIr25deIQOlw8IJUoHP50xNyegO9SEd4TJLKIOc0IMS+87mh+5vMgYuCDZvqsfwZQ==",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "ff91b260-0ab1-48c3-b7dd-ecb740dfce74",
                             TwoFactorEnabled = false,
                             UserName = "Merchant1"
                         },
@@ -288,7 +290,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = new Guid("6afbf121-61d4-42ca-a9c1-5ac694442d83"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4e92c515-e34e-433f-84a9-39e2221edd22",
+                            ConcurrencyStamp = "5eee9b54-3fe0-49ae-9e73-06ccb35c2aef",
                             Email = "empl1@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Empl",
@@ -297,8 +299,9 @@ namespace PrintingHouse.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "EMPL1@MAIL.COM",
                             NormalizedUserName = "EMPLOYEE1",
-                            PasswordHash = "AQAAAAEAACcQAAAAELd8z/CDLCCt5DECCjJdxI2SOukYIPyid+mFlx5M349EDo+mPWxwQSC3W1Q1XP/ZsA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEx5yhBKtCJfxQF/zUe9cV2xf+kBb2r2QkRC9P32A1vHS1prp+aTJfKGdOG4CnzBfw==",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "455036d5-b858-4330-83bb-d9bbe1e7d7a0",
                             TwoFactorEnabled = false,
                             UserName = "Employee1"
                         });
@@ -632,6 +635,48 @@ namespace PrintingHouse.Infrastructure.Migrations
                     b.ToTable("Machines");
 
                     b.HasComment("Printing machine");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ColorModelId = 2,
+                            MaterialId = 2,
+                            MaterialPerPrint = 5.0,
+                            Name = "Machine 1",
+                            PrintTime = new TimeSpan(0, 0, 3, 0, 0),
+                            Status = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ColorModelId = 2,
+                            MaterialId = 2,
+                            MaterialPerPrint = 5.0,
+                            Name = "Machine 2",
+                            PrintTime = new TimeSpan(0, 0, 2, 30, 0),
+                            Status = 0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ColorModelId = 1,
+                            MaterialId = 1,
+                            MaterialPerPrint = 1.0,
+                            Name = "Machine 3",
+                            PrintTime = new TimeSpan(0, 0, 0, 3, 0),
+                            Status = 0
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ColorModelId = 2,
+                            MaterialId = 3,
+                            MaterialPerPrint = 1.0,
+                            Name = "Machine 4",
+                            PrintTime = new TimeSpan(0, 0, 40, 0, 0),
+                            Status = 0
+                        });
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Material", b =>
@@ -734,6 +779,23 @@ namespace PrintingHouse.Infrastructure.Migrations
                     b.ToTable("MaterialsColorModels");
 
                     b.HasComment("Machine material and color model connecting table with article colors");
+
+                    b.HasData(
+                        new
+                        {
+                            MaterialId = 1,
+                            ColorModelId = 1
+                        },
+                        new
+                        {
+                            MaterialId = 2,
+                            ColorModelId = 2
+                        },
+                        new
+                        {
+                            MaterialId = 3,
+                            ColorModelId = 2
+                        });
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Order", b =>

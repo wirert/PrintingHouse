@@ -1,7 +1,8 @@
 ﻿namespace PrintingHouse.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    //using PrintingHouse.Core.Models.Article;
+
+    using PrintingHouse.Core.Models.Article;
 
     public class ArticleController : BaseController
     {
@@ -10,19 +11,19 @@
             return View("All");
         }
 
-        //public IActionResult Add()
-        //{
-        //    var model = new AddArticleViewModel();
+        public IActionResult Add()
+        {
+            var model = new AddArticleViewModel();
 
-        //    return View(model);
-        //}
+            return View(model);
+        }
 
-        //[HttpGet]
-        //public Task<IActionResult> All(int? id = null)
-        //{
+        [HttpGet]
+        public async Task<IActionResult> All(int? id = null)
+        {
 
 
-        //    return Ok();
-        //}
+            return Ok();
+        }
     }
 }

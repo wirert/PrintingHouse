@@ -149,8 +149,7 @@
         /// <summary>
         /// Add admin role to user(only for development purpose)
         /// </summary>
-        /// <returns></returns>
-        [Authorize(Roles = Admin)]
+        /// <returns></returns>        
         public async Task<IActionResult> AddRoles()
         {
             if (!hostEnvironment.IsDevelopment())

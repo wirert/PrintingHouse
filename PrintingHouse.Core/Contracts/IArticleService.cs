@@ -1,9 +1,9 @@
 ﻿namespace PrintingHouse.Core.Contracts
 {
-    //using PrintingHouse.Core.Models.Article;
+    using Models.Article;
 
     public interface IArticleService
     {
-        //Task AddAsync(AddArticleViewModel model);
+        Task AddAsync(AddArticleViewModel model);
     }
 }

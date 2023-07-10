@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Material - Copy\**" />
+    <EmbeddedResource Remove="Models\Material - Copy\**" />
+    <None Remove="Models\Material - Copy\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\PrintingHouse.Infrastructure\PrintingHouse.Infrastructure.csproj" />
   </ItemGroup>
 

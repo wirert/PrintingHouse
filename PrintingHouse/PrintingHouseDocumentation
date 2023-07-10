@@ -40,7 +40,7 @@
             <summary>
             Add admin role to user(only for development purpose)
             </summary>
-            <returns></returns>
+            <returns></returns>        
         </member>
         <member name="T:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtension">
             <summary>
