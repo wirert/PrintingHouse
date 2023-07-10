@@ -3,7 +3,6 @@
     using System.Threading.Tasks;
 
     using Contracts;
-    using Models.Article;
     using PrintingHouse.Infrastructure.Data.Common.Contracts;
 
     public class ArticleService : IArticleService
@@ -15,9 +14,9 @@
             repo = _repo;
         }
 
-        public Task AddAsync(AddArticleViewModel model)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task AddAsync(AddArticleViewModel model)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }
