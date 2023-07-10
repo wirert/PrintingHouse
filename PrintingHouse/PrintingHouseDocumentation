@@ -36,7 +36,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:PrintingHouse.Controllers.AccountController.AddAdminRole">
+        <member name="M:PrintingHouse.Controllers.AccountController.AddRoles">
             <summary>
             Add admin role to user(only for development purpose)
             </summary>

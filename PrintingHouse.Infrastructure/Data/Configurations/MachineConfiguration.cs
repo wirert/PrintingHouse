@@ -10,60 +10,78 @@
     {
         public void Configure(EntityTypeBuilder<Machine> builder)
         {
-            builder
-                .HasOne(m => m.Material)
-                .WithMany(mt => mt.Machines)
-                .HasForeignKey(m => m.MaterialId)
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(m => m.MaterialColorModel)
+                .WithMany(mc => mc.Machines)
+                .HasForeignKey(m => new {m.MaterialId, m.ColorModelId });
 
-            builder.HasData(CreateMachines());
+            builder.Property(p => p.Status).HasDefaultValue(MachineStatus.Working);
+
+           // builder.HasData(CreateMachines());
         }
 
-        private Machine[] CreateMachines()
+        private List<Machine> CreateMachines()
         {
-            return new Machine[]
+            var materialColorModel = new MaterialColorModel()
             {
-                new Machine()
-                {
-                    Id = 1,
-                    Name = "Machine 1",
-                    ColorModelId = 2,
-                    MaterialId = 2,
-                    MaterialPerPrint = 5,
-                    PrintTime = TimeSpan.FromMinutes(3),
-                    Status = MachineStatus.Working
-                },
-                 new Machine()
-                {
-                    Id = 2,
-                    Name = "Machine 2",
-                    ColorModelId = 2,
-                    MaterialId = 2,
-                    MaterialPerPrint = 5,
-                    PrintTime = TimeSpan.FromSeconds(150),
-                    Status = MachineStatus.Working
-                },
-                  new Machine()
-                {
-                    Id = 3,
-                    Name = "Machine 3",
-                    ColorModelId = 1,
-                    MaterialId = 1,
-                    MaterialPerPrint = 1,
-                    PrintTime = TimeSpan.FromSeconds(3),
-                    Status = MachineStatus.Working
-                },
-                   new Machine()
-                {
-                    Id = 4,
-                    Name = "Machine 4",
-                    ColorModelId = 2,
-                    MaterialId = 3,
-                    MaterialPerPrint = 1,
-                    PrintTime = TimeSpan.FromMinutes(40),
-                    Status = MachineStatus.Working
-                }
+                ColorModelId = 2,
+                MaterialId = 2
             };
+
+
+            var machines = new List<Machine>();
+
+            machines.Add(new Machine()
+            {
+                Id = 1,
+                Name = "Machine 1",
+                MaterialColorModel = materialColorModel,                
+                MaterialPerPrint = 5,
+                PrintTime = TimeSpan.FromMinutes(3),
+                Status = MachineStatus.Working
+            });
+
+            machines.Add(new Machine()
+            {
+                Id = 2,
+                Name = "Machine 2",
+                MaterialColorModel = materialColorModel,
+                MaterialPerPrint = 5,
+                PrintTime = TimeSpan.FromSeconds(150),
+                Status = MachineStatus.Working
+            });
+
+            materialColorModel = new MaterialColorModel()
+            {
+                MaterialId = 1,
+                ColorModelId = 1
+            };
+
+            machines.Add(new Machine()
+            {
+                Id = 3,
+                Name = "Machine 3",
+                MaterialColorModel = materialColorModel,
+                MaterialPerPrint = 1,
+                PrintTime = TimeSpan.FromSeconds(3),
+                Status = MachineStatus.Working
+            });
+
+            materialColorModel = new MaterialColorModel()
+            {
+                MaterialId = 3,
+                ColorModelId = 2
+            };
+            machines.Add(new Machine()
+            {
+                Id = 4,
+                Name = "Machine 4",
+                MaterialColorModel = materialColorModel,
+                MaterialPerPrint = 1,
+                PrintTime = TimeSpan.FromMinutes(40),
+                Status = MachineStatus.Working
+            });
+
+            return machines;
         }
     }
 }

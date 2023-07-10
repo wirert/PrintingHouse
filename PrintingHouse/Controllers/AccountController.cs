@@ -151,13 +151,17 @@
         /// </summary>
         /// <returns></returns>
         [Authorize(Roles = Admin)]
-        public async Task<IActionResult> AddAdminRole()
+        public async Task<IActionResult> AddRoles()
         {
             if (!hostEnvironment.IsDevelopment())
             {
                 return NotFound();
             }
-                        
+
+            await roleManager.CreateAsync(new IdentityRole<Guid>(Admin));
+            await roleManager.CreateAsync(new IdentityRole<Guid>(Employee));
+            await roleManager.CreateAsync(new IdentityRole<Guid>(Merchant));
+
             var user = await userManager.Users.FirstAsync(u => u.Id == Guid.Parse("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"));
 
             await userManager.AddToRoleAsync(user!, Admin);

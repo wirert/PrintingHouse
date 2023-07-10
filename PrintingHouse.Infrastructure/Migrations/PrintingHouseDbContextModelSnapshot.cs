@@ -183,7 +183,9 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .HasComment("Employee first name");
 
                     b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
+                        .HasDefaultValue(true)
                         .HasComment("Is active employee (soft delete property)");
 
                     b.Property<string>("LastName")
@@ -242,6 +244,62 @@ namespace PrintingHouse.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
 
                     b.HasComment("Extention of identity user");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "2db0853c-fd7f-4cad-878b-1d3a557adf16",
+                            Email = "admin@mail.com",
+                            EmailConfirmed = false,
+                            FirstName = "Admin",
+                            IsActive = false,
+                            LastName = "Petrov",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@MAIL.COM",
+                            NormalizedUserName = "ADMIN123",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHmHA5wdwtOSjyuYqpFbsMmFfOawrBY+gyaHRSiCUcLIcIx9eiRSemCu/jaSidNXKg==",
+                            PhoneNumberConfirmed = false,
+                            TwoFactorEnabled = false,
+                            UserName = "Admin123"
+                        },
+                        new
+                        {
+                            Id = new Guid("e7065dbb-0c70-48da-902c-9f6f2536c505"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "4171f9e1-f0f4-4e56-9a94-ce6d5bc5bf0d",
+                            Email = "merchant1@mail.com",
+                            EmailConfirmed = false,
+                            FirstName = "Merchant",
+                            IsActive = false,
+                            LastName = "Georgiev",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "MERCHANT1@MAIL.COM",
+                            NormalizedUserName = "MERCHANT1",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGtBVxxFoxPFdwKF+o5EfJ5Wi5RoH6KZHCZWNqa/6GsJ7FmFUvGcPLraU88f/k83kg==",
+                            PhoneNumberConfirmed = false,
+                            TwoFactorEnabled = false,
+                            UserName = "Merchant1"
+                        },
+                        new
+                        {
+                            Id = new Guid("6afbf121-61d4-42ca-a9c1-5ac694442d83"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "4e92c515-e34e-433f-84a9-39e2221edd22",
+                            Email = "empl1@mail.com",
+                            EmailConfirmed = false,
+                            FirstName = "Empl",
+                            IsActive = false,
+                            LastName = "Nikolov",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "EMPL1@MAIL.COM",
+                            NormalizedUserName = "EMPLOYEE1",
+                            PasswordHash = "AQAAAAEAACcQAAAAELd8z/CDLCCt5DECCjJdxI2SOukYIPyid+mFlx5M349EDo+mPWxwQSC3W1Q1XP/ZsA==",
+                            PhoneNumberConfirmed = false,
+                            TwoFactorEnabled = false,
+                            UserName = "Employee1"
+                        });
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Article", b =>
@@ -255,10 +313,6 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasComment("Article owner id");
 
-                    b.Property<int>("ColorModelId")
-                        .HasColumnType("int")
-                        .HasComment("Article color model id");
-
                     b.Property<string>("ImageName")
                         .IsRequired()
                         .HasMaxLength(60)
@@ -266,12 +320,14 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .HasComment("Name of design image");
 
                     b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
+                        .HasDefaultValue(true)
                         .HasComment("Soft delete boolean property");
 
-                    b.Property<int>("MaterialId")
-                        .HasColumnType("int")
-                        .HasComment("Article material");
+                    b.Property<double>("MaterialQuantity")
+                        .HasColumnType("float")
+                        .HasComment("Required material lenght");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -279,19 +335,11 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .HasColumnType("nvarchar(60)")
                         .HasComment("Article name.");
 
-                    b.Property<double>("RequiredMaterial")
-                        .HasColumnType("float")
-                        .HasComment("Required material lenght");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
-                    b.HasIndex("ColorModelId");
-
-                    b.HasIndex("MaterialId");
-
-                    b.ToTable("Articles", (string)null);
+                    b.ToTable("Articles");
 
                     b.HasComment("Particular client article ready for print.");
                 });
@@ -306,17 +354,23 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasComment("Color id");
 
+                    b.Property<int>("ColorModelId")
+                        .HasColumnType("int")
+                        .HasComment("Color model id");
+
                     b.Property<double>("ColorQuantity")
                         .HasColumnType("float")
                         .HasComment("Required color quantity for single print of article");
 
-                    b.HasKey("ArticleId", "ColorId");
+                    b.HasKey("ArticleId", "ColorId", "ColorModelId");
 
                     b.HasIndex("ColorId");
 
-                    b.ToTable("ArticlesColors", (string)null);
+                    b.HasIndex("ColorModelId");
 
-                    b.HasComment("Article color with quantity (connecting table)");
+                    b.ToTable("ArticleColors");
+
+                    b.HasComment("Article color with required quantity");
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Client", b =>
@@ -335,7 +389,9 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .HasComment("Client e-mail");
 
                     b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
+                        .HasDefaultValue(true)
                         .HasComment("Soft delete propery");
 
                     b.Property<int>("MerchantId")
@@ -361,7 +417,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Clients", (string)null);
+                    b.ToTable("Clients");
 
                     b.HasComment("Printing house client");
                 });
@@ -371,41 +427,34 @@ namespace PrintingHouse.Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasComment("Consumable primary key");
+                        .HasComment("Color primary key");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("ColorModelId")
-                        .HasColumnType("int")
-                        .HasComment("Color model id from which that color is");
-
                     b.Property<int>("InStock")
                         .HasColumnType("int")
-                        .HasComment("Consumable current quantit in stock");
+                        .HasComment("Color current quantit in stock");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("money")
-                        .HasComment("Consumable price");
+                        .HasComment("Color price");
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)")
-                        .HasComment("Consumable type name");
+                        .HasComment("Color type name");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ColorModelId");
+                    b.ToTable("Color");
 
-                    b.ToTable("Colors", (string)null);
-
-                    b.HasComment("Machine consumable");
+                    b.HasComment("Color");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            ColorModelId = 1,
                             InStock = 104,
                             Price = 50m,
                             Type = "Red"
@@ -413,7 +462,6 @@ namespace PrintingHouse.Infrastructure.Migrations
                         new
                         {
                             Id = 2,
-                            ColorModelId = 1,
                             InStock = 92,
                             Price = 48m,
                             Type = "Green"
@@ -421,7 +469,6 @@ namespace PrintingHouse.Infrastructure.Migrations
                         new
                         {
                             Id = 3,
-                            ColorModelId = 1,
                             InStock = 67,
                             Price = 57m,
                             Type = "Blue"
@@ -429,7 +476,6 @@ namespace PrintingHouse.Infrastructure.Migrations
                         new
                         {
                             Id = 4,
-                            ColorModelId = 2,
                             InStock = 47,
                             Price = 52m,
                             Type = "Cyan"
@@ -437,7 +483,6 @@ namespace PrintingHouse.Infrastructure.Migrations
                         new
                         {
                             Id = 5,
-                            ColorModelId = 2,
                             InStock = 38,
                             Price = 55m,
                             Type = "Magenta"
@@ -445,7 +490,6 @@ namespace PrintingHouse.Infrastructure.Migrations
                         new
                         {
                             Id = 6,
-                            ColorModelId = 2,
                             InStock = 50,
                             Price = 47m,
                             Type = "Yellow"
@@ -453,7 +497,6 @@ namespace PrintingHouse.Infrastructure.Migrations
                         new
                         {
                             Id = 7,
-                            ColorModelId = 2,
                             InStock = 60,
                             Price = 40m,
                             Type = "Black"
@@ -477,9 +520,9 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ColorModels", (string)null);
+                    b.ToTable("ColorModel");
 
-                    b.HasComment("Color model");
+                    b.HasComment("Printing color model");
 
                     b.HasData(
                         new
@@ -508,7 +551,9 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .HasComment("Employee application user id");
 
                     b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
+                        .HasDefaultValue(true)
                         .HasComment("Soft delete property");
 
                     b.Property<int>("PositionId")
@@ -522,9 +567,18 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasIndex("PositionId");
 
-                    b.ToTable("Employees", (string)null);
+                    b.ToTable("Employees");
 
                     b.HasComment("Employee entity");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ApplicationUserId = new Guid("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"),
+                            IsActive = true,
+                            PositionId = 1
+                        });
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Machine", b =>
@@ -538,23 +592,25 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.Property<int>("ColorModelId")
                         .HasColumnType("int")
-                        .HasComment("Machine working color model id");
+                        .HasComment("Foreign key to MaterialColorModel table");
 
                     b.Property<int>("MaterialId")
                         .HasColumnType("int")
-                        .HasComment("Machine printing material id.");
+                        .HasComment("Foreign key to MaterialColorModel table");
 
                     b.Property<double>("MaterialPerPrint")
                         .HasColumnType("float")
                         .HasComment("Material required for single print");
 
                     b.Property<string>("Model")
-                        .HasColumnType("nvarchar(max)")
-                        .HasComment("Printing machine model (optional");
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasComment("Printing machine model (optional)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)")
                         .HasComment("Printing machine name");
 
                     b.Property<TimeSpan>("PrintTime")
@@ -562,60 +618,18 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .HasComment("Machine printing time for single unit");
 
                     b.Property<int>("Status")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasDefaultValue(0)
                         .HasComment("Current status of the machine (has default value)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ColorModelId");
+                    b.HasIndex("MaterialId", "ColorModelId");
 
-                    b.HasIndex("MaterialId");
-
-                    b.ToTable("Machines", (string)null);
+                    b.ToTable("Machines");
 
                     b.HasComment("Printing machine");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ColorModelId = 2,
-                            MaterialId = 2,
-                            MaterialPerPrint = 5.0,
-                            Name = "Machine 1",
-                            PrintTime = new TimeSpan(0, 0, 3, 0, 0),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ColorModelId = 2,
-                            MaterialId = 2,
-                            MaterialPerPrint = 5.0,
-                            Name = "Machine 2",
-                            PrintTime = new TimeSpan(0, 0, 2, 30, 0),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ColorModelId = 1,
-                            MaterialId = 1,
-                            MaterialPerPrint = 1.0,
-                            Name = "Machine 3",
-                            PrintTime = new TimeSpan(0, 0, 0, 3, 0),
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ColorModelId = 2,
-                            MaterialId = 3,
-                            MaterialPerPrint = 1.0,
-                            Name = "Machine 4",
-                            PrintTime = new TimeSpan(0, 0, 40, 0, 0),
-                            Status = 0
-                        });
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Material", b =>
@@ -632,7 +646,9 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .HasComment("Material current quantit in stock");
 
                     b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
+                        .HasDefaultValue(true)
                         .HasComment("Soft delete property");
 
                     b.Property<double>("Lenght")
@@ -659,7 +675,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Materials", (string)null);
+                    b.ToTable("Materials");
 
                     b.HasComment("Мaterial on which it is printed");
 
@@ -697,6 +713,25 @@ namespace PrintingHouse.Infrastructure.Migrations
                             Type = "Nylon 20cm",
                             Width = 0.00020000000000000001
                         });
+                });
+
+            modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.MaterialColorModel", b =>
+                {
+                    b.Property<int>("MaterialId")
+                        .HasColumnType("int")
+                        .HasComment("Material id (primary key)");
+
+                    b.Property<int>("ColorModelId")
+                        .HasColumnType("int")
+                        .HasComment("Color model id (primary key)");
+
+                    b.HasKey("MaterialId", "ColorModelId");
+
+                    b.HasIndex("ColorModelId");
+
+                    b.ToTable("MaterialsColorModels");
+
+                    b.HasComment("Machine material and color model connecting table with article colors");
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Order", b =>
@@ -737,7 +772,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasIndex("ArticleId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
 
                     b.HasComment("Order from client for print");
                 });
@@ -763,7 +798,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Positions", (string)null);
+                    b.ToTable("Positions");
 
                     b.HasComment("Office position");
 
@@ -859,23 +894,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.ColorModel", "ColorModel")
-                        .WithMany("Articles")
-                        .HasForeignKey("ColorModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.Material", "Material")
-                        .WithMany("Articles")
-                        .HasForeignKey("MaterialId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Client");
-
-                    b.Navigation("ColorModel");
-
-                    b.Navigation("Material");
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.ArticleColor", b =>
@@ -883,18 +902,26 @@ namespace PrintingHouse.Infrastructure.Migrations
                     b.HasOne("PrintingHouse.Infrastructure.Data.Entities.Article", "Article")
                         .WithMany("ArticleColors")
                         .HasForeignKey("ArticleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PrintingHouse.Infrastructure.Data.Entities.Color", "Color")
-                        .WithMany("ArticleColors")
+                        .WithMany("ArticlesColors")
                         .HasForeignKey("ColorId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.ColorModel", "ColorModel")
+                        .WithMany("ArticleColors")
+                        .HasForeignKey("ColorModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Article");
 
                     b.Navigation("Color");
+
+                    b.Navigation("ColorModel");
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Client", b =>
@@ -906,17 +933,6 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Merchant");
-                });
-
-            modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Color", b =>
-                {
-                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.ColorModel", "ColorModel")
-                        .WithMany("Colors")
-                        .HasForeignKey("ColorModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ColorModel");
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Employee", b =>
@@ -940,16 +956,27 @@ namespace PrintingHouse.Infrastructure.Migrations
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Machine", b =>
                 {
-                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.ColorModel", "ColorModel")
+                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.MaterialColorModel", "MaterialColorModel")
                         .WithMany("Machines")
+                        .HasForeignKey("MaterialId", "ColorModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MaterialColorModel");
+                });
+
+            modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.MaterialColorModel", b =>
+                {
+                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.ColorModel", "ColorModel")
+                        .WithMany("MaterialsColorModel")
                         .HasForeignKey("ColorModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PrintingHouse.Infrastructure.Data.Entities.Material", "Material")
-                        .WithMany("Machines")
+                        .WithMany("MachineMaterials")
                         .HasForeignKey("MaterialId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ColorModel");
@@ -982,16 +1009,14 @@ namespace PrintingHouse.Infrastructure.Migrations
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Color", b =>
                 {
-                    b.Navigation("ArticleColors");
+                    b.Navigation("ArticlesColors");
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.ColorModel", b =>
                 {
-                    b.Navigation("Articles");
+                    b.Navigation("ArticleColors");
 
-                    b.Navigation("Colors");
-
-                    b.Navigation("Machines");
+                    b.Navigation("MaterialsColorModel");
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Employee", b =>
@@ -1001,8 +1026,11 @@ namespace PrintingHouse.Infrastructure.Migrations
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Material", b =>
                 {
-                    b.Navigation("Articles");
+                    b.Navigation("MachineMaterials");
+                });
 
+            modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.MaterialColorModel", b =>
+                {
                     b.Navigation("Machines");
                 });
 

@@ -12,6 +12,8 @@
     {
         public void Configure(EntityTypeBuilder<Material> builder)
         {
+            builder.Property(m => m.IsActive).HasDefaultValue(true);
+
             builder.HasData(CreateMaterials());
         }
 

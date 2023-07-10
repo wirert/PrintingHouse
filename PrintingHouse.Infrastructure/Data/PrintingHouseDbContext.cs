@@ -19,13 +19,14 @@
         }
 
         public virtual DbSet<Article> Articles { get; set; } = null!;
+        public virtual DbSet<ArticleColor> ArticleColors { get; set; } = null!;
         public virtual DbSet<Client> Clients { get; set; } = null!;
-        public virtual DbSet<Color> Colors { get; set; } = null!;
+        public virtual DbSet<ColorModel> Colors { get; set; } = null!;
         public virtual DbSet<Machine> Machines { get; set; } = null!;
         public virtual DbSet<Material> Materials { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
+        public virtual DbSet<MaterialColorModel> MaterialsColorModels { get; set; } = null!;
         public virtual DbSet<ColorModel> ColorModels { get; set; } = null!;
-        public virtual DbSet<ArticleColor> ArticlesColors { get; set; } = null!;
         public virtual DbSet<Employee> Employees { get; set; } = null!;
         public virtual DbSet<Position> Positions { get; set; } = null!;
 
@@ -40,29 +41,16 @@
             builder.ApplyConfiguration(new ColorConfiguration());
             builder.ApplyConfiguration(new MachineConfiguration());
 
-            builder.Entity<ArticleColor>().HasKey(k => new {k.ArticleId, k.ColorId});
+            builder.Entity<Article>().Property(a => a.IsActive).HasDefaultValue(true);
+            builder.Entity<Client>().Property(a => a.IsActive).HasDefaultValue(true);
 
-            builder.Entity<ArticleColor>()
-                .HasOne(ac => ac.Color)
-                .WithMany(c => c.ArticleColors)
-                .HasForeignKey(ac => ac.ColorId)
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<ArticleColor>().HasKey(k => new {k.ArticleId, k.ColorId, k.ColorModelId});
 
-            builder.Entity<ArticleColor>()
-                .HasOne(ac => ac.Article)
-                .WithMany(a => a.ArticleColors)
-                .HasForeignKey(ac => ac.ArticleId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            
-            
+            builder.Entity<MaterialColorModel>().HasKey(k => new { k.MaterialId, k.ColorModelId });
+              
             builder.Entity<Client>().HasIndex(e => e.Name).IsUnique();            
 
-            builder.Entity<Article>()
-                .HasOne(a => a.Material)
-                .WithMany(m => m.Articles)
-                .HasForeignKey(a => a.MaterialId)
-                .OnDelete(DeleteBehavior.Restrict);
+           
 
             base.OnModelCreating(builder);
         }

@@ -1,23 +1,21 @@
 ﻿namespace PrintingHouse.Infrastructure.Data.Entities
 {
     using System.ComponentModel.DataAnnotations;
-
     using Microsoft.EntityFrameworkCore;
 
-    using static Constants.DataConstants.ColorModel;
+    using static Infrastructure.Constants.DataConstants.ColorModel;
 
-    [Comment("Color model")]
+    [Comment("Printing color model")]
     public class ColorModel
     {
         public ColorModel()
         {
-            Machines = new HashSet<Machine>();
-            Articles = new HashSet<Article>();
-            Colors = new HashSet<Color>();
+            ArticleColors = new HashSet<ArticleColor>();
+            MaterialsColorModel = new HashSet<MaterialColorModel>();
         }
 
         [Comment("Primary key")]
-        [Key] 
+        [Key]
         public int Id { get; set; }
 
         [Comment("Color model name")]
@@ -25,12 +23,8 @@
         [MaxLength(MaxNameLenght)]
         public string Name { get; set; } = null!;
 
-        public virtual ICollection<Machine> Machines { get; set; }
+        public ICollection<MaterialColorModel> MaterialsColorModel { get; set; }
 
-        public virtual ICollection<Article> Articles { get; set; }
-
-        public virtual ICollection<Color> Colors { get; set; }
-
-
+        public virtual ICollection<ArticleColor> ArticleColors { get; set; }
     }
 }

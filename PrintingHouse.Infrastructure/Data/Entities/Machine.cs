@@ -6,44 +6,39 @@
     using Microsoft.EntityFrameworkCore;
 
     using Entities.Enums;
+    using static Constants.DataConstants.Machine;
 
     [Comment("Printing machine")]
     public class Machine
     {
-        public Machine()
-        {
-           Status = MachineStatus.Working;
-        }
-
         [Comment("Primary key")]
         [Key]
         public int Id { get; set; }
 
         [Comment("Printing machine name")]
         [Required]
+        [MaxLength(MaxNameLenght)]
         public string Name { get; set; } = null!;
 
-        [Comment("Printing machine model (optional")]
+        [Comment("Printing machine model (optional)")]
+        [MaxLength(MaxModelLenght)]
         public string? Model { get; set; }
 
         [Comment("Machine printing time for single unit")]
         [Required]
         public TimeSpan PrintTime { get; set; }
 
-        [Comment("Machine working color model id")]
-        [Required]
-        public int ColorModelId { get; set; }
-
-        [ForeignKey(nameof(ColorModelId))]
-        [Required]
-        public virtual ColorModel ColorModel { get; set; } = null!;
-
-        [Comment("Machine printing material id.")]
+        [Comment("Foreign key to MaterialColorModel table")]
         [Required]
         public int MaterialId { get; set; }
 
-        [ForeignKey(nameof(MaterialId))]
-        public virtual Material Material { get; set; } = null!;
+        [Comment("Foreign key to MaterialColorModel table")]
+        [Required]
+        public int ColorModelId { get; set; }
+                
+        [Required]
+        public virtual MaterialColorModel MaterialColorModel { get; set; } = null!;
+
 
         [Comment("Material required for single print")]
         [Required]
@@ -52,6 +47,5 @@
         [Comment("Current status of the machine (has default value)")]
         [Required]
         public MachineStatus Status { get; set; }
-
     }
 }

@@ -31,25 +31,9 @@
         [MaxLength(MaxImageNameLenght)]
         public string ImageName { get; set; } = null!;
 
-        [Comment("Article material")]
-        [Required]
-        public int MaterialId { get; set; }
-
-        [Required]
-        [ForeignKey(nameof(MaterialId))]
-        public virtual Material Material { get; set; } = null!;
-
         [Comment("Required material lenght")]
         [Required]
-        public double RequiredMaterial { get; set; }
-
-        [Comment("Article color model id")]
-        [Required]
-        public int ColorModelId { get; set; }
-
-        [ForeignKey(nameof(ColorModelId))]
-        [Required]
-        public virtual ColorModel ColorModel { get; set; } = null!;
+        public double MaterialQuantity { get; set; }       
 
         [Comment("Article owner id")]
         [Required]

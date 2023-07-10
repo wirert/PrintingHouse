@@ -26,6 +26,7 @@
             {
                 new Employee()
                 {
+                    Id = 1,
                     ApplicationUserId = Guid.Parse("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"),
                     PositionId = 1                    
                 }

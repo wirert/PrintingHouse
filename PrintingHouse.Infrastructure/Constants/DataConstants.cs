@@ -81,6 +81,15 @@
             /// Machine name minimum lenght
             /// </summary>
             public const int MinNameLenght = 2;
+
+            /// <summary>
+            /// Machine name maximum lenght
+            /// </summary>
+            public const int MaxModelLenght = 40;
+            /// <summary>
+            /// Machine name minimum lenght
+            /// </summary>
+            public const int MinModelLenght = 2;
         }
 
         /// <summary>

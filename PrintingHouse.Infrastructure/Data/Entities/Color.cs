@@ -8,39 +8,32 @@
 
     using static Constants.DataConstants.Consumable;
 
-    [Comment("Machine consumable")]
+    [Comment("Color")]
     public class Color
     {
         public Color()
         {
-            ArticleColors = new List<ArticleColor>();
+            ArticlesColors = new HashSet<ArticleColor>();
         }
 
-        [Comment("Consumable primary key")]
+        [Comment("Color primary key")]
         [Key]
         public int Id { get; set; }
 
-        [Comment("Consumable type name")]
+        [Comment("Color type name")]
         [Required]
         [MaxLength(MaxTypeLenght)]
         public string Type { get; set; } = null!;
 
-        [Comment("Consumable current quantit in stock")]
+        [Comment("Color current quantit in stock")]
         [Required]
         public int InStock { get; set; }
 
-        [Comment("Consumable price")]
+        [Comment("Color price")]
         [Required]
         [Column(TypeName = "money")]
         public decimal Price { get; set; }
 
-        [Comment("Color model id from which that color is")]
-        [Required]
-        public int ColorModelId { get; set; }
-
-        [ForeignKey(nameof(ColorModelId))]
-        public virtual ColorModel ColorModel { get; set; } = null!;
-
-        public virtual ICollection<ArticleColor> ArticleColors { get; set; }
+        public virtual ICollection<ArticleColor> ArticlesColors { get; set; }
     }
 }
