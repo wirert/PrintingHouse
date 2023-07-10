@@ -8,21 +8,26 @@
     using Infrastructure.Data.Entities.Account;
 
     using static Core.Constants.RoleNamesConstants;
+    using static Core.Constants.MessageConstants;
+    using Microsoft.EntityFrameworkCore;
 
     public class AccountController : BaseController
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly RoleManager<IdentityRole<Guid>> roleManager;
+        private readonly IHostEnvironment hostEnvironment;
 
         public AccountController(
             UserManager<ApplicationUser> _userManager,
             SignInManager<ApplicationUser> _signInManager,
-            RoleManager<IdentityRole<Guid>> _roleManager)
+            RoleManager<IdentityRole<Guid>> _roleManager,
+            IHostEnvironment _hostEnvironment)
         {
             userManager = _userManager;
             signInManager = _signInManager;
             roleManager = _roleManager;
+            hostEnvironment = _hostEnvironment;
         }
 
         /// <summary>
@@ -142,16 +147,22 @@
         }
 
         /// <summary>
-        /// Create roles
+        /// Add admin role to user(only for development purpose)
         /// </summary>
         /// <returns></returns>
         [Authorize(Roles = Admin)]
-        public async Task<IActionResult> CreateRoles()
+        public async Task<IActionResult> AddAdminRole()
         {
-            await roleManager.CreateAsync(new IdentityRole<Guid>(Admin));
-            await roleManager.CreateAsync(new IdentityRole<Guid>(Employee));
-            await roleManager.CreateAsync(new IdentityRole<Guid>(Merchant));
-           
+            if (!hostEnvironment.IsDevelopment())
+            {
+                return NotFound();
+            }
+                        
+            var user = await userManager.Users.FirstAsync(u => u.Id == Guid.Parse("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"));
+
+            await userManager.AddToRoleAsync(user!, Admin);
+
+            TempData[SuccessMessage] = "Admin role added to Admin123";
 
             return RedirectToAction("Index", "Home");
         }       

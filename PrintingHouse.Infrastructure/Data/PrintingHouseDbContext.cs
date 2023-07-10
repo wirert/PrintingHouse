@@ -32,8 +32,10 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfiguration(new ColorModelConfiguration());
+            builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new PositionConfiguration());
+            builder.ApplyConfiguration(new EmployeeConfiguration());
+            builder.ApplyConfiguration(new ColorModelConfiguration());
             builder.ApplyConfiguration(new MaterialConfiguration());
             builder.ApplyConfiguration(new ColorConfiguration());
             builder.ApplyConfiguration(new MachineConfiguration());
@@ -52,7 +54,7 @@
                 .HasForeignKey(ac => ac.ArticleId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<Employee>().HasIndex(e => e.ApplicationUserId).IsUnique(); 
+            
             
             builder.Entity<Client>().HasIndex(e => e.Name).IsUnique();            
 

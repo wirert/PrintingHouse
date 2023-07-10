@@ -26,7 +26,7 @@
         public string? PictureName { get; set; }
 
         [Comment("Is active employee (soft delete property)")]
-        public bool IsActive { get; set; } = true;
+        public bool IsActive { get; set; }
 
 
     }
