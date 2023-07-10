@@ -13,6 +13,7 @@
         {
             Machines = new HashSet<Machine>();
             Articles = new HashSet<Article>();
+            Colors = new HashSet<Color>();
         }
 
         [Comment("Primary key")]
@@ -27,5 +28,9 @@
         public virtual ICollection<Machine> Machines { get; set; }
 
         public virtual ICollection<Article> Articles { get; set; }
+
+        public virtual ICollection<Color> Colors { get; set; }
+
+
     }
 }

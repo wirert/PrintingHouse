@@ -13,7 +13,7 @@
         public Article()
         {
             Id = Guid.NewGuid();
-            ArticleConsumables = new HashSet<ArticleConsumable>();
+            ArticleColors = new HashSet<ArticleColor>();
             Orders = new HashSet<Order>();
         }
 
@@ -58,7 +58,7 @@
         [ForeignKey(nameof(ClientId))]
         public virtual Client Client { get; set; } = null!;
 
-        public virtual ICollection<ArticleConsumable> ArticleConsumables { get; set; }
+        public virtual ICollection<ArticleColor> ArticleColors { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
 

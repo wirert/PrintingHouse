@@ -1,0 +1,55 @@
+﻿@*@model AddArticleViewModel
+@{
+    ViewData["Title"] = "Add new client";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-floating">
+                <input asp-for="@Model.Name" class="form-control" autocomplete="name" aria-required="true" />
+                <label asp-for="@Model.Name">Client name:</label>
+                <span asp-validation-for="@Model.Name" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="MaterialId" class="form-label">Select material:</label>
+                <select asp-for="MaterialId" class="form-control">
+                    @foreach (var material in Model.Materials)
+                    {
+                        <option value="@material.Id">@material.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="MaterialId" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="@Model.RequiredMaterial" class="form-control" autocomplete="e-mail" aria-required="true" type="email" />
+                <label asp-for="@Model.RequiredMaterial">Required material quantity:</label>
+                <span asp-validation-for="@Model.RequiredMaterial" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ColorModelId" class="form-label">Select Color model:</label>
+                <select asp-for="ColorModelId" class="form-control">
+                    @foreach (var colorModel in Model.ColorModels)
+                    {
+                        <option value="@colorModel.Id">@colorModel.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="ColorModelId" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="@Model.PhoneNumber" class="form-control" autocomplete="phone" aria-required="true" type="tel" />
+                <label asp-for="@Model.PhoneNumber">Phone number:</label>
+                <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
+            </div>
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Add client</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}*@

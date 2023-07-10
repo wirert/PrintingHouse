@@ -1,4 +1,4 @@
-﻿namespace PrintingHouse.Core.Services
+﻿namespace PrintingHouse.Core.Services.Admin
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -37,16 +37,16 @@
 
                 await repo.AddAsync(position);
             }
-            
+
             await repo.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int positionId)
         {
-           var position = await repo.All<Position>()
-                .Include(p => p.Employees)
-                .Where(p => p.Id == positionId)
-                .FirstAsync();
+            var position = await repo.All<Position>()
+                 .Include(p => p.Employees)
+                 .Where(p => p.Id == positionId)
+                 .FirstAsync();
 
             if (position.Employees.Count(e => e.IsActive) > 0)
             {

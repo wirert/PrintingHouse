@@ -5,8 +5,8 @@
 
     using Microsoft.EntityFrameworkCore;
 
-    [Comment("Article consumable with quantity (connecting table")]
-    public class ArticleConsumable
+    [Comment("Article color with quantity (connecting table)")]
+    public class ArticleColor
     {
         [Comment("Article id")]
         [Required]
@@ -15,15 +15,15 @@
         [ForeignKey(nameof(ArticleId))]
         public virtual Article Article { get; set; } = null!;
 
-        [Comment("Consumable id")]
+        [Comment("Color id")]
         [Required]
-        public int ConsumableId { get; set; }
+        public int ColorId { get; set; }
 
-        [ForeignKey(nameof(ConsumableId))]
-        public virtual Consumable Consumable { get; set; } = null!;
+        [ForeignKey(nameof(ColorId))]
+        public virtual Color Color { get; set; } = null!;
 
-        [Comment("Required consumable quantity for single print of article")]
+        [Comment("Required color quantity for single print of article")]
         [Required]
-        public double ConsumableQuantity { get; set; }
+        public double ColorQuantity { get; set; }
     }
 }

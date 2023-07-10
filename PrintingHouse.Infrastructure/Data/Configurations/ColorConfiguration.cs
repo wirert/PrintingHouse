@@ -5,62 +5,72 @@
 
     using Entities;
 
-    internal class ConsumableConfiguration : IEntityTypeConfiguration<Consumable>
+    internal class ColorConfiguration : IEntityTypeConfiguration<Color>
     {
-        public void Configure(EntityTypeBuilder<Consumable> builder)
+        public void Configure(EntityTypeBuilder<Color> builder)
         {
             builder.HasData(CreateConsumables());
         }
 
-        private Consumable[] CreateConsumables()
+        private Color[] CreateConsumables()
         {
-            return new Consumable[]
+            return new Color[]
             {
-                new Consumable()
+                new Color()
                 {
                     Id = 1,
                     Type = "Red",
                     Price = 50m,
-                    InStock = 104
+                    InStock = 104,
+                    ColorModelId = 1
                 },
-                 new Consumable()
+                 new Color()
                 {
                     Id = 2,
                     Type = "Green",
                     Price = 48m,
-                    InStock = 92
+                    InStock = 92,
+                    ColorModelId = 1
                 },
-                  new Consumable()
+                  new Color()
                 {
                     Id = 3,
                     Type = "Blue",
                     Price = 57m,
-                    InStock = 67
+                    InStock = 67,
+                    ColorModelId = 1
                 },
-                   new Consumable()
+                   new Color()
                 {
                     Id = 4,
                     Type = "Cyan",
                     Price = 52m,
-                    InStock = 47
-                }, new Consumable()
+                    InStock = 47,
+                    ColorModelId = 2
+                },
+                new Color()
                 {
                     Id = 5,
                     Type = "Magenta",
                     Price = 55m,
-                    InStock = 38
-                }, new Consumable()
+                    InStock = 38,
+                    ColorModelId = 2
+                }, 
+                new Color()
                 {
                     Id = 6,
                     Type = "Yellow",
                     Price = 47m,
-                    InStock = 50
-                }, new Consumable()
+                    InStock = 50,
+                    ColorModelId = 2
+                }, 
+                new Color()
                 {
                     Id = 7,
                     Type = "Black",
                     Price = 40m,
-                    InStock = 60
+                    InStock = 60,
+                    ColorModelId = 2
                 }
             };
         }

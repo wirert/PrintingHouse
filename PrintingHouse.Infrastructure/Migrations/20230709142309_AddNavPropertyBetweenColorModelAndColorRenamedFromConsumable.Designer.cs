@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PrintingHouse.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using PrintingHouse.Infrastructure.Data;
 namespace PrintingHouse.Infrastructure.Migrations
 {
     [DbContext(typeof(PrintingHouseDbContext))]
-    partial class PrintingHouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230709142309_AddNavPropertyBetweenColorModelAndColorRenamedFromConsumable")]
+    partial class AddNavPropertyBetweenColorModelAndColorRenamedFromConsumable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -291,7 +293,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasIndex("MaterialId");
 
-                    b.ToTable("Articles", (string)null);
+                    b.ToTable("Articles");
 
                     b.HasComment("Particular client article ready for print.");
                 });
@@ -314,7 +316,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasIndex("ColorId");
 
-                    b.ToTable("ArticlesColors", (string)null);
+                    b.ToTable("ArticlesConsumables");
 
                     b.HasComment("Article color with quantity (connecting table)");
                 });
@@ -361,7 +363,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Clients", (string)null);
+                    b.ToTable("Clients");
 
                     b.HasComment("Printing house client");
                 });
@@ -397,7 +399,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasIndex("ColorModelId");
 
-                    b.ToTable("Colors", (string)null);
+                    b.ToTable("Colors");
 
                     b.HasComment("Machine consumable");
 
@@ -477,7 +479,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ColorModels", (string)null);
+                    b.ToTable("ColorModels");
 
                     b.HasComment("Color model");
 
@@ -522,7 +524,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasIndex("PositionId");
 
-                    b.ToTable("Employees", (string)null);
+                    b.ToTable("Employees");
 
                     b.HasComment("Employee entity");
                 });
@@ -571,7 +573,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasIndex("MaterialId");
 
-                    b.ToTable("Machines", (string)null);
+                    b.ToTable("Machines");
 
                     b.HasComment("Printing machine");
 
@@ -659,7 +661,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Materials", (string)null);
+                    b.ToTable("Materials");
 
                     b.HasComment("Мaterial on which it is printed");
 
@@ -737,7 +739,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasIndex("ArticleId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
 
                     b.HasComment("Order from client for print");
                 });
@@ -763,7 +765,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Positions", (string)null);
+                    b.ToTable("Positions");
 
                     b.HasComment("Office position");
 

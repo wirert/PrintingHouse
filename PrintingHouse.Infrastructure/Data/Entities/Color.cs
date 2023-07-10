@@ -9,11 +9,11 @@
     using static Constants.DataConstants.Consumable;
 
     [Comment("Machine consumable")]
-    public class Consumable
+    public class Color
     {
-        public Consumable()
+        public Color()
         {
-            ArticleConsumables = new List<ArticleConsumable>();
+            ArticleColors = new List<ArticleColor>();
         }
 
         [Comment("Consumable primary key")]
@@ -34,6 +34,13 @@
         [Column(TypeName = "money")]
         public decimal Price { get; set; }
 
-        public virtual ICollection<ArticleConsumable> ArticleConsumables { get; set; }
+        [Comment("Color model id from which that color is")]
+        [Required]
+        public int ColorModelId { get; set; }
+
+        [ForeignKey(nameof(ColorModelId))]
+        public virtual ColorModel ColorModel { get; set; } = null!;
+
+        public virtual ICollection<ArticleColor> ArticleColors { get; set; }
     }
 }

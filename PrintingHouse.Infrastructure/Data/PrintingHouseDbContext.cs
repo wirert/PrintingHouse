@@ -20,12 +20,12 @@
 
         public virtual DbSet<Article> Articles { get; set; } = null!;
         public virtual DbSet<Client> Clients { get; set; } = null!;
-        public virtual DbSet<Consumable> Consumables { get; set; } = null!;
+        public virtual DbSet<Color> Colors { get; set; } = null!;
         public virtual DbSet<Machine> Machines { get; set; } = null!;
         public virtual DbSet<Material> Materials { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<ColorModel> ColorModels { get; set; } = null!;
-        public virtual DbSet<ArticleConsumable> ArticlesConsumables { get; set; } = null!;
+        public virtual DbSet<ArticleColor> ArticlesColors { get; set; } = null!;
         public virtual DbSet<Employee> Employees { get; set; } = null!;
         public virtual DbSet<Position> Positions { get; set; } = null!;
 
@@ -35,10 +35,22 @@
             builder.ApplyConfiguration(new ColorModelConfiguration());
             builder.ApplyConfiguration(new PositionConfiguration());
             builder.ApplyConfiguration(new MaterialConfiguration());
-            builder.ApplyConfiguration(new ConsumableConfiguration());
+            builder.ApplyConfiguration(new ColorConfiguration());
             builder.ApplyConfiguration(new MachineConfiguration());
 
-            builder.Entity<ArticleConsumable>().HasKey(k => new {k.ArticleId, k.ConsumableId});
+            builder.Entity<ArticleColor>().HasKey(k => new {k.ArticleId, k.ColorId});
+
+            builder.Entity<ArticleColor>()
+                .HasOne(ac => ac.Color)
+                .WithMany(c => c.ArticleColors)
+                .HasForeignKey(ac => ac.ColorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ArticleColor>()
+                .HasOne(ac => ac.Article)
+                .WithMany(a => a.ArticleColors)
+                .HasForeignKey(ac => ac.ArticleId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Employee>().HasIndex(e => e.ApplicationUserId).IsUnique(); 
             

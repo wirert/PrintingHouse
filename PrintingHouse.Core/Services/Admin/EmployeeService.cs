@@ -1,4 +1,4 @@
-﻿namespace PrintingHouse.Core.Services
+﻿namespace PrintingHouse.Core.Services.Admin
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -88,9 +88,9 @@
             {
                 Id = employee.Id,
                 ApplicationUserId = employee.ApplicationUserId,
-                PositionId = employee.PositionId                
+                PositionId = employee.PositionId
             };
-                
+
         }
 
         public async Task<int> GetIdByUserIdAsync(Guid userId)

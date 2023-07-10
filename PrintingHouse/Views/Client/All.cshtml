@@ -6,6 +6,7 @@
     <table class="table table-hover">
         <thead>
             <tr>
+                <th scope="col"></th>
                 <th scope="col">Client name</th>
                 <th scope="col">E-mail</th>
                 <th scope="col">Phone number</th>
@@ -18,6 +19,16 @@
             @foreach (var client in Model)
             {
                 <tr>
+                    <td>
+                        @if (User.IsInRole(Merchant) || User.IsInRole(Admin))
+                        {
+                            <form asp-asp-area="" asp-controller="Client" asp-action="Delete">
+                                <input name="id" type="hidden" value="@client.Id" />
+                                <button class="btn btn-sm btn-danger" type="submit">Remove</button>
+                            </form>
+                        }
+
+                    </td>
                     <td>@client.Name</td>
                     <td>@client.Email</td>
                     <td>@client.PhoneNumber</td>
@@ -37,9 +48,9 @@
                     <td>
                         @if (User.IsInRole(Merchant) || User.IsInRole(Admin))
                         {
-                            <form asp-asp-area="" asp-controller="Client" asp-action="Delete">
+                            <form asp-asp-area="" asp-controller="Article" asp-action="Add">
                                 <input name="id" type="hidden" value="@client.Id" />
-                                <button class="btn btn-danger" type="submit">Remove</button>
+                                <button class="btn btn-sm btn-info" type="submit">Add Article</button>
                             </form>
                         }
                         

@@ -4,6 +4,7 @@
 
     using PrintingHouse.Core.Contracts;
     using PrintingHouse.Core.Services;
+    using PrintingHouse.Core.Services.Admin;
     using PrintingHouse.Infrastructure.Data.Common;
     using PrintingHouse.Infrastructure.Data.Common.Contracts;
 
@@ -25,6 +26,7 @@
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IPositionService, PositionService>();
             services.AddScoped<IClientService, ClientService>();
+            services.AddScoped<IArticleService, ArticleService>();
 
             return services;
         }
