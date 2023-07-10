@@ -1,5 +1,8 @@
 ﻿namespace PrintingHouse.Core.Models.Article
 {
+    using PrintingHouse.Core.Models.ColorModel;
+    using PrintingHouse.Core.Models.Material;
+    using PrintingHouse.Infrastructure.Data.Entities;
     using System.ComponentModel.DataAnnotations;
 
     using static Infrastructure.Constants.DataConstants.Article;
@@ -17,6 +20,13 @@
         [Required]
         public int MaterialId { get; set; }
 
+        public IEnumerable<MaterialSelectViewModel> Materials { get; set; } = Enumerable.Empty<MaterialSelectViewModel>();
+
+        [Required]
+        public int ColorModelId { get; set; }
+
+        public IEnumerable<ColorModelSelectViewModel> ColorModels { get; set; } = Enumerable.Empty<ColorModelSelectViewModel>();
+
         [Required]
         [Range(0, double.MaxValue)]
         public double MaterialQuantity { get; set; }
@@ -25,6 +35,6 @@
         [Range(1, int.MaxValue)]
         public int ClientId { get; set; }
 
-        //IEnumerable<>
+        
     }
 }

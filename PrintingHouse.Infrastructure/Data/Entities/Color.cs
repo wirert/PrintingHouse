@@ -34,6 +34,13 @@
         [Column(TypeName = "money")]
         public decimal Price { get; set; }
 
+        [Comment("Color's color model id")]
+        [Required]
+        public int ColorModelId { get; set; }
+
+        [ForeignKey(nameof(ColorModelId))]
+        public virtual ColorModel ColorModel { get; set; } = null!;
+
         public virtual ICollection<ArticleColor> ArticlesColors { get; set; }
     }
 }

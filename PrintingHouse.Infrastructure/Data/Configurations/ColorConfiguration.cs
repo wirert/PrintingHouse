@@ -9,6 +9,10 @@
     {
         public void Configure(EntityTypeBuilder<Color> builder)
         {
+            builder.HasOne(c => c.ColorModel)
+                .WithMany(cm => cm.Colors)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.HasData(CreateConsumables());
         }
 
@@ -21,49 +25,56 @@
                     Id = 1,
                     Type = "Red",
                     Price = 50m,
-                    InStock = 104
+                    InStock = 104,
+                    ColorModelId = 1
                 },
                  new Color()
                 {
                     Id = 2,
                     Type = "Green",
                     Price = 48m,
-                    InStock = 92
+                    InStock = 92,
+                    ColorModelId = 1
                 },
                   new Color()
                 {
                     Id = 3,
                     Type = "Blue",
                     Price = 57m,
-                    InStock = 67
+                    InStock = 67,
+                    ColorModelId = 1
                 },
                    new Color()
                 {
                     Id = 4,
                     Type = "Cyan",
                     Price = 52m,
-                    InStock = 47
+                    InStock = 47,
+                    ColorModelId = 2
                 },
                 new Color()
                 {
                     Id = 5,
                     Type = "Magenta",
                     Price = 55m,
-                    InStock = 38
+                    InStock = 38,
+                    ColorModelId = 2
                 },
                 new Color()
                 {
                     Id = 6,
                     Type = "Yellow",
                     Price = 47m,
-                    InStock = 50
+                    InStock = 50,
+                    ColorModelId = 2
                 },
                 new Color()
                 {
                     Id = 7,
                     Type = "Black",
                     Price = 40m,
-                    InStock = 60
+                    InStock = 60,
+                    ColorModelId = 2
                 }
             };
         }

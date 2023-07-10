@@ -12,6 +12,7 @@
         {
             ArticleColors = new HashSet<ArticleColor>();
             MaterialsColorModel = new HashSet<MaterialColorModel>();
+            Colors = new HashSet<Color>();
         }
 
         [Comment("Primary key")]
@@ -26,5 +27,7 @@
         public ICollection<MaterialColorModel> MaterialsColorModel { get; set; }
 
         public virtual ICollection<ArticleColor> ArticleColors { get; set; }
+
+        public virtual ICollection<Color> Colors { get; set; }
     }
 }

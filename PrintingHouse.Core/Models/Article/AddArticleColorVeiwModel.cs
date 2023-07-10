@@ -1,0 +1,17 @@
+﻿namespace PrintingHouse.Core.Models.Article
+{
+    using System.ComponentModel.DataAnnotations;
+
+    public class AddArticleColorVeiwModel
+    {
+        public int ColorModelId { get; set; }
+
+        [Required]
+        public int ColorId { get; set; }
+
+        public string ColorName { get; set; } = null!;
+
+        [Required]
+        public double ColorQuantity { get; set; }
+    }
+}

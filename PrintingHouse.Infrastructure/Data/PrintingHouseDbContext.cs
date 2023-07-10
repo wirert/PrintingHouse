@@ -21,9 +21,9 @@
         public virtual DbSet<Article> Articles { get; set; } = null!;
         public virtual DbSet<ArticleColor> ArticleColors { get; set; } = null!;
         public virtual DbSet<Client> Clients { get; set; } = null!;
+        public virtual DbSet<ColorModel> ColorModels { get; set; } = null!;
         public virtual DbSet<ColorModel> Colors { get; set; } = null!;
         public virtual DbSet<Material> Materials { get; set; } = null!;
-        public virtual DbSet<ColorModel> ColorModels { get; set; } = null!;
         public virtual DbSet<MaterialColorModel> MaterialsColorModels { get; set; } = null!;
         public virtual DbSet<Machine> Machines { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
