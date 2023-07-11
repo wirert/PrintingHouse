@@ -31,7 +31,7 @@
 
             await repo.AddAsync(client);
             await repo.SaveChangesAsync();
-        }
+        } 
 
         public async Task<bool> ExistByName(string name)
         {

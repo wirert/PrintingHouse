@@ -5,5 +5,7 @@
     public interface IArticleService
     {
         Task AddAsync(AddArticleViewModel model);
+
+        Task<AddArticleViewModel> FillAddModelWithData(AddArticleViewModel model);
     }
 }

@@ -1,9 +1,9 @@
 ﻿namespace PrintingHouse.Core.Models.Article
 {
-    using PrintingHouse.Core.Models.ColorModel;
-    using PrintingHouse.Core.Models.Material;
-    using PrintingHouse.Infrastructure.Data.Entities;
     using System.ComponentModel.DataAnnotations;
+
+    using ColorModel;
+    using Material;
 
     using static Infrastructure.Constants.DataConstants.Article;
 
@@ -35,6 +35,8 @@
         [Range(1, int.MaxValue)]
         public int ClientId { get; set; }
 
-        
+        public string ClientName { get; set; } = null!;
+
+        public ICollection<AddArticleColorVeiwModel> ArticleColors { get; set; } = new HashSet<AddArticleColorVeiwModel>();
     }
 }

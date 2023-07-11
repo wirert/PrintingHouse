@@ -27,6 +27,7 @@
             services.AddScoped<IPositionService, PositionService>();
             services.AddScoped<IClientService, ClientService>();
             services.AddScoped<IArticleService, ArticleService>();
+            services.AddScoped<IColorModelService, ColorModelService>();
 
             return services;
         }

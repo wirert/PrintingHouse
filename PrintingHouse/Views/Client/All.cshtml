@@ -48,8 +48,8 @@
                     <td>
                         @if (User.IsInRole(Merchant) || User.IsInRole(Admin))
                         {
-                            <form asp-asp-area="" asp-controller="Article" asp-action="Add">
-                                <input name="id" type="hidden" value="@client.Id" />
+                            <form asp-asp-area="" asp-controller="Article" asp-action="Add" method="get">
+                                <input name="clientId" type="hidden" value="@client.Id" />
                                 <button class="btn btn-sm btn-info" type="submit">Add Article</button>
                             </form>
                         }

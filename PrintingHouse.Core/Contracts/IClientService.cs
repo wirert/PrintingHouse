@@ -9,5 +9,6 @@
         Task<bool> ExistByName(string name);
 
         Task<IEnumerable<AllClientViewModel>> GetAllAsync();
+
     }
 }

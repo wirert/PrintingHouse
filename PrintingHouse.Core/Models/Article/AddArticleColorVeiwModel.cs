@@ -12,6 +12,7 @@
         public string ColorName { get; set; } = null!;
 
         [Required]
+        [Range(0, double.MaxValue)]
         public double ColorQuantity { get; set; }
     }
 }

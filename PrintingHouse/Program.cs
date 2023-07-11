@@ -32,6 +32,23 @@ builder.Services.AddControllersWithViews()
         options.ModelBinderProviders.Insert(2, new DateTimeModelBinderProvider(FormattingConstants.DateTimeFormat));
     });
 
+builder.Services.AddAntiforgery(options =>
+{
+    options.FormFieldName = "__RequestVerificationToken";
+    options.HeaderName = "X-CSRF-VERIFICATION-TOKEN";
+    options.SuppressXFrameOptionsHeader = false;
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    });
+});
+
 builder.Services.AddApplicationServices();
 builder.Services.AddMinIo(builder.Configuration);
 
@@ -52,6 +69,8 @@ else
 
     app.UseHsts();
 }
+
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
