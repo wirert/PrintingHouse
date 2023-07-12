@@ -1,14 +1,16 @@
 ﻿@model IEnumerable<AddArticleColorVeiwModel>
-
+<div>
+    
     @foreach (var color in Model)
-{
-    <div class="form-floating">
-        <h5>Color: @color.ColorName</h5>
-        <label asp-for="@color.ColorQuantity">Required color quantity:</label>
-        <input asp-for="@color.ColorQuantity" class="form-control" aria-required="true" type="number" step="0.01" min="0" />
-        <span asp-validation-for="@color.ColorQuantity" class="text-danger"></span>
-    </div>
-}
+    {
+        <p class="mt-2">@color.ColorName:</p>
+        <div class="form-floating">
+            <input asp-for="@color.ColorQuantity" class="form-control" aria-required="true" type="number" step="0.01" min="0" />
+            <label asp-for="@color.ColorQuantity">Required @color.ColorName:</label>
+            <span asp-validation-for="@color.ColorQuantity" class="text-danger"></span>
+        </div>
+    }
+</div>
 
 
 

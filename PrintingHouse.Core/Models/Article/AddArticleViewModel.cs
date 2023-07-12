@@ -4,7 +4,7 @@
 
     using ColorModel;
     using Material;
-
+    using Microsoft.AspNetCore.Http;
     using static Infrastructure.Constants.DataConstants.Article;
 
     public class AddArticleViewModel
@@ -13,9 +13,11 @@
         [StringLength(MaxNameLenght, MinimumLength = MinNameLenght)]
         public string Name { get; set; } = null!;
 
-        [Required]
-        [StringLength(MaxImageNameLenght, MinimumLength = MinImageNameLenght)]
-        public string ImageName { get; set; } = null!;
+        //[Required]
+        //[StringLength(MaxImageNameLenght, MinimumLength = MinImageNameLenght)]
+        //public string ImageName { get; set; } = null!;
+
+        public IFormFile DesignFile { get; set; } = null!;
 
         [Required]
         public int MaterialId { get; set; }
@@ -35,7 +37,7 @@
         [Range(1, int.MaxValue)]
         public int ClientId { get; set; }
 
-        public string ClientName { get; set; } = null!;
+        public string? ClientName { get; set; }
 
         public ICollection<AddArticleColorVeiwModel> ArticleColors { get; set; } = new HashSet<AddArticleColorVeiwModel>();
     }

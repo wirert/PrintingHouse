@@ -22,34 +22,37 @@
         {
             services.AddScoped<IRepository, Repository>();
             services.AddScoped<IMinIoRepository, MinIoRepository>();
+            services.AddSingleton<IMinioClient, MinioClient>(cfg => cfg.GetRequiredService<MinioClient>());
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IPositionService, PositionService>();
             services.AddScoped<IClientService, ClientService>();
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<IColorModelService, ColorModelService>();
+            services.AddScoped<IFileService, FileService>();
+            
 
             return services;
         }
 
-        /// <summary>
-        /// Register MinIO in the IoC container
-        /// </summary>
-        /// <param name="services">Registered services</param>
-        /// <param name="configuration">Application configuration</param>
-        /// <returns>Registered services with added MinIO</returns>
-        public static IServiceCollection AddMinIo(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.Configure<MinioClient>(options =>            
-                options.WithEndpoint(configuration.GetValue<string>("MinIo:Endpoint"))
-                        .WithCredentials(
-                            configuration.GetValue<string>("MinIo:AccessKey"),
-                            configuration.GetValue<string>("MinIo:SecretKey"))
-                        .Build());
+        ///// <summary>
+        ///// Register MinIO in the IoC container
+        ///// </summary>
+        ///// <param name="services">Registered services</param>
+        ///// <param name="configuration">Application configuration</param>
+        ///// <returns>Registered services with added MinIO</returns>
+        //public static IServiceCollection AddMinIo(this IServiceCollection services, IConfiguration configuration)
+        //{
+        //    services.Configure<MinioClient>(options =>            
+        //        options.WithEndpoint(configuration.GetValue<string>("MinIo:Endpoint"))
+        //                .WithCredentials(accessKey: configuration.GetValue<string>("MinIo:AccessKey"),
+        //                                  secretKey: configuration.GetValue<string>("MinIo:SecretKey"))
+        //                .WithSSL()
+        //                .Build());
         
-            services.AddScoped<IMinioClient, MinioClient>();
+        //    services.AddScoped<IMinioClient, MinioClient>();
 
-            return services;
-        }
+        //    return services;
+        //}
     }
 }

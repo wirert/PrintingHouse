@@ -5,6 +5,7 @@
 
     using Contracts;
     using Infrastructure.Data.Common.Contracts;
+    using Microsoft.AspNetCore.Http;
 
     public class FileService : IFileService
     {
@@ -19,9 +20,9 @@
         {
             try
             {
-               var result = await repo.GetFileAsync(BucketName, fileName);
+                var result = await repo.GetFileAsync(BucketName, fileName);
 
-               return result;
+                return result;
             }
             catch (Exception e)
             {
@@ -29,16 +30,9 @@
             }
         }
 
-        public async Task SaveFileAsync(Guid BucketName, string fileName, byte[] content)
+        public async Task SaveFileAsync(Guid BucketName, string fileName, IFormFile content)
         {
-            try
-            {
-                await repo.AddFileAsync(BucketName, fileName, content);
-            }
-            catch (Exception e)
-            {
-                throw new ApplicationException("Database failed to save file", e);
-            }
+            await repo.AddFileAsync(BucketName, fileName, content);
         }
     }
 }

@@ -7,6 +7,8 @@
     using Minio;
 
     using Contracts;
+    using Microsoft.AspNetCore.Http;
+    using System.Net;
 
     /// <summary>
     /// Implementation of repository access methods
@@ -28,8 +30,14 @@
         /// <param name="fileName">The name of the object</param>
         /// <param name="content">Content to add (Byte array)</param>
         /// <returns></returns>
-        public async Task AddFileAsync(Guid BucketName, string fileName, byte[] content)
+        public async Task AddFileAsync(Guid BucketName, string fileName, IFormFile content)
         {
+            //var client = new MinioClient()
+            //                        .WithEndpoint(@"127.0.0.1:9000")
+            //                        .WithCredentials("omth4ZmNoodS76uM2aZI", "l2JnpOtjjbVgpnNoFCW1bogIS1FcYAspnHWGNHM0")
+            //                        .WithSSL(false)
+            //                        .Build();
+
             var bucketExistArgs = new BucketExistsArgs().WithBucket(BucketName.ToString());
             if (await minioClient.BucketExistsAsync(bucketExistArgs) == false)
             {
@@ -42,8 +50,9 @@
             var putObjectArgs = new PutObjectArgs()
                 .WithBucket(BucketName.ToString())
                 .WithObject(fileName)
-                .WithContentType("application/octet-stream")
-                .WithStreamData(new MemoryStream(content));
+                .WithObjectSize(content.Length)
+                .WithContentType("application/octet-stream")                
+                .WithStreamData(content.OpenReadStream());
 
             await minioClient.PutObjectAsync(putObjectArgs);
         }

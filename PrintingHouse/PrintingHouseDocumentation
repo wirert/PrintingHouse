@@ -54,13 +54,5 @@
             <param name="services"></param>
             <returns></returns>
         </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtension.AddMinIo(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
-            <summary>
-            Register MinIO in the IoC container
-            </summary>
-            <param name="services">Registered services</param>
-            <param name="configuration">Application configuration</param>
-            <returns>Registered services with added MinIO</returns>
-        </member>
     </members>
 </doc>

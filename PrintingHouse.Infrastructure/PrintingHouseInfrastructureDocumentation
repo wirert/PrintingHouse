@@ -209,7 +209,7 @@
             Abstraction of repository access methods
             </summary>
         </member>
-        <member name="M:PrintingHouse.Infrastructure.Data.Common.Contracts.IMinIoRepository.AddFileAsync(System.Guid,System.String,System.Byte[])">
+        <member name="M:PrintingHouse.Infrastructure.Data.Common.Contracts.IMinIoRepository.AddFileAsync(System.Guid,System.String,Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
             Adds object to the MinIO database
             </summary>
@@ -315,7 +315,7 @@
             for MinIO object store database
             </summary>   
         </member>
-        <member name="M:PrintingHouse.Infrastructure.Data.Common.MinIoRepository.AddFileAsync(System.Guid,System.String,System.Byte[])">
+        <member name="M:PrintingHouse.Infrastructure.Data.Common.MinIoRepository.AddFileAsync(System.Guid,System.String,Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
             Adds object to the MinIO database
             </summary>

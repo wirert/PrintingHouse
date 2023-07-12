@@ -2,27 +2,53 @@
 {
     using System.Threading.Tasks;
 
+    using Microsoft.EntityFrameworkCore;
+
     using Contracts;
     using Models.Article;
+    using Models.ColorModel;
+    using Models.Material;
     using Infrastructure.Data.Common.Contracts;
     using PrintingHouse.Infrastructure.Data.Entities;
-    using Microsoft.EntityFrameworkCore;
-    using PrintingHouse.Core.Models.Material;
-    using PrintingHouse.Core.Models.ColorModel;
-    using Microsoft.AspNetCore.Mvc;
 
     public class ArticleService : IArticleService
     {
         private readonly IRepository repo;
+        private readonly IFileService fileService;
 
-        public ArticleService(IRepository _repo)
+        public ArticleService(
+            IRepository _repo, 
+            IFileService _fileService)
         {
             repo = _repo;
+            fileService = _fileService;
         }
 
-        public Task AddAsync(AddArticleViewModel model)
+        public async Task AddAsync(AddArticleViewModel model)
         {
-            throw new NotImplementedException();
+            var article = new Article()
+            { 
+                Name = model.Name,
+                ClientId = model.ClientId,
+                MaterialQuantity = model.MaterialQuantity,
+                ImageName = model.DesignFile.FileName                
+            };
+
+            await fileService.SaveFileAsync(article.Id, model.DesignFile.FileName, model.DesignFile);
+
+            foreach (var item in model.ArticleColors)
+            {
+                article.ArticleColors.Add(new ArticleColor()
+                {
+                    Article = article,
+                    ColorId = item.ColorId,
+                    ColorModelId = item.ColorModelId,
+                    ColorQuantity = item.ColorQuantity
+                });
+            }
+
+            await repo.AddAsync(article);
+            await repo.SaveChangesAsync();
         }
 
         public async Task<AddArticleViewModel> FillAddModelWithData(AddArticleViewModel model)

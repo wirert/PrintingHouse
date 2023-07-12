@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Minio;
+using Minio.AspNetCore;
+using Minio.AspNetCore.HealthChecks;
 using PrintingHouse.Core.Constants;
 using PrintingHouse.Infrastructure.Data;
 using PrintingHouse.Infrastructure.Data.Entities.Account;
@@ -39,18 +42,24 @@ builder.Services.AddAntiforgery(options =>
     options.SuppressXFrameOptionsHeader = false;
 });
 
-builder.Services.AddCors(options =>
+builder.Services.AddApplicationServices();
+builder.Services.AddMinio(options =>
 {
-    options.AddPolicy("AllowAll", builder =>
+    options.Endpoint = "127.0.0.1:9000"; //builder.Configuration.GetValue<string>("MinIo:Endpoint");
+    options.AccessKey = "omth4ZmNoodS76uM2aZI"; // builder.Configuration.GetValue<string>("MinIo:AccessKey");
+    options.SecretKey = "l2JnpOtjjbVgpnNoFCW1bogIS1FcYAspnHWGNHM0"; // builder.Configuration.GetValue<string>("MinIo:SecretKey");
+
+    options.ConfigureClient(client => 
     {
-        builder.AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader();
-    });
+        client.WithEndpoint(options.Endpoint)
+            .WithCredentials(options.AccessKey, options.SecretKey)
+            .WithSSL(false)
+            .Build();
+    });   
+   
 });
 
-builder.Services.AddApplicationServices();
-builder.Services.AddMinIo(builder.Configuration);
+builder.Services.AddHealthChecks().AddMinio(sp => sp.GetRequiredService<MinioClient>());
 
 builder.Services.ConfigureApplicationCookie(cfg =>
 {
@@ -70,7 +79,6 @@ else
     app.UseHsts();
 }
 
-app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
