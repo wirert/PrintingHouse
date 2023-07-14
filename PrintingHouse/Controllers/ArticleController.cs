@@ -37,7 +37,7 @@
             {
                 model.ClientId = clientId;
 
-                model = await articleService.FillAddModelWithData(model);
+                model = await articleService.FillAddModelWithDataAsync(model);
 
                 return View(model);
             }
@@ -60,7 +60,7 @@
             {
                 try
                 {
-                    model = await articleService.FillAddModelWithData(model);
+                    model = await articleService.FillAddModelWithDataAsync(model);
 
                     return View(model);
                 }
@@ -78,11 +78,11 @@
             }
             catch (Exception)
             {
-                TempData[ErrorMessage] = "Something went wrong trying to add article! Try again.";                
+                TempData[ErrorMessage] = "Something went wrong trying to add article! Try again.";
             }
 
-            return RedirectToAction("All", "Client");
-        }
+                return RedirectToAction("All", "Client");
+            }
 
         [HttpGet]
         public async Task<IActionResult> All(int? id = null)
@@ -95,7 +95,7 @@
         [IgnoreAntiforgeryToken]
         [HttpPost]
         public async Task<IActionResult> GetColorsForAdding(int colorModelid, ICollection<AddArticleColorVeiwModel> colors)
-        {
+            {
             try
             {
                 colors = await colorModelService.GetColorModelColorsAsync(colorModelid);
@@ -106,7 +106,7 @@
             {
                 return BadRequest();
             }
-        }        
+        }
     }
 }
 

@@ -13,10 +13,7 @@
         [StringLength(MaxNameLenght, MinimumLength = MinNameLenght)]
         public string Name { get; set; } = null!;
 
-        //[Required]
-        //[StringLength(MaxImageNameLenght, MinimumLength = MinImageNameLenght)]
-        //public string ImageName { get; set; } = null!;
-
+        
         public IFormFile DesignFile { get; set; } = null!;
 
         [Required]
@@ -39,6 +36,6 @@
 
         public string? ClientName { get; set; }
 
-        public ICollection<AddArticleColorVeiwModel> ArticleColors { get; set; } = new HashSet<AddArticleColorVeiwModel>();
+        public IList<AddArticleColorVeiwModel> ArticleColors { get; set; } = new HashSet<AddArticleColorVeiwModel>();
     }
 }

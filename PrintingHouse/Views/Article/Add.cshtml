@@ -12,7 +12,9 @@
 <div class="row">
     <h1>@ViewData["Title"]</h1>
     <div class="col-md-4">
-        <form method="post" enctype="multipart/form-data" >
+        <form method="post" asp-action="Add" asp-controller="Article" enctype="multipart/form-data">
+            <input type="hidden" asp-for="@Model.ClientId" />
+            <input type="hidden" asp-for="@Model.ClientName" />
             <h4>Client: @Model.ClientName</h4>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -46,19 +48,19 @@
                     }
                 </select>
                 <span asp-validation-for="ColorModelId" class="text-danger"></span>
-            </div>
+            </div>           
             <div id="partialColors">
                 <div id="article-partial-body" class="form-floating">
                 </div>
             </div>
             <div class="mb-3">
                 <label asp-for="@Model.DesignFile" class="form-label">Upload design file</label>
-                <input asp-for="@Model.DesignFile" class="form-control form-control"  type="file">
+                <input asp-for="@Model.DesignFile" class="form-control form-control" type="file">
                 <span asp-validation-for="@Model.DesignFile" class="text-danger"></span>
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary mt-3">Add article</button>
+            <button type="submit" class="w-100 btn btn-lg btn-primary mt-3">Submit</button>
         </form>
-    </div>   
+    </div>
 </div>
 
 @section Scripts {

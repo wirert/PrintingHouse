@@ -45,9 +45,9 @@ builder.Services.AddAntiforgery(options =>
 builder.Services.AddApplicationServices();
 builder.Services.AddMinio(options =>
 {
-    options.Endpoint = "127.0.0.1:9000"; //builder.Configuration.GetValue<string>("MinIo:Endpoint");
-    options.AccessKey = "omth4ZmNoodS76uM2aZI"; // builder.Configuration.GetValue<string>("MinIo:AccessKey");
-    options.SecretKey = "l2JnpOtjjbVgpnNoFCW1bogIS1FcYAspnHWGNHM0"; // builder.Configuration.GetValue<string>("MinIo:SecretKey");
+    options.Endpoint = builder.Configuration.GetValue<string>("MinIo:Endpoint");
+    options.AccessKey = builder.Configuration.GetValue<string>("MinIo:AccessKey");
+    options.SecretKey = builder.Configuration.GetValue<string>("MinIo:SecretKey");
 
     options.ConfigureClient(client => 
     {
@@ -55,8 +55,7 @@ builder.Services.AddMinio(options =>
             .WithCredentials(options.AccessKey, options.SecretKey)
             .WithSSL(false)
             .Build();
-    });   
-   
+    }); 
 });
 
 builder.Services.AddHealthChecks().AddMinio(sp => sp.GetRequiredService<MinioClient>());
@@ -78,7 +77,6 @@ else
 
     app.UseHsts();
 }
-
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

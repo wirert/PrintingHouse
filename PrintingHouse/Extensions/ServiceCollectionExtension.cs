@@ -34,25 +34,5 @@
 
             return services;
         }
-
-        ///// <summary>
-        ///// Register MinIO in the IoC container
-        ///// </summary>
-        ///// <param name="services">Registered services</param>
-        ///// <param name="configuration">Application configuration</param>
-        ///// <returns>Registered services with added MinIO</returns>
-        //public static IServiceCollection AddMinIo(this IServiceCollection services, IConfiguration configuration)
-        //{
-        //    services.Configure<MinioClient>(options =>            
-        //        options.WithEndpoint(configuration.GetValue<string>("MinIo:Endpoint"))
-        //                .WithCredentials(accessKey: configuration.GetValue<string>("MinIo:AccessKey"),
-        //                                  secretKey: configuration.GetValue<string>("MinIo:SecretKey"))
-        //                .WithSSL()
-        //                .Build());
-        
-        //    services.AddScoped<IMinioClient, MinioClient>();
-
-        //    return services;
-        //}
     }
 }

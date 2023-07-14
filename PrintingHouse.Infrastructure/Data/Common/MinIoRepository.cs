@@ -31,14 +31,9 @@
         /// <param name="content">Content to add (Byte array)</param>
         /// <returns></returns>
         public async Task AddFileAsync(Guid BucketName, string fileName, IFormFile content)
-        {
-            //var client = new MinioClient()
-            //                        .WithEndpoint(@"127.0.0.1:9000")
-            //                        .WithCredentials("omth4ZmNoodS76uM2aZI", "l2JnpOtjjbVgpnNoFCW1bogIS1FcYAspnHWGNHM0")
-            //                        .WithSSL(false)
-            //                        .Build();
-
+        {      
             var bucketExistArgs = new BucketExistsArgs().WithBucket(BucketName.ToString());
+
             if (await minioClient.BucketExistsAsync(bucketExistArgs) == false)
             {
                 var makeBucketArgs = new MakeBucketArgs()
