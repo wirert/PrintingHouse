@@ -19,7 +19,7 @@
             repo = _repo;
         }
 
-        public async Task<ICollection<AddArticleColorVeiwModel>?> GetColorModelColorsAsync(int ColorModelId)
+        public async Task<IList<AddArticleColorVeiwModel>> GetColorModelColorsAsync(int ColorModelId)
         {
             var colors =  await repo.AllReadonly<ColorModel>(cm => cm.Id == ColorModelId)
                 .Select (cm => cm.Colors
@@ -34,7 +34,7 @@
 
             if (colors == null)
             {
-                throw new Exception();
+                throw new ArgumentException();
             }
 
             return colors;

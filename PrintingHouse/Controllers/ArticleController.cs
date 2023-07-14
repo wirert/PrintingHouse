@@ -94,11 +94,13 @@
 
         [IgnoreAntiforgeryToken]
         [HttpPost]
-        public async Task<IActionResult> GetColorsForAdding(int colorModelid, ICollection<AddArticleColorVeiwModel> colors)
+        public async Task<IActionResult> GetColorsForAdding(int colorModelId, IList<AddArticleColorVeiwModel> colors)
             {
             try
             {
-                colors = await colorModelService.GetColorModelColorsAsync(colorModelid);
+                colors = await colorModelService.GetColorModelColorsAsync(colorModelId);
+
+                //model.ArticleColors = colors;
 
                 return PartialView("_ArticleColorsPartial", colors);
             }

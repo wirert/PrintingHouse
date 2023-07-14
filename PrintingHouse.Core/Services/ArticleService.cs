@@ -51,7 +51,7 @@
             await repo.SaveChangesAsync();
         }
 
-        public async Task<AddArticleViewModel> FillAddModelWithData(AddArticleViewModel model)
+        public async Task<AddArticleViewModel> FillAddModelWithDataAsync(AddArticleViewModel model)
         {
             var client = await repo.GetByIdAsync<Client>(model.ClientId);
                        

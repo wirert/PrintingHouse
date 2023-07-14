@@ -15,6 +15,7 @@
         <form method="post" asp-action="Add" asp-controller="Article" enctype="multipart/form-data">
             <input type="hidden" asp-for="@Model.ClientId" />
             <input type="hidden" asp-for="@Model.ClientName" />
+            <input id="colors-articleColors" type="hidden" asp-for="@Model.ArticleColors" />
             <h4>Client: @Model.ClientName</h4>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -76,7 +77,7 @@
             $.ajax({
                 type: "POST",
                 url: "/Article/GetColorsForAdding",
-                data: { 
+                data: {
                     "colorModelId": colorModelId,
                     "colors": colors
                 },
@@ -96,3 +97,4 @@
         });
     });
 </script>
+

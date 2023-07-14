@@ -4,6 +4,6 @@
 
     public interface IColorModelService
     {
-        Task<ICollection<AddArticleColorVeiwModel>?> GetColorModelColorsAsync(int ColorModelId);
+        Task<IList<AddArticleColorVeiwModel>> GetColorModelColorsAsync(int ColorModelId);
     }
 }

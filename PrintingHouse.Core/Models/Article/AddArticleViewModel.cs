@@ -36,6 +36,6 @@
 
         public string? ClientName { get; set; }
 
-        public IList<AddArticleColorVeiwModel> ArticleColors { get; set; } = new HashSet<AddArticleColorVeiwModel>();
+        public IList<AddArticleColorVeiwModel> ArticleColors { get; set; } = new List<AddArticleColorVeiwModel>();
     }
 }

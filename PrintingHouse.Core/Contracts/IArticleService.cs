@@ -6,6 +6,6 @@
     {
         Task AddAsync(AddArticleViewModel model);
 
-        Task<AddArticleViewModel> FillAddModelWithData(AddArticleViewModel model);
+        Task<AddArticleViewModel> FillAddModelWithDataAsync(AddArticleViewModel model);
     }
 }
