@@ -10,6 +10,7 @@
     using Models.Material;
     using Infrastructure.Data.Common.Contracts;
     using PrintingHouse.Infrastructure.Data.Entities;
+    using System.Collections.Generic;
 
     public class ArticleService : IArticleService
     {
@@ -36,7 +37,18 @@
 
             await fileService.SaveFileAsync(article.Id, model.DesignFile.FileName, model.DesignFile);
 
-            foreach (var item in model.ArticleColors)
+            await repo.AddAsync(article);
+            await repo.SaveChangesAsync();
+        }
+
+        public async Task AddColorRecipeAsync(IList<AddArticleColorVeiwModel> model)
+        {
+            var article = await repo
+                .All<Article>(a => a.Name == model.First().ArticleName)
+                .Include(a => a.ArticleColors)
+                .FirstAsync();
+
+            foreach (var item in model)
             {
                 article.ArticleColors.Add(new ArticleColor()
                 {
@@ -45,9 +57,8 @@
                     ColorModelId = item.ColorModelId,
                     ColorQuantity = item.ColorQuantity
                 });
-            }
+            };
 
-            await repo.AddAsync(article);
             await repo.SaveChangesAsync();
         }
 

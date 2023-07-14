@@ -34,8 +34,6 @@
         [Range(1, int.MaxValue)]
         public int ClientId { get; set; }
 
-        public string? ClientName { get; set; }
-
-        public IList<AddArticleColorVeiwModel> ArticleColors { get; set; } = new List<AddArticleColorVeiwModel>();
+        public string? ClientName { get; set; }       
     }
 }

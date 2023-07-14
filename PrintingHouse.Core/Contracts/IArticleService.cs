@@ -7,5 +7,7 @@
         Task AddAsync(AddArticleViewModel model);
 
         Task<AddArticleViewModel> FillAddModelWithDataAsync(AddArticleViewModel model);
+
+        Task AddColorRecipeAsync(IList<AddArticleColorVeiwModel> colorRecipes);
     }
 }

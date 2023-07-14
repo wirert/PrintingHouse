@@ -1,21 +1,15 @@
 ﻿@model AddArticleViewModel
-@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+
 @{
     ViewData["Title"] = "Add new article";
-    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
 }
 
-
-
-<input id="__RequestVerificationToken" type="hidden" value="@requestToken" />
-<input id="colors-fromArticleModel" type="hidden" value="@Model.ArticleColors" />
 <div class="row">
     <h1>@ViewData["Title"]</h1>
     <div class="col-md-4">
         <form method="post" asp-action="Add" asp-controller="Article" enctype="multipart/form-data">
             <input type="hidden" asp-for="@Model.ClientId" />
             <input type="hidden" asp-for="@Model.ClientName" />
-            <input id="colors-articleColors" type="hidden" asp-for="@Model.ArticleColors" />
             <h4>Client: @Model.ClientName</h4>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -42,7 +36,8 @@
             </div>
             <div class="mb-3">
                 <label asp-for="ColorModelId" class="form-label">Color model:</label>
-                <select id="pick-colorModel" href="javascript:;" aria-label="Disabled select example" asp-for="ColorModelId" class="form-select">
+                <select aria-label="Disabled select example" asp-for="ColorModelId" class="form-select">
+                    <option selected class="text-info"><em>Select</em></option>
                     @foreach (var colorModel in Model.ColorModels)
                     {
                         <option value="@colorModel.Id">@colorModel.Name</option>
@@ -50,10 +45,7 @@
                 </select>
                 <span asp-validation-for="ColorModelId" class="text-danger"></span>
             </div>           
-            <div id="partialColors">
-                <div id="article-partial-body" class="form-floating">
-                </div>
-            </div>
+           
             <div class="mb-3">
                 <label asp-for="@Model.DesignFile" class="form-label">Upload design file</label>
                 <input asp-for="@Model.DesignFile" class="form-control form-control" type="file">
@@ -66,35 +58,5 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <partial name="_ArticleColorsPartial" , model="@Model.ArticleColors" />
 }
-
-<script type="text/javascript">
-    $(function () {
-        $("#pick-colorModel").click(function () {
-            var colorModelId = $("#pick-colorModel").val();
-            var colors = $("#colors-fromArticleModel").val();
-            $.ajax({
-                type: "POST",
-                url: "/Article/GetColorsForAdding",
-                data: {
-                    "colorModelId": colorModelId,
-                    "colors": colors
-                },
-                Headers: {
-                    "X-CSRF-VERIFICATION-TOKEN": $('#__RequestVerificationToken').val()
-                },
-                success: function (response) {
-                    $("#partialColors").find("#article-partial-body").html(response);
-                },
-                failure: function (response) {
-                    alert(response.responseText);
-                },
-                error: function (response) {
-                    alert(response.responseText);
-                }
-            });
-        });
-    });
-</script>
 

@@ -5,5 +5,7 @@
     public interface IColorModelService
     {
         Task<IList<AddArticleColorVeiwModel>> GetColorModelColorsAsync(int ColorModelId);
+
+        Task<bool> ExistByIdAsync(int ColorModelId);
     }
 }

@@ -19,6 +19,13 @@
             repo = _repo;
         }
 
+        public async Task<bool> ExistByIdAsync(int colorModelId)
+        {
+            var colorModel = await repo.GetByIdAsync<ColorModel>(colorModelId);
+
+            return colorModel != null;
+        }
+
         public async Task<IList<AddArticleColorVeiwModel>> GetColorModelColorsAsync(int ColorModelId)
         {
             var colors =  await repo.AllReadonly<ColorModel>(cm => cm.Id == ColorModelId)
@@ -26,8 +33,8 @@
                     .Select(c => new AddArticleColorVeiwModel() 
                     {
                         ColorId = c.Id,
-                        ColorModelId = ColorModelId,
-                        ColorName = c.Type
+                        ColorName = c.Type,
+                        ColorModelId = ColorModelId
                     })
                     .ToList())
                 .FirstOrDefaultAsync();
