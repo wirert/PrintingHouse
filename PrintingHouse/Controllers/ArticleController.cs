@@ -5,28 +5,55 @@
     using Core.Contracts;
     using Core.Models.Article;
     using static Core.Constants.MessageConstants;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.Build.Framework;
 
     public class ArticleController : BaseController
     {
         private readonly IArticleService articleService;
         private readonly IColorModelService colorModelService;
-        private readonly IFileService fileService;
 
         public ArticleController(IArticleService _articleService,
-            IColorModelService _colorModelService,
-            IFileService _fileService)
+            IColorModelService _colorModelService)
         {
             articleService = _articleService;
             colorModelService = _colorModelService;
-            fileService = _fileService;
-
         }
 
         public IActionResult Index()
         {
-            return View("All");
+            return RedirectToAction("All", "Client");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> All(int? id = null)
+        {
+            //add button for recipe
+
+            try
+            {
+                var models = await articleService.GetAllAsync(id);
+
+                if (models.Any() == false)
+                {
+                    return NotFound("There is no active articles");
+                }
+
+                if (id.HasValue)
+                {
+                    ViewBag.Title = $"All articles of Client {models.First().ClientName}";
+                }
+                else
+                {
+                    ViewBag.Title = "All articles";
+                }
+
+                return View(models);
+            }
+            catch (Exception)
+            {
+                TempData[ErrorMessage] = "Problem retrieving articles.";
+
+                return RedirectToAction("All", "Client");
+            }
         }
 
         [HttpGet]
@@ -97,15 +124,7 @@
             }
 
 
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> All(int? id = null)
-        {
-            //add button for recipe
-
-            return Ok();
-        }
+        }       
 
         [HttpGet]
         public async Task<IActionResult> AddColors(int colorModelId, string article, string client)

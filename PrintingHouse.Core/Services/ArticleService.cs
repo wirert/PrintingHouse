@@ -11,6 +11,7 @@
     using Infrastructure.Data.Common.Contracts;
     using PrintingHouse.Infrastructure.Data.Entities;
     using System.Collections.Generic;
+    using System.Linq.Expressions;
 
     public class ArticleService : IArticleService
     {
@@ -18,21 +19,49 @@
         private readonly IFileService fileService;
 
         public ArticleService(
-            IRepository _repo, 
+            IRepository _repo,
             IFileService _fileService)
         {
             repo = _repo;
             fileService = _fileService;
         }
 
+        public async Task<IEnumerable<AllArticleViewModel>> GetAllAsync(int? id)
+        {
+            Expression<Func<Article, bool>> searchTerms = a => a.IsActive;
+
+            if (id.HasValue)
+            {
+                searchTerms = (a) => a.IsActive && a.ClientId == id;
+            }
+
+            var articles = await repo.AllReadonly(searchTerms)
+                .Include(a => a.ArticleColors)
+                .ThenInclude(ac => ac.ColorModel)
+                .ToListAsync();
+
+            var models = articles
+                .Select(a => new AllArticleViewModel()
+                {
+                    Id = a.Id,
+                    Name = a.Name,
+                    ClientId = a.ClientId,
+                    ClientName = a.Client.Name,
+                    ImageName = a.ImageName,
+                    ColorModel = a.ArticleColors.Select(ac => ac.ColorModel.Name).FirstOrDefault()
+                });
+
+            return models;
+        }
+
         public async Task AddAsync(AddArticleViewModel model)
         {
             var article = new Article()
-            { 
+            {
                 Name = model.Name,
                 ClientId = model.ClientId,
                 MaterialQuantity = model.MaterialQuantity,
-                ImageName = model.DesignFile.FileName                
+                ImageName = model.DesignFile.FileName
             };
 
             await fileService.SaveFileAsync(article.Id, model.DesignFile.FileName, model.DesignFile);
@@ -65,7 +94,7 @@
         public async Task<AddArticleViewModel> FillAddModelWithDataAsync(AddArticleViewModel model)
         {
             var client = await repo.GetByIdAsync<Client>(model.ClientId);
-                       
+
             if (client == null)
             {
                 throw new Exception();
@@ -84,14 +113,16 @@
                 {
                     Id = cm.Id,
                     Name = cm.Name
-                })                
+                })
                 .ToListAsync();
 
-            model.ClientName = client.Name; 
+            model.ClientName = client.Name;
             model.Materials = materials;
             model.ColorModels = colorModels;
 
             return model;
         }
+
+
     }
 }

@@ -4,6 +4,8 @@
 
     public interface IArticleService
     {
+        Task<IEnumerable<AllArticleViewModel>> GetAllAsync(int? id);
+
         Task AddAsync(AddArticleViewModel model);
 
         Task<AddArticleViewModel> FillAddModelWithDataAsync(AddArticleViewModel model);

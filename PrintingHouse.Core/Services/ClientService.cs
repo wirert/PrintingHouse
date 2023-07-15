@@ -10,6 +10,7 @@
     using Infrastructure.Data.Common.Contracts;
     using Infrastructure.Data.Entities;
 
+
     public class ClientService : IClientService
     {
         private readonly IRepository repo;
@@ -43,6 +44,7 @@
         public async Task<IEnumerable<AllClientViewModel>> GetAllAsync()
         {
             return await repo.AllReadonly<Client>(c => c.IsActive)
+                .Include(c => c.Articles)
                 .Select(c => new AllClientViewModel()
                 {
                     Id = c.Id,
@@ -50,7 +52,7 @@
                     PhoneNumber = c.PhoneNumber,
                     Email = c.Email,
                     MerchantName = $"{c.Merchant.ApplicationUser.FirstName!} {c.Merchant.ApplicationUser.LastName!}",
-                    Articles = c.Articles.Count
+                    Articles = c.Articles.Count(a => a.IsActive)
                 })
                 .ToArrayAsync();
         }

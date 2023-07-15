@@ -42,6 +42,29 @@
             </summary>
             <returns></returns>        
         </member>
+        <member name="T:PrintingHouse.Controllers.ClientController">
+            <summary>
+            Client controller
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Controllers.ClientController.Add">
+            <summary>
+            Adds new Client by merchant (Get)
+            </summary>
+            <returns>View with form for client details</returns>
+        </member>
+        <member name="M:PrintingHouse.Controllers.ClientController.Add(PrintingHouse.Core.Models.Client.AddClientViewModel)">
+            <summary>
+            Adds new Client by merchant (Post)
+            </summary>
+            <returns>Redirect to all clients page</returns>
+        </member>
+        <member name="M:PrintingHouse.Controllers.ClientController.All">
+            <summary>
+            Show all active clients
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtension">
             <summary>
             Adds extention methods to the ServiceCollection of application

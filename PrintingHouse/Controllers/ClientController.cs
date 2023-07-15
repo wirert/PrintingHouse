@@ -9,6 +9,9 @@
     using Core.Models.Client;
     using Extensions;
 
+    /// <summary>
+    /// Client controller
+    /// </summary>
     public class ClientController : BaseController
     {
         private readonly IClientService clientService;
@@ -22,6 +25,10 @@
 
         }
 
+        /// <summary>
+        /// Adds new Client by merchant (Get)
+        /// </summary>
+        /// <returns>View with form for client details</returns>
         [HttpGet]
         [Authorize(Roles = Merchant)]
         public IActionResult Add()
@@ -31,6 +38,10 @@
             return View(model);
         }
 
+        /// <summary>
+        /// Adds new Client by merchant (Post)
+        /// </summary>
+        /// <returns>Redirect to all clients page</returns>
         [HttpPost]
         [Authorize(Roles = Merchant)]
         public async Task<IActionResult> Add(AddClientViewModel model)
@@ -64,9 +75,13 @@
                 TempData[ErrorMessage] = "Unexpected error occurred while adding new client! Try again later.";
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("All");
         }
 
+        /// <summary>
+        /// Show all active clients
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> All()
         {
