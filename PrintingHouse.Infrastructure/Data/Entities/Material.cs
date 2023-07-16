@@ -13,7 +13,7 @@
     {
         public Material()
         {
-            MachineMaterials = new HashSet<MaterialColorModel>();
+            MaterialColorModels = new HashSet<MaterialColorModel>();
         }
 
         [Comment("Primary key")]
@@ -46,7 +46,7 @@
         [Required]
         public int InStock { get; set; }
 
-        public virtual ICollection<MaterialColorModel> MachineMaterials { get; set; }   
+        public virtual ICollection<MaterialColorModel> MaterialColorModels { get; set; }   
 
         [Comment("Soft delete property")]
         [Required]

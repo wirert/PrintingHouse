@@ -19,12 +19,12 @@
         [Required]
         public int MaterialId { get; set; }
 
-        public IEnumerable<MaterialSelectViewModel> Materials { get; set; } = Enumerable.Empty<MaterialSelectViewModel>();
+        public ICollection<MaterialSelectViewModel> Materials { get; set; } = new HashSet<MaterialSelectViewModel>();
 
         [Required]
         public int ColorModelId { get; set; }
 
-        public IEnumerable<ColorModelSelectViewModel> ColorModels { get; set; } = Enumerable.Empty<ColorModelSelectViewModel>();
+        public ICollection<ColorModelSelectViewModel> ColorModels { get; set; } = new HashSet<ColorModelSelectViewModel>();
 
         [Required]
         [Range(0, double.MaxValue)]

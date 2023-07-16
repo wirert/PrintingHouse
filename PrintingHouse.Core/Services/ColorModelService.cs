@@ -9,6 +9,7 @@
     using Models.Article;
     using Infrastructure.Data.Common.Contracts;
     using Infrastructure.Data.Entities;
+    using PrintingHouse.Core.Models.ColorModel;
 
     public class ColorModelService : IColorModelService
     {
@@ -24,6 +25,26 @@
             var colorModel = await repo.GetByIdAsync<ColorModel>(colorModelId);
 
             return colorModel != null;
+        }
+
+        public async Task<ICollection<ColorModelSelectViewModel>> GetColorModelByMaterialIdAsync(string materialId)
+        {
+            int matId;
+            List<ColorModelSelectViewModel> colorModelList = new List<ColorModelSelectViewModel>();
+            if (!string.IsNullOrEmpty(materialId))
+            {
+                matId = Convert.ToInt32(materialId);
+                colorModelList = await repo.AllReadonly<MaterialColorModel>(mc => mc.MaterialId == matId)
+                    .Select(mc => mc.ColorModel)
+                    .Select(cm => new ColorModelSelectViewModel()
+                    {
+                        Id = cm.Id,
+                        Name = cm.Name,
+                    })
+                    .ToListAsync();    
+            }
+
+            return colorModelList;
         }
 
         public async Task<IList<AddArticleColorVeiwModel>> GetColorModelColorsAsync(int ColorModelId)

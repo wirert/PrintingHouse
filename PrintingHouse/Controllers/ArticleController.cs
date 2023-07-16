@@ -5,6 +5,9 @@
     using Core.Contracts;
     using Core.Models.Article;
     using static Core.Constants.MessageConstants;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.EntityFrameworkCore;
+    using PrintingHouse.Core.Models.ColorModel;
 
     public class ArticleController : BaseController
     {
@@ -71,6 +74,9 @@
 
                 model = await articleService.FillAddModelWithDataAsync(model);
 
+                ViewData["MaterialsData"] = new SelectList(model.Materials.OrderBy(s => s.Id), "Id", "Type");
+                ViewData["ColorModelsData"] = new SelectList(model.ColorModels.OrderBy(s => s.Id), "Id", "Name");
+
                 return View(model);
             }
             catch (Exception)
@@ -81,6 +87,15 @@
         }
 
         [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public async Task<JsonResult> GetColorModelByMaterialId(string materialId)
+        {
+            var colorModelList = await colorModelService.GetColorModelByMaterialIdAsync(materialId);
+
+            return Json(colorModelList);
+        }
+
+            [HttpPost]
         public async Task<IActionResult> Add(AddArticleViewModel model)
         {
             if (model.DesignFile.Length == 0)

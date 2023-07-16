@@ -96,8 +96,8 @@
             {
                 throw new Exception();
             }
-
-            var materials = await repo.AllReadonly<Material>()
+                
+            model.Materials = await repo.AllReadonly<Material>()
                 .Select(m => new MaterialSelectViewModel()
                 {
                     Id = m.Id,
@@ -105,17 +105,28 @@
                 })
                 .ToListAsync();
 
-            var colorModels = await repo.AllReadonly<ColorModel>()
-                .Select(cm => new ColorModelSelectViewModel()
-                {
-                    Id = cm.Id,
-                    Name = cm.Name
-                })
-                .ToListAsync();
+            model.Materials.Add(new MaterialSelectViewModel()
+            {
+                Id = 0,
+                Type = "--Select Material--"
+            });
+
+            model.ColorModels.Add(new ColorModelSelectViewModel()
+            {
+                Id = 0,
+                Name = "--Select Color model--"
+            });
+
+            
+            //var colorModels = await repo.AllReadonly<ColorModel>()
+            //    .Select(cm => new ColorModelSelectViewModel()
+            //    {
+            //        Id = cm.Id,
+            //        Name = cm.Name
+            //    })
+            //    .ToListAsync();
 
             model.ClientName = client.Name;
-            model.Materials = materials;
-            model.ColorModels = colorModels;
 
             return model;
         }
