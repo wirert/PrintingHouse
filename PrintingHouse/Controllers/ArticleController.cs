@@ -6,23 +6,25 @@
     using Core.Models.Article;
     using static Core.Constants.MessageConstants;
     using Microsoft.AspNetCore.Mvc.Rendering;
-    using Microsoft.EntityFrameworkCore;
-    using PrintingHouse.Core.Models.ColorModel;
+    using Microsoft.AspNetCore.Antiforgery;
 
     public class ArticleController : BaseController
     {
         private readonly IArticleService articleService;
         private readonly IColorModelService colorModelService;
         private readonly IMaterialService materialService;
+        private readonly IAntiforgery Antiforgery;
 
         public ArticleController(
                 IArticleService _articleService,
                 IColorModelService _colorModelService,
-                IMaterialService _materialService)
+                IMaterialService _materialService,
+                IAntiforgery antiforgery)
         {
             articleService = _articleService;
             colorModelService = _colorModelService;
             materialService = _materialService;
+            Antiforgery = antiforgery;
         }
 
         public IActionResult Index()
@@ -77,6 +79,9 @@
                 ViewData["MaterialsData"] = new SelectList(model.Materials.OrderBy(s => s.Id), "Id", "Type");
                 ViewData["ColorModelsData"] = new SelectList(model.ColorModels.OrderBy(s => s.Id), "Id", "Name");
 
+                var requestToken = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+                Request.Headers.Add("X-CSRF-VERIFICATION-TOKEN", requestToken);
+
                 return View(model);
             }
             catch (Exception)
@@ -87,7 +92,6 @@
         }
 
         [HttpPost]
-        [IgnoreAntiforgeryToken]
         public async Task<JsonResult> GetColorModelByMaterialId(string materialId)
         {
             var colorModelList = await colorModelService.GetColorModelByMaterialIdAsync(materialId);
@@ -95,7 +99,8 @@
             return Json(colorModelList);
         }
 
-            [HttpPost]
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Add(AddArticleViewModel model)
         {
             if (model.DesignFile.Length == 0)

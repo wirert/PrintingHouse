@@ -1,13 +1,18 @@
 ﻿@model AddArticleViewModel
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+
 
 @{
     ViewData["Title"] = "Add new article";
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+   
 }
 
 <div class="row">
     <h1>@ViewData["Title"]</h1>
     <div class="col-md-4">
-        <form method="post" asp-action="Add" asp-controller="Article" enctype="multipart/form-data">
+        <form method="post" asp-action="Add" asp-controller="Article" asp-antiforgery="true" enctype="multipart/form-data">
+            <input id="__RequestVerificationToken" type="hidden" name="__RequestVerificationToken" value="@requestToken" />            
             <input type="hidden" asp-for="@Model.ClientId" />
             <input type="hidden" asp-for="@Model.ClientName" />
             <h4>Client: @Model.ClientName</h4>
@@ -33,9 +38,9 @@
                     <label asp-for="@Model.ColorModelId" class="control-label"></label>
                 </div>
                 <div class="col-md-4">
-                    <select asp-for="ColorModelId" class="form-control" 
-                    asp-items="ViewBag.ColorModelsData" 
-                    id="ddlColorModelId"></select>
+                    <select asp-for="ColorModelId" class="form-control"
+                            asp-items="ViewBag.ColorModelsData"
+                            id="ddlColorModelId"></select>
                     <span asp-validation-for="ColorModelId" class="text-danger"></span>
                 </div>
             </div>
@@ -44,7 +49,7 @@
                 <input asp-for="@Model.MaterialQuantity" class="form-control" aria-required="true" type="number" step="0.1" min="0" />
                 <label asp-for="@Model.MaterialQuantity">Required material quantity:</label>
                 <span asp-validation-for="@Model.MaterialQuantity" class="text-danger"></span>
-            </div>     
+            </div>
             <div class="mb-3">
                 <label asp-for="@Model.DesignFile" class="form-label">Upload design file</label>
                 <input asp-for="@Model.DesignFile" class="form-control form-control" type="file">
@@ -64,11 +69,30 @@
         });
         function loadColorModel(obj) {
             var value = obj.value;
-            var url = "/Article/GetColorModelByMaterialId";
-            $.post(url, { MaterialId: value }, function (data) {
-                debugger;
-                PopulateDropDown("#ddlColorModelId", data);
-            });
+            var ajax = {
+                url: "@Url.Action("GetColorModelByMaterialId")",
+                data: {
+                    MaterialId: value
+                },
+                type: "post",
+                dataType: "json"
+            };
+            var antiForgeryToken = $('#__RequestVerificationToken').val();
+            if (antiForgeryToken) {
+                ajax.headers = {};
+                ajax.headers["X-CSRF-VERIFICATION-TOKEN"] = antiForgeryToken;
+            };
+            ajax.success = function (response) {
+                PopulateDropDown("#ddlColorModelId", response);
+            };
+            ajax.failure = function (response) {
+                alert(response.responseText);
+            };
+            ajax.error = function (response) {
+                alert(response.responseText);
+            }
+
+            $.ajax(ajax);
         }
         function PopulateDropDown(dropDownId, list, selectedId) {
             $(dropDownId).empty();
@@ -77,6 +101,6 @@
                 $(dropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
             });
         }
-    </script>
+    </script>   
 }
 
