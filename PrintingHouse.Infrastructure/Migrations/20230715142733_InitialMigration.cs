@@ -54,22 +54,6 @@ namespace PrintingHouse.Infrastructure.Migrations
                 comment: "Extention of identity user");
 
             migrationBuilder.CreateTable(
-                name: "Color",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false, comment: "Color primary key")
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false, comment: "Color type name"),
-                    InStock = table.Column<int>(type: "int", nullable: false, comment: "Color current quantit in stock"),
-                    Price = table.Column<decimal>(type: "money", nullable: false, comment: "Color price")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Color", x => x.Id);
-                },
-                comment: "Color");
-
-            migrationBuilder.CreateTable(
                 name: "ColorModel",
                 columns: table => new
                 {
@@ -225,6 +209,28 @@ namespace PrintingHouse.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Color",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false, comment: "Color primary key")
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false, comment: "Color type name"),
+                    InStock = table.Column<int>(type: "int", nullable: false, comment: "Color current quantit in stock"),
+                    Price = table.Column<decimal>(type: "money", nullable: false, comment: "Color price"),
+                    ColorModelId = table.Column<int>(type: "int", nullable: false, comment: "Color's color model id")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Color", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Color_ColorModel_ColorModelId",
+                        column: x => x.ColorModelId,
+                        principalTable: "ColorModel",
+                        principalColumn: "Id");
+                },
+                comment: "Color");
+
+            migrationBuilder.CreateTable(
                 name: "MaterialsColorModels",
                 columns: table => new
                 {
@@ -336,6 +342,8 @@ namespace PrintingHouse.Infrastructure.Migrations
                     ImageName = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false, comment: "Name of design image"),
                     MaterialQuantity = table.Column<double>(type: "float", nullable: false, comment: "Required material lenght"),
                     ClientId = table.Column<int>(type: "int", nullable: false, comment: "Article owner id"),
+                    MaterialId = table.Column<int>(type: "int", nullable: false, comment: "Foreign key to MaterialColorModel table"),
+                    ColorModelId = table.Column<int>(type: "int", nullable: false, comment: "Foreign key to MaterialColorModel table"),
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true, comment: "Soft delete boolean property")
                 },
                 constraints: table =>
@@ -347,6 +355,12 @@ namespace PrintingHouse.Infrastructure.Migrations
                         principalTable: "Clients",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Articles_MaterialsColorModels_MaterialId_ColorModelId",
+                        columns: x => new { x.MaterialId, x.ColorModelId },
+                        principalTable: "MaterialsColorModels",
+                        principalColumns: new[] { "MaterialId", "ColorModelId" },
+                        onDelete: ReferentialAction.Cascade);
                 },
                 comment: "Particular client article ready for print.");
 
@@ -355,13 +369,12 @@ namespace PrintingHouse.Infrastructure.Migrations
                 columns: table => new
                 {
                     ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Article id"),
-                    ColorModelId = table.Column<int>(type: "int", nullable: false, comment: "Color model id"),
                     ColorId = table.Column<int>(type: "int", nullable: false, comment: "Color id"),
                     ColorQuantity = table.Column<double>(type: "float", nullable: false, comment: "Required color quantity for single print of article")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ArticleColors", x => new { x.ArticleId, x.ColorId, x.ColorModelId });
+                    table.PrimaryKey("PK_ArticleColors", x => new { x.ArticleId, x.ColorId });
                     table.ForeignKey(
                         name: "FK_ArticleColors_Articles_ArticleId",
                         column: x => x.ArticleId,
@@ -372,12 +385,6 @@ namespace PrintingHouse.Infrastructure.Migrations
                         name: "FK_ArticleColors_Color_ColorId",
                         column: x => x.ColorId,
                         principalTable: "Color",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ArticleColors_ColorModel_ColorModelId",
-                        column: x => x.ColorModelId,
-                        principalTable: "ColorModel",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 },
@@ -413,23 +420,9 @@ namespace PrintingHouse.Infrastructure.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PictureName", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"), 0, "e5f89b31-e136-4fa5-af85-6d894587d1df", "admin@mail.com", false, "Admin", "Petrov", false, null, "ADMIN@MAIL.COM", "ADMIN123", "AQAAAAEAACcQAAAAEInWF6oTX2iEiojPVpBv3VMgZypmuYVTue7NClyQjvjIuHRzW/uEzCFqiMOci6GXEw==", null, false, null, "d2ecdcca-b1e6-4015-aaa1-17c22a17e6b3", false, "Admin123" },
-                    { new Guid("6afbf121-61d4-42ca-a9c1-5ac694442d83"), 0, "5eee9b54-3fe0-49ae-9e73-06ccb35c2aef", "empl1@mail.com", false, "Empl", "Nikolov", false, null, "EMPL1@MAIL.COM", "EMPLOYEE1", "AQAAAAEAACcQAAAAEEx5yhBKtCJfxQF/zUe9cV2xf+kBb2r2QkRC9P32A1vHS1prp+aTJfKGdOG4CnzBfw==", null, false, null, "455036d5-b858-4330-83bb-d9bbe1e7d7a0", false, "Employee1" },
-                    { new Guid("e7065dbb-0c70-48da-902c-9f6f2536c505"), 0, "1996cdb1-a667-423e-abc4-966b97ca4175", "merchant1@mail.com", false, "Merchant", "Georgiev", false, null, "MERCHANT1@MAIL.COM", "MERCHANT1", "AQAAAAEAACcQAAAAEHIr25deIQOlw8IJUoHP50xNyegO9SEd4TJLKIOc0IMS+87mh+5vMgYuCDZvqsfwZQ==", null, false, null, "ff91b260-0ab1-48c3-b7dd-ecb740dfce74", false, "Merchant1" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Color",
-                columns: new[] { "Id", "InStock", "Price", "Type" },
-                values: new object[,]
-                {
-                    { 1, 104, 50m, "Red" },
-                    { 2, 92, 48m, "Green" },
-                    { 3, 67, 57m, "Blue" },
-                    { 4, 47, 52m, "Cyan" },
-                    { 5, 38, 55m, "Magenta" },
-                    { 6, 50, 47m, "Yellow" },
-                    { 7, 60, 40m, "Black" }
+                    { new Guid("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"), 0, "f391a5b2-078f-4bac-aecf-bf071b646306", "admin@mail.com", false, "Admin", "Petrov", false, null, "ADMIN@MAIL.COM", "ADMIN123", "AQAAAAEAACcQAAAAEHJhxuLXWf5igzFtlPGT/vOgHD31VzAvG3vuAFMYvUQy2DFe+KWSHWLT9R5kHKE/vA==", null, false, null, "d2ecdcca-b1e6-4015-aaa1-17c22a17e6b3", false, "Admin123" },
+                    { new Guid("6afbf121-61d4-42ca-a9c1-5ac694442d83"), 0, "d802d894-dc3d-4b4b-8735-6e97e4496c4b", "empl1@mail.com", false, "Empl", "Nikolov", false, null, "EMPL1@MAIL.COM", "EMPLOYEE1", "AQAAAAEAACcQAAAAEH2jMWzk77ERO8cewJZA4gtIukkIAoRcyWhiyq7actAPY5H8yfRk7HZRUj8/rjMivQ==", null, false, null, "455036d5-b858-4330-83bb-d9bbe1e7d7a0", false, "Employee1" },
+                    { new Guid("e7065dbb-0c70-48da-902c-9f6f2536c505"), 0, "1436b11c-c659-443b-a780-58d9e2adf477", "merchant1@mail.com", false, "Merchant", "Georgiev", false, null, "MERCHANT1@MAIL.COM", "MERCHANT1", "AQAAAAEAACcQAAAAEGO/XRqDFZPqxHxaLGqHnMSztXttaUzdKUmQghMQmlOe/mOkcmYG1XkvR/UnG2TO+g==", null, false, null, "ff91b260-0ab1-48c3-b7dd-ecb740dfce74", false, "Merchant1" }
                 });
 
             migrationBuilder.InsertData(
@@ -464,6 +457,20 @@ namespace PrintingHouse.Infrastructure.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Color",
+                columns: new[] { "Id", "ColorModelId", "InStock", "Price", "Type" },
+                values: new object[,]
+                {
+                    { 1, 1, 104, 50m, "Red" },
+                    { 2, 1, 92, 48m, "Green" },
+                    { 3, 1, 67, 57m, "Blue" },
+                    { 4, 2, 47, 52m, "Cyan" },
+                    { 5, 2, 38, 55m, "Magenta" },
+                    { 6, 2, 50, 47m, "Yellow" },
+                    { 7, 2, 60, 40m, "Black" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Employees",
                 columns: new[] { "Id", "ApplicationUserId", "IsActive", "PositionId" },
                 values: new object[] { 1, new Guid("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"), true, 1 });
@@ -495,14 +502,14 @@ namespace PrintingHouse.Infrastructure.Migrations
                 column: "ColorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ArticleColors_ColorModelId",
-                table: "ArticleColors",
-                column: "ColorModelId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Articles_ClientId",
                 table: "Articles",
                 column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Articles_MaterialId_ColorModelId",
+                table: "Articles",
+                columns: new[] { "MaterialId", "ColorModelId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -553,6 +560,11 @@ namespace PrintingHouse.Infrastructure.Migrations
                 table: "Clients",
                 column: "Name",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Color_ColorModelId",
+                table: "Color",
+                column: "ColorModelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_ApplicationUserId",
@@ -614,22 +626,22 @@ namespace PrintingHouse.Infrastructure.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Articles");
+
+            migrationBuilder.DropTable(
+                name: "Clients");
+
+            migrationBuilder.DropTable(
                 name: "MaterialsColorModels");
 
             migrationBuilder.DropTable(
-                name: "Articles");
+                name: "Employees");
 
             migrationBuilder.DropTable(
                 name: "ColorModel");
 
             migrationBuilder.DropTable(
                 name: "Materials");
-
-            migrationBuilder.DropTable(
-                name: "Clients");
-
-            migrationBuilder.DropTable(
-                name: "Employees");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

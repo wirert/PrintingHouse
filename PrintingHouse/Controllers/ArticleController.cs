@@ -10,12 +10,16 @@
     {
         private readonly IArticleService articleService;
         private readonly IColorModelService colorModelService;
+        private readonly IMaterialService materialService;
 
-        public ArticleController(IArticleService _articleService,
-            IColorModelService _colorModelService)
+        public ArticleController(
+                IArticleService _articleService,
+                IColorModelService _colorModelService,
+                IMaterialService _materialService)
         {
             articleService = _articleService;
             colorModelService = _colorModelService;
+            materialService = _materialService;
         }
 
         public IActionResult Index()
@@ -89,6 +93,11 @@
                 ModelState.AddModelError(nameof(model.ColorModelId), "Color model is invalid!");
             }
 
+            if (await materialService.ExistByIdAsync(model.MaterialId) == false )
+            {
+                ModelState.AddModelError(nameof(model.MaterialId), "Material is invalid!");
+            }
+
             if (!ModelState.IsValid)
             {
                 try
@@ -122,8 +131,6 @@
 
                 return RedirectToAction("All", "Client");
             }
-
-
         }       
 
         [HttpGet]

@@ -12,6 +12,7 @@
             <div class="mb-3">
                 <label asp-for="ApplicationUserId" class="form-label">Select employee:</label>
                 <select asp-for="ApplicationUserId" class="form-control">
+                    <option selected class="text-info"><em>Select</em></option>
                     @foreach (var board in Model.Users)
                     {
                         <option value="@board.Id">@board.FullName</option>
@@ -22,6 +23,7 @@
             <div class="mb-3">
                 <label asp-for="PositionId" class="form-label">Select position:</label>
                 <select asp-for="PositionId" class="form-control">
+                    <option selected class="text-info"><em>Select</em></option>
                     @foreach (var position in Model.Positions)
                     {
                         <option value="@position.Id">@position.Name</option>
@@ -35,6 +37,7 @@
             <div class="mb-3">
                 <label asp-for="Role" class="form-label">Select access level:</label>
                 <select asp-for="Role" class="form-control">
+                    <option selected class="text-info"><em>Select role</em></option>
                     @foreach (var access in Model.AccessLevels)
                     {
                         <option value="@access">@access</option>

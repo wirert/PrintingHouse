@@ -14,14 +14,7 @@
         public Guid ArticleId { get; set; }
 
         [ForeignKey(nameof(ArticleId))]
-        public virtual Article Article { get; set; } = null!;
-
-        [Comment("Color model id")]
-        [Required]
-        public int ColorModelId { get; set; }
-
-        [ForeignKey(nameof(ColorModelId))]
-        public virtual ColorModel ColorModel { get; set; } = null!;
+        public virtual Article Article { get; set; } = null!;        
 
         [Comment("Color id")]
         [Required]

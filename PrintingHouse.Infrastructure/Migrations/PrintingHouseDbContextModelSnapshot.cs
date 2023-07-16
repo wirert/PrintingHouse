@@ -250,7 +250,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = new Guid("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3d28714a-4f0d-4eab-ab33-e618bf666cf4",
+                            ConcurrencyStamp = "f391a5b2-078f-4bac-aecf-bf071b646306",
                             Email = "admin@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
@@ -259,7 +259,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@MAIL.COM",
                             NormalizedUserName = "ADMIN123",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAicMPwBWTGoaA1onBToen1Ff70sGwEjp11elaCAfpThXeMdvP0IOJr/bjts1oxTxg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHJhxuLXWf5igzFtlPGT/vOgHD31VzAvG3vuAFMYvUQy2DFe+KWSHWLT9R5kHKE/vA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "d2ecdcca-b1e6-4015-aaa1-17c22a17e6b3",
                             TwoFactorEnabled = false,
@@ -269,7 +269,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = new Guid("e7065dbb-0c70-48da-902c-9f6f2536c505"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1f10c9eb-4939-4838-9762-ca8abc6b7af2",
+                            ConcurrencyStamp = "1436b11c-c659-443b-a780-58d9e2adf477",
                             Email = "merchant1@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Merchant",
@@ -278,7 +278,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MERCHANT1@MAIL.COM",
                             NormalizedUserName = "MERCHANT1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKuXrU2ZCrSdG4o9mMzKLeXppfPAlHIsgHZYT7Yt39E6xjEmSDICoxuQsMZS/DdECw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGO/XRqDFZPqxHxaLGqHnMSztXttaUzdKUmQghMQmlOe/mOkcmYG1XkvR/UnG2TO+g==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "ff91b260-0ab1-48c3-b7dd-ecb740dfce74",
                             TwoFactorEnabled = false,
@@ -288,7 +288,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = new Guid("6afbf121-61d4-42ca-a9c1-5ac694442d83"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b2a29da3-f85d-4f1a-8fd3-9099944c520c",
+                            ConcurrencyStamp = "d802d894-dc3d-4b4b-8735-6e97e4496c4b",
                             Email = "empl1@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Empl",
@@ -297,7 +297,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "EMPL1@MAIL.COM",
                             NormalizedUserName = "EMPLOYEE1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMkeDSbg9yPRLpQJr/Wt5lLZdC8ctgcJ17tF8kcF+wmGNYADb9ZUueyKraAQH3dOOw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEH2jMWzk77ERO8cewJZA4gtIukkIAoRcyWhiyq7actAPY5H8yfRk7HZRUj8/rjMivQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "455036d5-b858-4330-83bb-d9bbe1e7d7a0",
                             TwoFactorEnabled = false,
@@ -316,6 +316,10 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasComment("Article owner id");
 
+                    b.Property<int>("ColorModelId")
+                        .HasColumnType("int")
+                        .HasComment("Foreign key to MaterialColorModel table");
+
                     b.Property<string>("ImageName")
                         .IsRequired()
                         .HasMaxLength(60)
@@ -327,6 +331,10 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(true)
                         .HasComment("Soft delete boolean property");
+
+                    b.Property<int>("MaterialId")
+                        .HasColumnType("int")
+                        .HasComment("Foreign key to MaterialColorModel table");
 
                     b.Property<double>("MaterialQuantity")
                         .HasColumnType("float")
@@ -341,6 +349,8 @@ namespace PrintingHouse.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
+
+                    b.HasIndex("MaterialId", "ColorModelId");
 
                     b.ToTable("Articles");
 
@@ -357,19 +367,13 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasComment("Color id");
 
-                    b.Property<int>("ColorModelId")
-                        .HasColumnType("int")
-                        .HasComment("Color model id");
-
                     b.Property<double>("ColorQuantity")
                         .HasColumnType("float")
                         .HasComment("Required color quantity for single print of article");
 
-                    b.HasKey("ArticleId", "ColorId", "ColorModelId");
+                    b.HasKey("ArticleId", "ColorId");
 
                     b.HasIndex("ColorId");
-
-                    b.HasIndex("ColorModelId");
 
                     b.ToTable("ArticleColors");
 
@@ -969,7 +973,15 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.MaterialColorModel", "MaterialColorModel")
+                        .WithMany("Articles")
+                        .HasForeignKey("MaterialId", "ColorModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Client");
+
+                    b.Navigation("MaterialColorModel");
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.ArticleColor", b =>
@@ -986,17 +998,9 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PrintingHouse.Infrastructure.Data.Entities.ColorModel", "ColorModel")
-                        .WithMany("ArticleColors")
-                        .HasForeignKey("ColorModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Article");
 
                     b.Navigation("Color");
-
-                    b.Navigation("ColorModel");
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Client", b =>
@@ -1100,8 +1104,6 @@ namespace PrintingHouse.Infrastructure.Migrations
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.ColorModel", b =>
                 {
-                    b.Navigation("ArticleColors");
-
                     b.Navigation("Colors");
 
                     b.Navigation("MaterialsColorModel");
@@ -1119,6 +1121,8 @@ namespace PrintingHouse.Infrastructure.Migrations
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.MaterialColorModel", b =>
                 {
+                    b.Navigation("Articles");
+
                     b.Navigation("Machines");
                 });
 

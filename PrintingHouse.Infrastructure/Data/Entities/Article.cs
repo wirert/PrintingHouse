@@ -42,6 +42,17 @@
         [ForeignKey(nameof(ClientId))]
         public virtual Client Client { get; set; } = null!;
 
+        [Comment("Foreign key to MaterialColorModel table")]
+        [Required]
+        public int MaterialId { get; set; }
+
+        [Comment("Foreign key to MaterialColorModel table")]
+        [Required]
+        public int ColorModelId { get; set; }
+
+        [Required]
+        public virtual MaterialColorModel MaterialColorModel { get; set; } = null!;
+
         public virtual ICollection<ArticleColor> ArticleColors { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }

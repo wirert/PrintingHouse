@@ -29,6 +29,7 @@
             services.AddScoped<IClientService, ClientService>();
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<IColorModelService, ColorModelService>();
+            services.AddScoped<IMaterialService, MaterialService>();
             services.AddScoped<IFileService, FileService>();
             
 

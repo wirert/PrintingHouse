@@ -11,6 +11,7 @@
         public MaterialColorModel()
         {
             Machines = new HashSet<Machine>();
+            Articles = new HashSet<Article>();
         }
 
         [Comment("Material id (primary key)")]
@@ -28,5 +29,7 @@
         public virtual ColorModel ColorModel { get; set; } = null!;
 
         public virtual ICollection<Machine> Machines { get; set; }
+
+        public virtual ICollection<Article> Articles { get; set; }
     }
 }

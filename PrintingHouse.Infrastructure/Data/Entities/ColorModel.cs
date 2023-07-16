@@ -10,7 +10,6 @@
     {
         public ColorModel()
         {
-            ArticleColors = new HashSet<ArticleColor>();
             MaterialsColorModel = new HashSet<MaterialColorModel>();
             Colors = new HashSet<Color>();
         }
@@ -25,8 +24,6 @@
         public string Name { get; set; } = null!;
 
         public ICollection<MaterialColorModel> MaterialsColorModel { get; set; }
-
-        public virtual ICollection<ArticleColor> ArticleColors { get; set; }
 
         public virtual ICollection<Color> Colors { get; set; }
     }

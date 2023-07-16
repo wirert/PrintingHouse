@@ -35,12 +35,7 @@
                 searchTerms = (a) => a.IsActive && a.ClientId == id;
             }
 
-            var articles = await repo.AllReadonly(searchTerms)
-                .Include(a => a.ArticleColors)
-                .ThenInclude(ac => ac.ColorModel)
-                .ToListAsync();
-
-            var models = articles
+            var models = await repo.AllReadonly(searchTerms)
                 .Select(a => new AllArticleViewModel()
                 {
                     Id = a.Id,
@@ -48,8 +43,9 @@
                     ClientId = a.ClientId,
                     ClientName = a.Client.Name,
                     ImageName = a.ImageName,
-                    ColorModel = a.ArticleColors.Select(ac => ac.ColorModel.Name).FirstOrDefault()
-                });
+                    ColorModel = a.MaterialColorModel.ColorModel.Name
+                })
+                .ToListAsync();
 
             return models;
         }
@@ -60,6 +56,8 @@
             {
                 Name = model.Name,
                 ClientId = model.ClientId,
+                MaterialId = model.MaterialId,
+                ColorModelId = model.ColorModelId,
                 MaterialQuantity = model.MaterialQuantity,
                 ImageName = model.DesignFile.FileName
             };
@@ -83,7 +81,6 @@
                 {
                     Article = article,
                     ColorId = item.ColorId,
-                    ColorModelId = item.ColorModelId,
                     ColorQuantity = item.ColorQuantity
                 });
             };

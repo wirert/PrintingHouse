@@ -45,10 +45,13 @@
             builder.Entity<Article>().Property(a => a.IsActive).HasDefaultValue(true);
             builder.Entity<Client>().Property(a => a.IsActive).HasDefaultValue(true);
 
-            builder.Entity<ArticleColor>().HasKey(k => new {k.ArticleId, k.ColorId, k.ColorModelId});
+            builder.Entity<ArticleColor>().HasKey(k => new {k.ArticleId, k.ColorId});
 
-            
-              
+            builder.Entity<Article>()
+                .HasOne(m => m.MaterialColorModel)
+                .WithMany(mc => mc.Articles)
+                .HasForeignKey(m => new { m.MaterialId, m.ColorModelId });
+
             builder.Entity<Client>().HasIndex(e => e.Name).IsUnique();            
 
            
