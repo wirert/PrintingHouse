@@ -1,4 +1,4 @@
-﻿@model AddArticleViewModel
+﻿@model ChooseArticleMaterialAndColorsViewModel
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 
 
@@ -12,17 +12,11 @@
         <h1>@ViewData["Title"]</h1>
         <h4 class="mb-2">Client: @Model.ClientName</h4>
         <hr />
-        <form method="post" asp-action="Add" asp-controller="Article" enctype="multipart/form-data">
+        <form method="post" asp-action="Add" asp-controller="Article" asp-antiforgery=false enctype="multipart/form-data">
             <input id="__RequestVerificationToken" type="hidden" name="__RequestVerificationToken" value="@requestToken" />
             <input type="hidden" asp-for="@Model.ClientId" />
             <input type="hidden" asp-for="@Model.ClientName" />            
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating mt-4">
-                <input asp-for="@Model.Name" class="form-control" autocomplete="name" aria-required="true" />
-                <label asp-for="@Model.Name">Article name:</label>
-                <span asp-validation-for="@Model.Name" class="text-danger"></span>
-            </div>
-
             <div class="row form-group mt-3 mb-4">
                 <div class="col-md-6 pt-2">
                     <select asp-for="MaterialId" class="form-control text-center"
@@ -36,22 +30,8 @@
                             id="ddlColorModelId"></select>
                     <span asp-validation-for="ColorModelId" class="text-danger"></span>
                 </div>
-            </div>
-
-            <div class="form-floating">
-                <input asp-for="@Model.MaterialQuantity" class="form-control" aria-required="true" type="number" step="0.1" min="0" />
-                <label asp-for="@Model.MaterialQuantity">Required material quantity:</label>
-                <span asp-validation-for="@Model.MaterialQuantity" class="text-danger"></span>
-            </div>
-            <div class="row form-group mt-4 mb-3">
-                <div class="col-md-4">
-                    <label asp-for="@Model.DesignFile" class="control-label">Upload Design file</label>
-                </div>
-                <div class="col-md-8">
-                    <input asp-for="@Model.DesignFile" class="form-control form-control" type="file">
-                    <span asp-validation-for="@Model.DesignFile" class="text-danger"></span>
-                </div>
-            </div>
+            </div>            
+            
             <button type="submit" class="w-100 btn btn-lg btn-primary mt-3">Submit</button>
         </form>
     </div>

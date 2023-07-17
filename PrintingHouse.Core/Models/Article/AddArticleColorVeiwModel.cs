@@ -4,11 +4,6 @@
 
     public class AddArticleColorVeiwModel
     {
-        public string ArticleName { get; set; } = null!;
-
-        public string ClientName { get; set; } = null!;
-
-        public int ColorModelId { get; set; }
 
         [Required]
         public int ColorId { get; set; }

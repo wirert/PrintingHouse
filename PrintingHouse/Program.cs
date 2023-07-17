@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -59,7 +61,7 @@ builder.Services.AddMinio(options =>
     }); 
 });
 
-builder.Services.AddHealthChecks().AddMinio(sp => sp.GetRequiredService<MinioClient>());
+//builder.Services.AddHealthChecks().AddMinio(sp => sp.GetRequiredService<MinioClient>());
 
 builder.Services.ConfigureApplicationCookie(cfg =>
 {

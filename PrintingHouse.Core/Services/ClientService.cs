@@ -56,5 +56,12 @@
                 })
                 .ToArrayAsync();
         }
+
+        public async Task<string?> GetNameByIdAsync(int id)
+        {
+            var client = await repo.GetByIdAsync<Client>(id);
+
+            return client.Name;
+        }
     }
 }

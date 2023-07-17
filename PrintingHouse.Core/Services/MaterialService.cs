@@ -1,6 +1,6 @@
 ﻿namespace PrintingHouse.Core.Services
 {
-    using PrintingHouse.Core.Contracts;
+    using PrintingHouse.Core.Services.Contracts;
     using PrintingHouse.Infrastructure.Data.Common.Contracts;
     using PrintingHouse.Infrastructure.Data.Entities;
     using System.Threading.Tasks;
@@ -14,11 +14,11 @@
             repo = _repo;
         }
 
-        public async Task<bool> ExistByIdAsync(int materialId)
+        public async Task<string?> GetNameByIdIfExistAsync(int materialId)
         {
             var material = await repo.GetByIdAsync<Material>(materialId);
 
-            return material != null;
+            return material.Type;
         }
     }
 }

@@ -54,8 +54,7 @@
                     .Select(c => new AddArticleColorVeiwModel() 
                     {
                         ColorId = c.Id,
-                        ColorName = c.Type,
-                        ColorModelId = ColorModelId
+                        ColorName = c.Type
                     })
                     .ToList())
                 .FirstOrDefaultAsync();

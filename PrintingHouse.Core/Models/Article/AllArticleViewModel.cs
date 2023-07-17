@@ -19,6 +19,6 @@
         public int ClientId { get; set; }
 
         [Display(Name = "Client name")]
-        public string ClientName { get; set; } = null!;
+        public string ClientName { get; set; } = null!;       
     }
 }

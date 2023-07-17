@@ -1,10 +1,9 @@
 ﻿namespace Microsoft.Extensions.DependencyInjection
 {
     using Minio;
-
-    using PrintingHouse.Core.Contracts;
     using PrintingHouse.Core.Services;
     using PrintingHouse.Core.Services.Admin;
+    using PrintingHouse.Core.Services.Contracts;
     using PrintingHouse.Infrastructure.Data.Common;
     using PrintingHouse.Infrastructure.Data.Common.Contracts;
 

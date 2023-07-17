@@ -1,4 +1,4 @@
-﻿namespace PrintingHouse.Core.Contracts
+﻿namespace PrintingHouse.Core.Services.Contracts
 {
     using PrintingHouse.Core.Models.Article;
     using PrintingHouse.Core.Models.ColorModel;

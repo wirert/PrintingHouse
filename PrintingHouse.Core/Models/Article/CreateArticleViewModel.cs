@@ -2,29 +2,25 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using ColorModel;
-    using Material;
     using Microsoft.AspNetCore.Http;
-    using static Infrastructure.Constants.DataConstants.Article;
 
-    public class AddArticleViewModel
+    using static Infrastructure.Constants.DataConstants;
+
+    public class CreateArticleViewModel
     {
         [Required]
-        [StringLength(MaxNameLenght, MinimumLength = MinNameLenght)]
+        [StringLength(Article.MaxNameLenght, MinimumLength = Article.MinNameLenght)]
         public string Name { get; set; } = null!;
 
-        
         public IFormFile DesignFile { get; set; } = null!;
 
         [Required]
         public int MaterialId { get; set; }
 
-        public ICollection<MaterialSelectViewModel> Materials { get; set; } = new HashSet<MaterialSelectViewModel>();
+        public string MaterialName { get; set; } = null!;
 
         [Required]
         public int ColorModelId { get; set; }
-
-        public ICollection<ColorModelSelectViewModel> ColorModels { get; set; } = new HashSet<ColorModelSelectViewModel>();
 
         [Required]
         [Range(0, double.MaxValue)]
@@ -34,6 +30,8 @@
         [Range(1, int.MaxValue)]
         public int ClientId { get; set; }
 
-        public string? ClientName { get; set; }       
+        public string ClientName { get; set; } = null!;
+
+        public IList<AddArticleColorVeiwModel> Colors { get; set; } = new List<AddArticleColorVeiwModel>();
     }
 }

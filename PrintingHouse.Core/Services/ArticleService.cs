@@ -50,7 +50,7 @@
             return models;
         }
 
-        public async Task AddAsync(AddArticleViewModel model)
+        public async Task CreateAsync(CreateArticleViewModel model)
         {
             var article = new Article()
             {
@@ -62,42 +62,32 @@
                 ImageName = model.DesignFile.FileName
             };
 
+            foreach (var color in model.Colors)
+            {
+                article.ArticleColors.Add(new ArticleColor()
+                {
+                    Article = article,
+                    ColorId = color.ColorId,
+                    ColorQuantity = color.ColorQuantity
+                });
+            }
+
             await fileService.SaveFileAsync(article.Id, model.DesignFile.FileName, model.DesignFile);
 
             await repo.AddAsync(article);
             await repo.SaveChangesAsync();
         }
 
-        public async Task AddColorRecipeAsync(IList<AddArticleColorVeiwModel> model)
-        {
-            var article = await repo
-                .All<Article>(a => a.Name == model.First().ArticleName)
-                .Include(a => a.ArticleColors)
-                .FirstAsync();
-
-            foreach (var item in model)
-            {
-                article.ArticleColors.Add(new ArticleColor()
-                {
-                    Article = article,
-                    ColorId = item.ColorId,
-                    ColorQuantity = item.ColorQuantity
-                });
-            };
-
-            await repo.SaveChangesAsync();
-        }
-
-        public async Task<AddArticleViewModel> FillAddModelWithDataAsync(AddArticleViewModel model)
+        public async Task<ChooseArticleMaterialAndColorsViewModel> FillAddModelWithDataAsync(ChooseArticleMaterialAndColorsViewModel model)
         {
             var client = await repo.GetByIdAsync<Client>(model.ClientId);
 
-            if (client == null)
+            if (client == null || client.IsActive == false)
             {
                 throw new Exception();
             }
                 
-            model.Materials = await repo.AllReadonly<Material>()
+            model.Materials = await repo.AllReadonly<Material>(m => m.IsActive)
                 .Select(m => new MaterialSelectViewModel()
                 {
                     Id = m.Id,
@@ -116,15 +106,6 @@
                 Id = 0,
                 Name = "--Select Color model--"
             });
-
-            
-            //var colorModels = await repo.AllReadonly<ColorModel>()
-            //    .Select(cm => new ColorModelSelectViewModel()
-            //    {
-            //        Id = cm.Id,
-            //        Name = cm.Name
-            //    })
-            //    .ToListAsync();
 
             model.ClientName = client.Name;
 

@@ -1,4 +1,4 @@
-﻿namespace PrintingHouse.Core.Contracts
+﻿namespace PrintingHouse.Core.Services.Contracts
 {
     using AdminModels.Position;
 
@@ -8,6 +8,6 @@
 
         Task AddNewAsync(AddPositionViewModel viewModel);
 
-        Task DeleteAsync (int positionId);
+        Task DeleteAsync(int positionId);
     }
 }

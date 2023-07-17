@@ -2,8 +2,7 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using PrintingHouse.Core.AdminModels.Position;
-    using PrintingHouse.Core.Contracts;
-
+    using PrintingHouse.Core.Services.Contracts;
     using static Core.Constants.MessageConstants;
 
     public class PositionController : BaseController

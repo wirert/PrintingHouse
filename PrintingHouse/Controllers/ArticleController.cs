@@ -1,30 +1,28 @@
 ﻿namespace PrintingHouse.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-
-    using Core.Contracts;
     using Core.Models.Article;
     using static Core.Constants.MessageConstants;
     using Microsoft.AspNetCore.Mvc.Rendering;
-    using Microsoft.AspNetCore.Antiforgery;
+    using PrintingHouse.Core.Services.Contracts;
 
     public class ArticleController : BaseController
     {
         private readonly IArticleService articleService;
         private readonly IColorModelService colorModelService;
         private readonly IMaterialService materialService;
-        private readonly IAntiforgery Antiforgery;
+        private readonly IClientService clientService;
 
         public ArticleController(
                 IArticleService _articleService,
                 IColorModelService _colorModelService,
                 IMaterialService _materialService,
-                IAntiforgery antiforgery)
+                IClientService _clientService)
         {
             articleService = _articleService;
             colorModelService = _colorModelService;
             materialService = _materialService;
-            Antiforgery = antiforgery;
+            clientService = _clientService;
         }
 
         public IActionResult Index()
@@ -68,7 +66,7 @@
         [HttpGet]
         public async Task<IActionResult> Add(int clientId)
         {
-            var model = new AddArticleViewModel();
+            var model = new ChooseArticleMaterialAndColorsViewModel();
 
             try
             {
@@ -78,9 +76,6 @@
 
                 ViewData["MaterialsData"] = new SelectList(model.Materials.OrderBy(s => s.Id), "Id", "Type");
                 ViewData["ColorModelsData"] = new SelectList(model.ColorModels.OrderBy(s => s.Id), "Id", "Name");
-
-                var requestToken = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
-                Request.Headers.Add("X-CSRF-VERIFICATION-TOKEN", requestToken);
 
                 return View(model);
             }
@@ -100,31 +95,25 @@
         }
 
         [HttpPost]
-        [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> Add(AddArticleViewModel model)
+        public async Task<IActionResult> Add(ChooseArticleMaterialAndColorsViewModel materialColors)
         {
-            if (model.DesignFile.Length == 0)
+            if (await colorModelService.ExistByIdAsync(materialColors.ColorModelId) == false)
             {
-                ModelState.AddModelError(nameof(model.DesignFile), "The design file is empty.");
+                ModelState.AddModelError(nameof(materialColors.ColorModelId), "Color model is invalid!");
             }
 
-            if (await colorModelService.ExistByIdAsync(model.ColorModelId) == false)
+            if (await materialService.GetNameByIdIfExistAsync(materialColors.MaterialId) == null)
             {
-                ModelState.AddModelError(nameof(model.ColorModelId), "Color model is invalid!");
-            }
-
-            if (await materialService.ExistByIdAsync(model.MaterialId) == false )
-            {
-                ModelState.AddModelError(nameof(model.MaterialId), "Material is invalid!");
+                ModelState.AddModelError(nameof(materialColors.MaterialId), "Material is invalid!");
             }
 
             if (!ModelState.IsValid)
             {
                 try
                 {
-                    model = await articleService.FillAddModelWithDataAsync(model);
+                    materialColors = await articleService.FillAddModelWithDataAsync(materialColors);
 
-                    return View(model);
+                    return View(materialColors);
                 }
                 catch (Exception)
                 {
@@ -134,52 +123,78 @@
                 }
             }
 
+            return RedirectToAction("Create", materialColors);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Create(ChooseArticleMaterialAndColorsViewModel materialColors)
+        {
+            if (await colorModelService.ExistByIdAsync(materialColors.ColorModelId) == false)
+            {
+                ModelState.AddModelError(nameof(materialColors.ColorModelId), "Color model is invalid!");
+            }
+
+            var materialName = await materialService.GetNameByIdIfExistAsync(materialColors.MaterialId);
+
+            if (materialName == null)
+            {
+                ModelState.AddModelError(nameof(materialColors.MaterialId), "Material is invalid!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                try
+                {
+                    materialColors = await articleService.FillAddModelWithDataAsync(materialColors);
+
+                    return RedirectToAction("Add", materialColors);
+                }
+                catch (Exception)
+                {
+                    TempData[ErrorMessage] = "Something went wrong trying to add article! Try again.";
+
+                    return RedirectToAction("All", "Client");
+                }
+            }
             try
             {
-                await articleService.AddAsync(model);
-
-                return RedirectToAction("AddColors", new
+                var model = new CreateArticleViewModel()
                 {
-                    colorModelId = model.ColorModelId,
-                    article = model.Name,
-                    client = model.ClientName
-                });
+                    MaterialId = materialColors.MaterialId,
+                    MaterialName = materialName!,
+                    ColorModelId = materialColors.ColorModelId,
+                    ClientId = materialColors.ClientId,
+                    ClientName = materialColors.ClientName
+                };
+
+                model.Colors = await colorModelService.GetColorModelColorsAsync(materialColors.ColorModelId);
+
+                return View(model);
             }
             catch (Exception)
             {
                 TempData[ErrorMessage] = "Something went wrong trying to add article! Try again.";
-
                 return RedirectToAction("All", "Client");
-            }
-        }       
-
-        [HttpGet]
-        public async Task<IActionResult> AddColors(int colorModelId, string article, string client)
-        {
-            try
-            {
-                var colors = await colorModelService.GetColorModelColorsAsync(colorModelId);
-
-                foreach (var color in colors)
-                {
-                    color.ArticleName = article;
-                    color.ClientName = client;
-
-                }
-                
-                return View(colors);
-            }
-            catch (Exception)
-            {
-                TempData[ErrorMessage] = $"Unable to add recipe to article {article}. Try again later.";
-
-                return RedirectToAction("All");
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddColors(List<AddArticleColorVeiwModel> model)
+        public async Task<IActionResult> Create(CreateArticleViewModel model)
         {
+            if (await colorModelService.ExistByIdAsync(model.ColorModelId) == false ||
+                await materialService.GetNameByIdIfExistAsync(model.MaterialId) == null)
+            {
+                TempData[WarningMessage] = "Material and Color model should be accurate!";
+
+                return RedirectToAction("Add", model.ClientId);
+            }
+
+            if (model.DesignFile.Length == 0)
+            {
+                ModelState.AddModelError(nameof(model.DesignFile), "The design file is empty.");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -187,16 +202,16 @@
 
             try
             {
-                await articleService.AddColorRecipeAsync(model);
+                await articleService.CreateAsync(model);
 
-                TempData[SuccessMessage] = $"Successfully added recipe to article {model.First().ArticleName}";
+                TempData[SuccessMessage] = $"Successfully added article {model.Name}";
             }
             catch (Exception)
             {
-                TempData[ErrorMessage] = $"Unable to add recipe to article {model.First().ArticleName}. Try again later.";
+                TempData[ErrorMessage] = "Something went wrong trying to add article! Try again.";
             }
 
-            return RedirectToAction("All");
+            return RedirectToAction("All", "Client");
         }
     }
 }
