@@ -43,6 +43,7 @@
                     ClientId = a.ClientId,
                     ClientName = a.Client.Name,
                     ImageName = a.ImageName,
+                    Material = a.MaterialColorModel.Material.Type,
                     ColorModel = a.MaterialColorModel.ColorModel.Name
                 })
                 .ToListAsync();

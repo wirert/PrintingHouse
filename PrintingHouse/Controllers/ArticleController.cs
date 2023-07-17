@@ -1,10 +1,11 @@
 ﻿namespace PrintingHouse.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+
     using Core.Models.Article;
     using static Core.Constants.MessageConstants;
-    using Microsoft.AspNetCore.Mvc.Rendering;
-    using PrintingHouse.Core.Services.Contracts;
+    using Core.Services.Contracts;
 
     public class ArticleController : BaseController
     {

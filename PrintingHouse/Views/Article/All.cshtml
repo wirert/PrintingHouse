@@ -1,4 +1,4 @@
-﻿@*@model IEnumerable<AllArticleViewModel>
+﻿@model IEnumerable<AllArticleViewModel>
 
 
 <h1>@ViewBag.Title</h1>
@@ -6,12 +6,13 @@
 <table class="table table-hover">
     <thead>
         <tr>
-            <th scope="col">Employee number</th>
             <th scope="col">Name</th>
-            <th scope="col">Position</th>
-            <th scope="col">Phone number</th>
-            <th scope="col">Change position</th>
-            <th scope="col">Dismiss</th>
+            <th scope="col">Client name</th>
+            <th scope="col">Material</th>
+            <th scope="col">Color model</th>
+            <th scope="col">Design file</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
         </tr>
     </thead>
     <tbody>
@@ -20,17 +21,18 @@
             <tr>
                 <td>@article.Name</td>
                 <td>@article.ClientName</td>
-                <td>@article.Material</td>
+                <td>
+                    @article.Material
+                </td>
                 <td>@article.ColorModel</td>
                 <td>@article.ImageName</td>
                 <td>
-                    <form asp-controller="Article" asp-action="All" method="get">
-                        <input name="id" type="hidden" value="@article.Id" />                        
+                    <form asp-controller="Article" asp-action="Edit" method="get">
+                        <input name="id" type="hidden" value="@article.Id" />
                         <button class="btn btn-warning" type="submit">Edit</button>
                     </form>
                 </td>
                 <td>
-                    
                 </td>
             </tr>
         }
@@ -38,4 +40,4 @@
     </tbody>
 </table>
 
-<a asp-asp-area="Admin" asp-controller="Employee" asp-action="Add" class="btn btn-dark">Add new employee</a>*@
+<a asp-asp-area="Admin" asp-controller="Employee" asp-action="Add" class="btn btn-dark">Add new employee</a>
