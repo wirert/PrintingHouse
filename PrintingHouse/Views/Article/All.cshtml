@@ -19,21 +19,18 @@
         {
             <tr>
                 <td>@article.Name</td>
-                <td>@article.</td>
-                <td>@employee.Position</td>
-                <td>@employee.PhoneNumber</td>
+                <td>@article.ClientName</td>
+                <td>@article.Material</td>
+                <td>@article.ColorModel</td>
+                <td>@article.ImageName</td>
                 <td>
-                    <form asp-asp-area="Admin" asp-controller="Employee" asp-action="Edit" method="get">
-                        <input name="id" type="hidden" value="@employee.EmployeeNumber" />
-                        <input name="userId" type="hidden" value="@employee.Id" />
-                        <button class="btn btn-warning" type="submit">Reassign</button>
+                    <form asp-controller="Article" asp-action="All" method="get">
+                        <input name="id" type="hidden" value="@article.Id" />                        
+                        <button class="btn btn-warning" type="submit">Edit</button>
                     </form>
                 </td>
                 <td>
-                    <form asp-asp-area="Admin" asp-controller="Employee" asp-action="Delete">
-                        <input name="id" type="hidden" value="@employee.EmployeeNumber" />
-                        <button class="btn btn-danger" type="submit">Dismiss</button>
-                    </form>
+                    
                 </td>
             </tr>
         }
