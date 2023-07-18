@@ -51,7 +51,7 @@
             return models;
         }
 
-        public async Task CreateAsync(CreateArticleViewModel model)
+        public async Task CreateAsync(ArticleViewModel model)
         {
             var article = new Article()
             {
@@ -60,7 +60,7 @@
                 MaterialId = model.MaterialId,
                 ColorModelId = model.ColorModelId,
                 MaterialQuantity = model.MaterialQuantity,
-                ImageName = model.DesignFile.FileName
+                ImageName = model.DesignFile!.FileName
             };
 
             foreach (var color in model.Colors)
@@ -113,6 +113,93 @@
             return model;
         }
 
+        public async Task<bool> ExistByIdAsync(Guid? id)
+        {
+            var article = await repo.GetByIdAsync<Article>(id);
 
+            return article != null && article.IsActive;
+        }
+
+        public async Task<ArticleViewModel> GetByIdAsync(Guid id)
+        {
+            var article = await repo
+                .AllReadonly<Article>(a => a.Id == id && a.IsActive)
+                .Select(a => new ArticleViewModel() 
+                {
+                    Id = a.Id,
+                    Name = a.Name,
+                    ClientId = a.ClientId,
+                    DesignName = a.ImageName,
+                    ClientName = a.Client.Name,
+                    ColorModelId = a.ColorModelId,
+                    MaterialId = a.MaterialId,
+                    MaterialName = a.MaterialColorModel.Material.Type,
+                    MaterialQuantity = a.MaterialQuantity,
+                    Colors = a.ArticleColors
+                        .Select(ac => new AddArticleColorVeiwModel()
+                        {
+                            ColorName = ac.Color.Type,
+                            ColorId = ac.Color.Id,
+                            ColorQuantity = ac.ColorQuantity
+                        })
+                        .ToList()
+                })
+                .FirstOrDefaultAsync();
+
+            if (article == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            return article;
+        }
+
+        public async Task EditAsync(ArticleViewModel model)
+        {
+            var article = await repo.GetByIdAsync<Article>(model.Id);
+
+            if (article == null || 
+                article.IsActive == false ||
+                article.ClientId != model.ClientId)
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (article.ColorModelId == model.ColorModelId && 
+                article.MaterialId == model.MaterialId)
+            {
+                foreach (var color in article.ArticleColors)
+                {
+                    color.ColorQuantity = model.Colors.Where(c => c.ColorId == color.ColorId).First().ColorQuantity;
+                }
+            }
+            else
+            {
+                article.ArticleColors.Clear();
+
+                foreach (var color in model.Colors)
+                {
+                    article.ArticleColors.Add(new ArticleColor()
+                    {
+                        Article = article,
+                        ColorId = color.ColorId,
+                        ColorQuantity = color.ColorQuantity                        
+                    });
+                }
+
+                article.MaterialId = model.MaterialId;
+                article.ColorModelId = model.ColorModelId;
+            }
+
+            article.Name = model.Name;            
+            article.MaterialQuantity = model.MaterialQuantity;
+
+            if (model.DesignFile != null && model.DesignFile.Length > 0)
+            {
+                await fileService.SaveFileAsync(article.Id, model.DesignFile.FileName, model.DesignFile);
+            }
+
+            await repo.SaveChangesAsync();
+        }
     }
 }

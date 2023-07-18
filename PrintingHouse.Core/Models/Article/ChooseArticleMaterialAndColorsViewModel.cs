@@ -13,6 +13,8 @@
 
         public int ColorModelId { get; set; }
 
+        public Guid? ArticleId { get; set; }
+
         public ICollection<MaterialSelectViewModel> Materials { get; set; } = new HashSet<MaterialSelectViewModel>();
 
         public ICollection<ColorModelSelectViewModel> ColorModels { get; set; } = new HashSet<ColorModelSelectViewModel>();

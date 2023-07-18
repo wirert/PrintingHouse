@@ -39,8 +39,6 @@
         [HttpGet]
         public async Task<IActionResult> All(int? id = null)
         {
-            //add button for recipe
-
             try
             {
                 var models = await articleService.GetAllAsync(id);
@@ -88,13 +86,14 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Add(int clientId)
+        public async Task<IActionResult> Add(int clientId, Guid? articleId = null)
         {
             var model = new ChooseArticleMaterialAndColorsViewModel();
 
             try
             {
                 model.ClientId = clientId;
+                model.ArticleId = articleId;
 
                 model = await articleService.FillAddModelWithDataAsync(model);
 
@@ -147,6 +146,20 @@
                 }
             }
 
+            if (TempData["EditArticleMethod"] != null)
+            {
+                if (materialColors.ArticleId == null ||
+                    await articleService.ExistByIdAsync(materialColors.ArticleId) == false)
+                {
+                    return RedirectToAction("All", "Article");
+                }
+
+                TempData["MaterialId"] = materialColors.MaterialId;
+                TempData["ColorModelId"] = materialColors.ColorModelId;
+
+                return RedirectToAction("Edit", materialColors.ArticleId);
+            }
+
             return RedirectToAction("Create", materialColors);
         }
 
@@ -183,7 +196,7 @@
             }
             try
             {
-                var model = new CreateArticleViewModel()
+                var model = new ArticleViewModel()
                 {
                     MaterialId = materialColors.MaterialId,
                     MaterialName = materialName!,
@@ -204,7 +217,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateArticleViewModel model)
+        public async Task<IActionResult> Create(ArticleViewModel model)
         {
             if (await colorModelService.ExistByIdAsync(model.ColorModelId) == false ||
                 await materialService.GetNameByIdIfExistAsync(model.MaterialId) == null)
@@ -214,9 +227,9 @@
                 return RedirectToAction("Add", model.ClientId);
             }
 
-            if (model.DesignFile.Length == 0)
+            if (model.DesignFile == null || model.DesignFile.Length == 0)
             {
-                ModelState.AddModelError(nameof(model.DesignFile), "The design file is empty.");
+                ModelState.AddModelError(nameof(model.DesignFile), "Upload a valid design file");
             }
 
             if (!ModelState.IsValid)
@@ -236,6 +249,70 @@
             }
 
             return RedirectToAction("All", "Client");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            try
+            {
+                var model = await articleService.GetByIdAsync(id);
+
+                if (TempData.Peek("ColorModelId") != null)
+                {
+                    model.ColorModelId = (int)TempData["ColorModelId"]!;
+                    model.MaterialId = (int)TempData["MaterialId"]!;
+
+                    var materialName = await materialService.GetNameByIdIfExistAsync(model.MaterialId);
+
+                    if (materialName == null ||
+                        await colorModelService.ExistByIdAsync(model.ColorModelId) == false)
+                    {
+                        throw new ArgumentException();
+                    }
+
+                    model.MaterialName = materialName;
+                    model.Colors = await colorModelService.GetColorModelColorsAsync(model.ColorModelId);
+                }
+
+                return View(model);
+            }
+            catch (Exception)
+            {
+                TempData[ErrorMessage] = "Something went wrong trying to edit an article! Try again.";
+                return RedirectToAction("All", "Article");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(ArticleViewModel model)
+        {
+            if (await colorModelService.ExistByIdAsync(model.ColorModelId) == false ||
+                await materialService.GetNameByIdIfExistAsync(model.MaterialId) == null)
+            {
+                TempData[WarningMessage] = "Material and Color model should be accurate!";
+
+                return RedirectToAction("Add", model.ClientId);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                TempData[SuccessMessage] = $"Successfully edited article {model.Name}.";
+
+                await articleService.EditAsync(model);
+            }
+            catch (Exception)
+            {
+                TempData[ErrorMessage] = "Something went wrong trying to edit an article! Try again.";
+            }
+
+
+            return RedirectToAction("All", "Article");
         }
     }
 }

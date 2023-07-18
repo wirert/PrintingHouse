@@ -135,7 +135,7 @@
         /// </summary>
         /// <param name="id">record identificator</param>
         /// <returns>Single record</returns>
-        public async Task<T> GetByIdAsync<T>(object id) where T : class
+        public async Task<T> GetByIdAsync<T>(object? id) where T : class
         {
             return await DbSet<T>().FindAsync(id);
         }

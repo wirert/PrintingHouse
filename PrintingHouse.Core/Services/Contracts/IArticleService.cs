@@ -6,8 +6,14 @@
     {
         Task<IEnumerable<AllArticleViewModel>> GetAllAsync(int? id);
 
-        Task CreateAsync(CreateArticleViewModel model);
+        Task CreateAsync(ArticleViewModel model);
 
         Task<ChooseArticleMaterialAndColorsViewModel> FillAddModelWithDataAsync(ChooseArticleMaterialAndColorsViewModel model);
+
+        Task<bool> ExistByIdAsync(Guid? id);
+
+        Task<ArticleViewModel> GetByIdAsync(Guid id);
+
+        Task EditAsync(ArticleViewModel model);
     }
 }

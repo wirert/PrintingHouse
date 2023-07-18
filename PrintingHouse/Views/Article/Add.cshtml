@@ -15,7 +15,8 @@
         <form method="post" asp-action="Add" asp-controller="Article" asp-antiforgery=false enctype="multipart/form-data">
             <input id="__RequestVerificationToken" type="hidden" name="__RequestVerificationToken" value="@requestToken" />
             <input type="hidden" asp-for="@Model.ClientId" />
-            <input type="hidden" asp-for="@Model.ClientName" />            
+            <input type="hidden" asp-for="@Model.ClientName" />
+            <input type="hidden" asp-for="@Model.ArticleId" />            
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row form-group mt-3 mb-4">
                 <div class="col-md-6 pt-2">

@@ -6,13 +6,17 @@
 
     using static Infrastructure.Constants.DataConstants;
 
-    public class CreateArticleViewModel
+    public class ArticleViewModel
     {
+        public Guid? Id { get; set; }
+
         [Required]
         [StringLength(Article.MaxNameLenght, MinimumLength = Article.MinNameLenght)]
         public string Name { get; set; } = null!;
 
-        public IFormFile DesignFile { get; set; } = null!;
+        public IFormFile? DesignFile { get; set; }
+
+        public string? DesignName { get; set; }
 
         [Required]
         public int MaterialId { get; set; }
