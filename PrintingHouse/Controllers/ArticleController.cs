@@ -6,6 +6,8 @@
     using Core.Models.Article;
     using static Core.Constants.MessageConstants;
     using Core.Services.Contracts;
+    using System.Net.Mime;
+    using System.IO;
 
     public class ArticleController : BaseController
     {
@@ -13,17 +15,20 @@
         private readonly IColorModelService colorModelService;
         private readonly IMaterialService materialService;
         private readonly IClientService clientService;
+        private readonly IFileService fileService;
 
         public ArticleController(
                 IArticleService _articleService,
                 IColorModelService _colorModelService,
                 IMaterialService _materialService,
-                IClientService _clientService)
+                IClientService _clientService,
+                IFileService _fileService)
         {
             articleService = _articleService;
             colorModelService = _colorModelService;
             materialService = _materialService;
             clientService = _clientService;
+            fileService = _fileService;
         }
 
         public IActionResult Index()
@@ -61,6 +66,24 @@
                 TempData[ErrorMessage] = "Problem retrieving articles.";
 
                 return RedirectToAction("All", "Client");
+            }
+        }
+
+        public async Task<IActionResult> Download(string fileName, Guid articleId)
+        {
+            try
+            {
+                using var stream = await fileService.GetFileAsync(articleId, fileName);
+
+                byte[] data = stream.ToArray();
+
+                Response.Headers.Add("Content-Disposition", "attachment; filename=" + fileName);
+
+                return File(data, "application/octet-stream", fileName);
+            }
+            catch (Exception)
+            {
+                return NotFound("Error downloading file.");
             }
         }
 

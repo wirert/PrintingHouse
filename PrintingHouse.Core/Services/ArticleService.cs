@@ -42,7 +42,7 @@
                     Name = a.Name,
                     ClientId = a.ClientId,
                     ClientName = a.Client.Name,
-                    ImageName = a.ImageName,
+                    FileName = a.ImageName,
                     Material = a.MaterialColorModel.Material.Type,
                     ColorModel = a.MaterialColorModel.ColorModel.Name
                 })

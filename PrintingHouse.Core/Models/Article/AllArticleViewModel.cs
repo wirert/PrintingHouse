@@ -9,7 +9,7 @@
         public string Name { get; set; } = null!;
 
         [Display(Name = "Design file name")]
-        public string ImageName { get; set; } = null!;
+        public string FileName { get; set; } = null!;
 
         public string Material { get; set; } = null!;
 

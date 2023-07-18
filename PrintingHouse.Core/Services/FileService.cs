@@ -18,16 +18,14 @@
 
         public async Task<MemoryStream> GetFileAsync(Guid BucketName, string fileName)
         {
-            try
-            {
-                var result = await repo.GetFileAsync(BucketName, fileName);
+            var result = await repo.GetFileAsync(BucketName, fileName);
 
-                return result;
-            }
-            catch (Exception e)
+            if (result == null)
             {
-                throw new ApplicationException("Can't get the file from Database", e);
+                throw new ArgumentNullException();
             }
+
+            return result;
         }
 
         public async Task SaveFileAsync(Guid BucketName, string fileName, IFormFile content)
