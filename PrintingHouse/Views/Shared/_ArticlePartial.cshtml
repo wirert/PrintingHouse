@@ -1,8 +1,7 @@
 ﻿@model ArticleViewModel
 
 <div>
-    <a class="btn btn-warning btn-sm text-primary" asp-action="Add" asp-controller="Article" asp-route-clientId="@Model.ClientId">Change Material or Color model</a>
-    <form method="post" asp-action="Create" asp-controller="Article" enctype="multipart/form-data">
+   
         <input type="hidden" asp-for="@Model.ClientId" />
         <input type="hidden" asp-for="@Model.ClientName" />
         <input type="hidden" asp-for="@Model.MaterialId" />
@@ -46,6 +45,6 @@
                 <span asp-validation-for="@Model.DesignFile" class="text-danger"></span>
             </div>
         </div>
-        <button type="submit" class="w-100 btn btn-lg btn-primary mt-3">Create</button>
-    </form>
+       
+   
 </div>

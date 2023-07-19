@@ -165,10 +165,12 @@
                 throw new ArgumentNullException();
             }
 
+            var articleColors = repo.All<ArticleColor>(ac => ac.ArticleId == article.Id);
+
             if (article.ColorModelId == model.ColorModelId && 
                 article.MaterialId == model.MaterialId)
             {
-                foreach (var color in article.ArticleColors)
+                foreach (var color in articleColors)
                 {
                     color.ColorQuantity = model.Colors.Where(c => c.ColorId == color.ColorId).First().ColorQuantity;
                 }
@@ -176,6 +178,10 @@
             else
             {
                 article.ArticleColors.Clear();
+
+               
+
+                repo.DeleteRange(articleColors);
 
                 foreach (var color in model.Colors)
                 {
@@ -197,6 +203,8 @@
             if (model.DesignFile != null && model.DesignFile.Length > 0)
             {
                 await fileService.SaveFileAsync(article.Id, model.DesignFile.FileName, model.DesignFile);
+
+                article.ImageName = model.DesignFile.FileName;
             }
 
             await repo.SaveChangesAsync();

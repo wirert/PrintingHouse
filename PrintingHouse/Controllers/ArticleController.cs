@@ -146,10 +146,9 @@
                 }
             }
 
-            if (TempData["EditArticleMethod"] != null)
+            if (materialColors.ArticleId != null)
             {
-                if (materialColors.ArticleId == null ||
-                    await articleService.ExistByIdAsync(materialColors.ArticleId) == false)
+                if (await articleService.ExistByIdAsync(materialColors.ArticleId) == false)
                 {
                     return RedirectToAction("All", "Article");
                 }
@@ -157,7 +156,9 @@
                 TempData["MaterialId"] = materialColors.MaterialId;
                 TempData["ColorModelId"] = materialColors.ColorModelId;
 
-                return RedirectToAction("Edit", materialColors.ArticleId);
+                //Guid id =(Guid)materialColors.ArticleId;
+
+                return RedirectToAction("Edit", new { id = materialColors.ArticleId });
             }
 
             return RedirectToAction("Create", materialColors);
