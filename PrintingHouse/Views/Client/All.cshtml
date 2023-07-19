@@ -27,7 +27,6 @@
                                 <button class="btn btn-sm btn-danger" type="submit">Remove</button>
                             </form>
                         }
-
                     </td>
                     <td>@client.Name</td>
                     <td>@client.Email</td>
@@ -42,23 +41,20 @@
                                     <input name="id" type="hidden" value="@client.Id" />
                                     <button class="btn btn-sm btn-info" type="submit">View articles</button>
                                 </form>
-                            }                            
+                            }
                         </div>
                     </td>
                     <td>
                         @if (User.IsInRole(Merchant) || User.IsInRole(Admin))
                         {
-                            <form asp-asp-area="" asp-controller="Article" asp-action="Add" method="get">
+                            <form asp-asp-area="" asp-controller="Article" asp-action="Select" method="get">
                                 <input name="clientId" type="hidden" value="@client.Id" />
                                 <button class="btn btn-sm btn-warning" type="submit">Add Article</button>
                             </form>
                         }
-                        
                     </td>
-                    
                 </tr>
             }
-
         </tbody>
     </table>
 </div>

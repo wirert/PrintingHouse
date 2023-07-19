@@ -11,6 +11,9 @@
     using Infrastructure.Data.Entities;
     using PrintingHouse.Core.Models.ColorModel;
 
+    /// <summary>
+    /// Color model service
+    /// </summary>
     public class ColorModelService : IColorModelService
     {
         private readonly IRepository repo;
@@ -20,13 +23,11 @@
             repo = _repo;
         }
 
-        public async Task<bool> ExistByIdAsync(int colorModelId)
-        {
-            var colorModel = await repo.GetByIdAsync<ColorModel>(colorModelId);
-
-            return colorModel != null;
-        }
-
+        /// <summary>
+        /// Get Color models for particular Material
+        /// </summary>
+        /// <param name="materialId">material identifier</param>
+        /// <returns>Collection of Color model view model</returns>
         public async Task<ICollection<ColorModelSelectViewModel>> GetColorModelByMaterialIdAsync(string materialId)
         {
             int matId;
@@ -47,9 +48,15 @@
             return colorModelList;
         }
 
-        public async Task<IList<AddArticleColorVeiwModel>> GetColorModelColorsAsync(int ColorModelId)
+        /// <summary>
+        /// Gets the colors list of particular color model by id
+        /// </summary>
+        /// <param name="colorModelId">Color model identifier</param>
+        /// <returns>List of color View model</returns>
+        /// <exception cref="ArgumentException">Throw exception if identifier is invalid</exception>
+        public async Task<IList<AddArticleColorVeiwModel>> GetColorModelColorsAsync(int colorModelId)
         {
-            var colors =  await repo.AllReadonly<ColorModel>(cm => cm.Id == ColorModelId)
+            var colors =  await repo.AllReadonly<ColorModel>(cm => cm.Id == colorModelId)
                 .Select (cm => cm.Colors
                     .Select(c => new AddArticleColorVeiwModel() 
                     {

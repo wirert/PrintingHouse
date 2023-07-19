@@ -149,7 +149,7 @@
         /// <summary>
         /// Add admin role to user(only for development purpose)
         /// </summary>
-        /// <returns></returns>        
+        /// <returns>Redirect to Index action in Home controller</returns>        
         public async Task<IActionResult> AddRoles()
         {
             if (!hostEnvironment.IsDevelopment())

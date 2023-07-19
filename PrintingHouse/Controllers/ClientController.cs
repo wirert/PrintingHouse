@@ -26,6 +26,15 @@
         }
 
         /// <summary>
+        /// Redirect to All clients
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Index()
+        {
+            return RedirectToAction("All");
+        }
+
+        /// <summary>
         /// Adds new Client by merchant (Get)
         /// </summary>
         /// <returns>View with form for client details</returns>

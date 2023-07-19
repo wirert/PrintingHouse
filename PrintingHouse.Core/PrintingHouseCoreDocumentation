@@ -79,5 +79,408 @@
             Employee phone number
             </summary>
         </member>
+        <member name="T:PrintingHouse.Core.Services.Admin.EmployeeService">
+            <summary>
+            Employee service
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Admin.EmployeeService.AddAsync(PrintingHouse.Core.AdminModels.Employee.AddEmployeeViewModel)">
+            <summary>
+            Create new employee
+            </summary>
+            <param name="model">Add employee view model with form data</param>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Admin.EmployeeService.DeleteAsync(System.Int32)">
+            <summary>
+            Soft delete employee
+            </summary>
+            <param name="id">employee identifier</param>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Admin.EmployeeService.ChnagePositionAsync(PrintingHouse.Core.AdminModels.Employee.EditEmployeeViewModel)">
+            <summary>
+            Change working position of na employee
+            </summary>
+            <param name="model">Edit employee view model</param>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Admin.EmployeeService.GetAllAsync">
+            <summary>
+            Gets all active employees
+            </summary>
+            <returns>Enumeration with Employee view model</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Admin.EmployeeService.GetByIdAsync(System.Int32)">
+            <summary>
+            Get active employee by id
+            </summary>
+            <param name="id">employee id</param>
+            <returns>Edit employee view model or null</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Admin.EmployeeService.GetIdByUserIdAsync(System.Guid)">
+            <summary>
+            Get employee Id by application user id. May Throw exception from FirstAsync() method
+            </summary>
+            <param name="userId">user id (guid)</param>
+            <returns>employee id</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Admin.EmployeeService.GetAllNewEmployees">
+            <summary>
+            Get all registered application users who are not employees yet
+            </summary>
+            <returns>Enumeration of All user view model</returns>
+        </member>
+        <member name="T:PrintingHouse.Core.Services.Admin.PositionService">
+            <summary>
+            Position service
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Admin.PositionService.AddNewAsync(PrintingHouse.Core.AdminModels.Position.AddPositionViewModel)">
+            <summary>
+            Create new position or restore if non active
+            </summary>
+            <param name="viewModel">Add position view model</param>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Admin.PositionService.DeleteAsync(System.Int32)">
+            <summary>
+            Soft delete position
+            </summary>
+            <param name="positionId">Positon id</param>
+            <returns></returns>
+            <exception cref="T:System.InvalidOperationException">Throw if there are workers on this position</exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Admin.PositionService.GetAllAsync">
+            <summary>
+            Get all active positions available
+            </summary>
+            <returns>Enumeration of Position view model</returns>
+        </member>
+        <member name="T:PrintingHouse.Core.Services.ArticleService">
+            <summary>
+            Article service
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.ArticleService.GetAllAsync(System.Nullable{System.Int32})">
+            <summary>
+            Get all articles or all articles of certain client by client id
+            </summary>
+            <param name="id">client id (nullable)</param>
+            <returns>Enumeration of All article view model</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.ArticleService.CreateAsync(PrintingHouse.Core.Models.Article.ArticleViewModel)">
+            <summary>
+            Creates new article
+            </summary>
+            <param name="model">Article view model</param>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.ArticleService.FillSelectModelWithDataAsync(PrintingHouse.Core.Models.Article.ChooseArticleMaterialAndColorsViewModel)">
+            <summary>
+            Fill data for select material and color model view model
+            </summary>
+            <param name="model">Choose article material and color model view model</param>
+            <returns>Choose article material and color model view model</returns>
+            <exception cref="T:System.Exception">Thrown when clinet is null or client isActive is false</exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.ArticleService.ExistByIdAsync(System.Nullable{System.Guid})">
+            <summary>
+            Check existence of article by id and is it active
+            </summary>
+            <param name="id">article id</param>
+            <returns>Boolean</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.ArticleService.GetByIdAsync(System.Guid)">
+            <summary>
+            Get article by id and whether it is active
+            </summary>
+            <param name="id">Guid article id</param>
+            <returns>Article view model</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when Article is null</exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.ArticleService.EditAsync(PrintingHouse.Core.Models.Article.ArticleViewModel)">
+            <summary>
+            Edit existing article
+            </summary>
+            <param name="model">Article view model with data changes</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException">thrown when Article is null or IsActive is false, or ClientId is different</exception>
+        </member>
+        <member name="T:PrintingHouse.Core.Services.ClientService">
+            <summary>
+            Client service
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.ClientService.AddNewAsync(PrintingHouse.Core.Models.Client.AddClientViewModel)">
+            <summary>
+            Create new client
+            </summary>
+            <param name="model">Add client view model with data from form</param>
+            <returns></returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.ClientService.ExistByName(System.String)">
+            <summary>
+            Whether client exist by given name
+            </summary>
+            <param name="name">Client name</param>
+            <returns>Boolean</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.ClientService.GetAllAsync">
+            <summary>
+            Gets all active clients
+            </summary>
+            <returns>Enumeration of All client view model</returns>
+        </member>
+        <member name="T:PrintingHouse.Core.Services.ColorModelService">
+            <summary>
+            Color model service
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.ColorModelService.GetColorModelByMaterialIdAsync(System.String)">
+            <summary>
+            Get Color models for particular Material
+            </summary>
+            <param name="materialId">material identifier</param>
+            <returns>Collection of Color model view model</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.ColorModelService.GetColorModelColorsAsync(System.Int32)">
+            <summary>
+            Gets the colors list of particular color model by id
+            </summary>
+            <param name="colorModelId">Color model identifier</param>
+            <returns>List of color View model</returns>
+            <exception cref="T:System.ArgumentException">Throw exception if identifier is invalid</exception>
+        </member>
+        <member name="T:PrintingHouse.Core.Services.Contracts.IArticleService">
+            <summary>
+            Article service interface for IoC
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IArticleService.GetAllAsync(System.Nullable{System.Int32})">
+            <summary>
+            Get all articles or all articles of certain client by client id
+            </summary>
+            <param name="id">client id (nullable)</param>
+            <returns>Enumeration of All article view model</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IArticleService.CreateAsync(PrintingHouse.Core.Models.Article.ArticleViewModel)">
+            <summary>
+            Creates new article
+            </summary>
+            <param name="model">Article view model</param>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IArticleService.FillSelectModelWithDataAsync(PrintingHouse.Core.Models.Article.ChooseArticleMaterialAndColorsViewModel)">
+            <summary>
+            Fill data for select material and color model view model
+            </summary>
+            <param name="model">Choose article material and color model view model</param>
+            <returns>Choose article material and color model view model</returns>
+            <exception cref="T:System.Exception">Thrown when clinet is null or client isActive is false</exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IArticleService.ExistByIdAsync(System.Nullable{System.Guid})">
+            <summary>
+            Check existence of article by id and is it active
+            </summary>
+            <param name="id">article id</param>
+            <returns>Boolean</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IArticleService.GetByIdAsync(System.Guid)">
+            <summary>
+            Get article by id and whether it is active
+            </summary>
+            <param name="id">Guid article id</param>
+            <returns>Article view model</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when Article is null</exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IArticleService.EditAsync(PrintingHouse.Core.Models.Article.ArticleViewModel)">
+            <summary>
+            Edit existing article
+            </summary>
+            <param name="model">Article view model with data changes</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException">thrown when Article is null or IsActive is false, or ClientId is different</exception>
+        </member>
+        <member name="T:PrintingHouse.Core.Services.Contracts.IClientService">
+            <summary>
+            Client service interface for IoC
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IClientService.AddNewAsync(PrintingHouse.Core.Models.Client.AddClientViewModel)">
+            <summary>
+            Create new client
+            </summary>
+            <param name="model">Add client view model with data from form</param>
+            <returns></returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IClientService.ExistByName(System.String)">
+            <summary>
+            Whether client exist by given name
+            </summary>
+            <param name="name">Client name</param>
+            <returns>Boolean</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IClientService.GetAllAsync">
+            <summary>
+            Gets all active clients
+            </summary>
+            <returns>Enumeration of All client view model</returns>
+        </member>
+        <member name="T:PrintingHouse.Core.Services.Contracts.IColorModelService">
+            <summary>
+            Color model service interface for IoC
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IColorModelService.GetColorModelColorsAsync(System.Int32)">
+            <summary>
+            Gets the colors list of particular color model by id
+            </summary>
+            <param name="colorModelId">Color model identifier</param>
+            <returns>List of color View model</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IColorModelService.GetColorModelByMaterialIdAsync(System.String)">
+            <summary>
+            Get Color models for particular Material
+            </summary>
+            <param name="materialId">material identifier</param>
+            <returns>Collection of Color model view model</returns>
+        </member>
+        <member name="T:PrintingHouse.Core.Services.Contracts.IEmployeeService">
+            <summary>
+            Employee service interface for IoC
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IEmployeeService.AddAsync(PrintingHouse.Core.AdminModels.Employee.AddEmployeeViewModel)">
+            <summary>
+            Create new employee
+            </summary>
+            <param name="model">Add employee view model with form data</param>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IEmployeeService.GetAllAsync">
+            <summary>
+            Gets all active employees
+            </summary>
+            <returns>Enumeration with Employee view model</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IEmployeeService.GetByIdAsync(System.Int32)">
+            <summary>
+            Get active employee by id
+            </summary>
+            <param name="id">employee id</param>
+            <returns>Edit employee view model or null</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IEmployeeService.ChnagePositionAsync(PrintingHouse.Core.AdminModels.Employee.EditEmployeeViewModel)">
+            <summary>
+            Change working position of na employee
+            </summary>
+            <param name="model">Edit employee view model</param>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IEmployeeService.DeleteAsync(System.Int32)">
+            <summary>
+            Soft delete employee
+            </summary>
+            <param name="id">employee identifier</param>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IEmployeeService.GetIdByUserIdAsync(System.Guid)">
+            <summary>
+            Get employee Id by application user id. May Throw exception from FirstAsync() method
+            </summary>
+            <param name="userId">user id (guid)</param>
+            <returns>employee id</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IEmployeeService.GetAllNewEmployees">
+            <summary>
+            Get all registered application users who are not employees yet
+            </summary>
+            <returns>Enumeration of All user view model</returns>
+        </member>
+        <member name="T:PrintingHouse.Core.Services.Contracts.IFileService">
+            <summary>
+            File service interface for IoC
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IFileService.SaveFileAsync(System.Guid,System.String,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Save file mothod for object store
+            </summary>
+            <param name="BucketName">Bucket name</param>
+            <param name="fileName">file name</param>
+            <param name="content">File content (IFormFile)</param>
+            <returns></returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IFileService.GetFileAsync(System.Guid,System.String)">
+            <summary>
+            Retrieve file from object store by bucket name and file name
+            </summary>
+            <param name="BucketName">Bucket name</param>
+            <param name="fileName">File name</param>
+            <returns>Memory stream with file content</returns>
+        </member>
+        <member name="T:PrintingHouse.Core.Services.Contracts.IMaterialService">
+            <summary>
+            Material service interface for IoC
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IMaterialService.GetNameByIdIfExistAsync(System.Int32)">
+            <summary>
+            Get material name by identifier or null if not exist
+            </summary>
+            <param name="materialId">material identifier</param>
+            <returns>material name or null</returns>
+        </member>
+        <member name="T:PrintingHouse.Core.Services.Contracts.IPositionService">
+            <summary>
+            Position service interface for IoC
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IPositionService.GetAllAsync">
+            <summary>
+            Get all active positions available
+            </summary>
+            <returns>Enumeration of Position view model</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IPositionService.AddNewAsync(PrintingHouse.Core.AdminModels.Position.AddPositionViewModel)">
+            <summary>
+            Create new position or restore if non active
+            </summary>
+            <param name="viewModel">Add position view model</param>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IPositionService.DeleteAsync(System.Int32)">
+            <summary>
+            Soft delete position
+            </summary>
+            <param name="positionId">Positon id</param>
+            <returns></returns>
+            <exception cref="T:System.InvalidOperationException">Thrown if there are workers on this position</exception>
+        </member>
+        <member name="T:PrintingHouse.Core.Services.FileService">
+            <summary>
+            File service
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.FileService.GetFileAsync(System.Guid,System.String)">
+            <summary>
+            Retrieve file from MinIO object store by bucket name and file name
+            </summary>
+            <param name="BucketName">Bucket name</param>
+            <param name="fileName">File name</param>
+            <returns>Memory stream with file content</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.FileService.SaveFileAsync(System.Guid,System.String,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Save file mothod for MinIO object store
+            </summary>
+            <param name="BucketName">Bucket name</param>
+            <param name="fileName">file name</param>
+            <param name="content">File content (IFormFile)</param>
+            <returns></returns>
+        </member>
+        <member name="T:PrintingHouse.Core.Services.MaterialService">
+            <summary>
+            Material service
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.MaterialService.GetNameByIdIfExistAsync(System.Int32)">
+            <summary>
+            Get material name by identifier or null if not exist
+            </summary>
+            <param name="materialId">material identifier</param>
+            <returns>material name or null</returns>
+        </member>
     </members>
 </doc>

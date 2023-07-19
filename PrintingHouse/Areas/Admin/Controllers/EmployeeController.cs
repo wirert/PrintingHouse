@@ -9,36 +9,38 @@
     using static Core.Constants.MessageConstants;
     using PrintingHouse.Core.Services.Contracts;
 
+    /// <summary>
+    /// Employee controller in admin area
+    /// </summary>
     public class EmployeeController : BaseController
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole<Guid>> roleManager;
         private readonly IEmployeeService employeeService;
         private readonly IPositionService positionService;
-        private readonly IAccountService accountService;
 
         public EmployeeController(
             UserManager<ApplicationUser> _userManager,
             RoleManager<IdentityRole<Guid>> _roleManager,
             IEmployeeService _employeeService,
-            IPositionService _positionService,
-            IAccountService _accountService)
+            IPositionService _positionService)
         {
             userManager = _userManager;
             roleManager = _roleManager;
             employeeService = _employeeService;
             positionService = _positionService;
-            accountService = _accountService;
         }
 
+        /// <summary>
+        /// Add new employee (get)
+        /// </summary>
+        /// <returns>View with Employee view model</returns>
         [HttpGet]
         public async Task<IActionResult> Add()
         {
             try
             {
-                var employeeUserIds = await employeeService.GetAllEmployeesUserIdAsync();
-
-                var users = await accountService.GetAllNewEmployees(employeeUserIds);
+                var users = await employeeService.GetAllNewEmployees();
 
                 if (users.Count() == 0)
                 {
@@ -68,10 +70,14 @@
             }
         }
 
+        /// <summary>
+        /// Creates new employee with registered application user data
+        /// </summary>
+        /// <param name="model">Add employee view model with form parameters</param>
+        /// <returns>Redirect to All employees action</returns>
         [HttpPost]
         public async Task<IActionResult> Add(AddEmployeeViewModel model)
         {
-
             try
             {
                 var positions = await positionService.GetAllAsync();
@@ -97,9 +103,7 @@
 
                 if (!ModelState.IsValid)
                 {
-                    var employeeUserIds = await employeeService.GetAllEmployeesUserIdAsync();
-
-                    var users = await accountService.GetAllNewEmployees(employeeUserIds);
+                    var users = await employeeService.GetAllNewEmployees();
                     var roles = await roleManager.Roles.Select(r => r.Name).ToArrayAsync();
 
                     model.Users = users;
@@ -130,6 +134,10 @@
             }
         }
 
+        /// <summary>
+        /// Show all active employees
+        /// </summary>
+        /// <returns>View with Collection of employee view model</returns>
         public async Task<IActionResult> All()
         {
             var model = await employeeService.GetAllAsync();
@@ -137,6 +145,11 @@
             return View(model);
         }
 
+        /// <summary>
+        /// Edit existing employee data (position and permissions)
+        /// </summary>
+        /// <param name="id">employee identifier</param>
+        /// <returns>View with model</returns>
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {            
@@ -174,6 +187,11 @@
             }
         }
 
+        /// <summary>
+        /// Change position and permissions of an employee
+        /// </summary>
+        /// <param name="model">Edit employee view model</param>
+        /// <returns>Redirect to All employees action</returns>
         [HttpPost]
         public async Task<IActionResult> Edit(EditEmployeeViewModel model)
         {
@@ -243,6 +261,11 @@
             }
         }
 
+        /// <summary>
+        /// Soft delete for employee with delete of personal data and permissions (roles)
+        /// </summary>
+        /// <param name="id">employee identifier</param>
+        /// <returns>Redirects to All employees action</returns>
         [HttpPost]
         public async Task<IActionResult> Delete([FromForm] int id)
         {

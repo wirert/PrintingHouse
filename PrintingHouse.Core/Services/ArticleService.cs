@@ -13,6 +13,9 @@
     using System.Collections.Generic;
     using System.Linq.Expressions;
 
+    /// <summary>
+    /// Article service
+    /// </summary>
     public class ArticleService : IArticleService
     {
         private readonly IRepository repo;
@@ -26,6 +29,11 @@
             fileService = _fileService;
         }
 
+        /// <summary>
+        /// Get all articles or all articles of certain client by client id
+        /// </summary>
+        /// <param name="id">client id (nullable)</param>
+        /// <returns>Enumeration of All article view model</returns>
         public async Task<IEnumerable<AllArticleViewModel>> GetAllAsync(int? id)
         {
             Expression<Func<Article, bool>> searchTerms = a => a.IsActive;
@@ -51,6 +59,10 @@
             return models;
         }
 
+        /// <summary>
+        /// Creates new article
+        /// </summary>
+        /// <param name="model">Article view model</param>
         public async Task CreateAsync(ArticleViewModel model)
         {
             var article = new Article()
@@ -79,7 +91,13 @@
             await repo.SaveChangesAsync();
         }
 
-        public async Task<ChooseArticleMaterialAndColorsViewModel> FillAddModelWithDataAsync(ChooseArticleMaterialAndColorsViewModel model)
+        /// <summary>
+        /// Fill data for select material and color model view model
+        /// </summary>
+        /// <param name="model">Choose article material and color model view model</param>
+        /// <returns>Choose article material and color model view model</returns>
+        /// <exception cref="Exception">Thrown when clinet is null or client isActive is false</exception>
+        public async Task<ChooseArticleMaterialAndColorsViewModel> FillSelectModelWithDataAsync(ChooseArticleMaterialAndColorsViewModel model)
         {
             var client = await repo.GetByIdAsync<Client>(model.ClientId);
 
@@ -113,6 +131,11 @@
             return model;
         }
 
+        /// <summary>
+        /// Check existence of article by id and is it active
+        /// </summary>
+        /// <param name="id">article id</param>
+        /// <returns>Boolean</returns>
         public async Task<bool> ExistByIdAsync(Guid? id)
         {
             var article = await repo.GetByIdAsync<Article>(id);
@@ -120,6 +143,12 @@
             return article != null && article.IsActive;
         }
 
+        /// <summary>
+        /// Get article by id and whether it is active
+        /// </summary>
+        /// <param name="id">Guid article id</param>
+        /// <returns>Article view model</returns>
+        /// <exception cref="ArgumentNullException">Thrown when Article is null</exception>
         public async Task<ArticleViewModel> GetByIdAsync(Guid id)
         {
             var article = await repo
@@ -154,6 +183,12 @@
             return article;
         }
 
+        /// <summary>
+        /// Edit existing article
+        /// </summary>
+        /// <param name="model">Article view model with data changes</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">thrown when Article is null or IsActive is false, or ClientId is different</exception>
         public async Task EditAsync(ArticleViewModel model)
         {
             var article = await repo.GetByIdAsync<Article>(model.Id);

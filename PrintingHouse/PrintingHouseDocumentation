@@ -4,6 +4,87 @@
         <name>PrintingHouse</name>
     </assembly>
     <members>
+        <member name="T:PrintingHouse.Areas.Admin.Controllers.BaseController">
+            <summary>
+            Admin area base controller
+            </summary>
+        </member>
+        <member name="T:PrintingHouse.Areas.Admin.Controllers.EmployeeController">
+            <summary>
+            Employee controller in admin area
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Areas.Admin.Controllers.EmployeeController.Add">
+            <summary>
+            Add new employee (get)
+            </summary>
+            <returns>View with Employee view model</returns>
+        </member>
+        <member name="M:PrintingHouse.Areas.Admin.Controllers.EmployeeController.Add(PrintingHouse.Core.AdminModels.Employee.AddEmployeeViewModel)">
+            <summary>
+            Creates new employee with registered application user data
+            </summary>
+            <param name="model">Add employee view model with form parameters</param>
+            <returns>Redirect to All employees action</returns>
+        </member>
+        <member name="M:PrintingHouse.Areas.Admin.Controllers.EmployeeController.All">
+            <summary>
+            Show all active employees
+            </summary>
+            <returns>View with Collection of employee view model</returns>
+        </member>
+        <member name="M:PrintingHouse.Areas.Admin.Controllers.EmployeeController.Edit(System.Int32)">
+            <summary>
+            Edit existing employee data (position and permissions)
+            </summary>
+            <param name="id">employee identifier</param>
+            <returns>View with model</returns>
+        </member>
+        <member name="M:PrintingHouse.Areas.Admin.Controllers.EmployeeController.Edit(PrintingHouse.Core.AdminModels.Employee.EditEmployeeViewModel)">
+            <summary>
+            Change position and permissions of an employee
+            </summary>
+            <param name="model">Edit employee view model</param>
+            <returns>Redirect to All employees action</returns>
+        </member>
+        <member name="M:PrintingHouse.Areas.Admin.Controllers.EmployeeController.Delete(System.Int32)">
+            <summary>
+            Soft delete for employee with delete of personal data and permissions (roles)
+            </summary>
+            <param name="id">employee identifier</param>
+            <returns>Redirects to All employees action</returns>
+        </member>
+        <member name="T:PrintingHouse.Areas.Admin.Controllers.PositionController">
+            <summary>
+            Work position controller (admin area)
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Areas.Admin.Controllers.PositionController.Add">
+            <summary>
+            Add new position
+            </summary>
+            <returns>view with add position view model</returns>
+        </member>
+        <member name="M:PrintingHouse.Areas.Admin.Controllers.PositionController.Add(PrintingHouse.Core.AdminModels.Position.AddPositionViewModel)">
+            <summary>
+            Creates new work position
+            </summary>
+            <param name="model">Add position view model with form data</param>
+            <returns>Redirect to action All in Employee controller</returns>
+        </member>
+        <member name="M:PrintingHouse.Areas.Admin.Controllers.PositionController.Delete">
+            <summary>
+            Gets all active position to view to select for deletion
+            </summary>
+            <returns>view with Enumeration of Position view model</returns>
+        </member>
+        <member name="M:PrintingHouse.Areas.Admin.Controllers.PositionController.Delete(System.Int32)">
+            <summary>
+            Soft delete position 
+            </summary>
+            <param name="positionId">position id</param>
+            <returns>Redirect to action All in Employee controller</returns>
+        </member>
         <member name="M:PrintingHouse.Controllers.AccountController.Register">
             <summary>
             Register action for registration of users
@@ -40,12 +121,101 @@
             <summary>
             Add admin role to user(only for development purpose)
             </summary>
-            <returns></returns>        
+            <returns>Redirect to Index action in Home controller</returns>        
+        </member>
+        <member name="T:PrintingHouse.Controllers.ArticleController">
+            <summary>
+            Article controller
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Controllers.ArticleController.Index">
+            <summary>
+            Redirect to All clients
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PrintingHouse.Controllers.ArticleController.All(System.Nullable{System.Int32})">
+            <summary>
+            Show all articles or All articles of client
+            </summary>
+            <param name="id">Clent Id (optional)</param>
+            <returns></returns>
+        </member>
+        <member name="M:PrintingHouse.Controllers.ArticleController.Download(System.String,System.Guid)">
+            <summary>
+            Download design file action
+            </summary>
+            <param name="fileName">Design file name</param>
+            <param name="articleId">Article identifier</param>
+            <returns>Design file</returns>
+        </member>
+        <member name="M:PrintingHouse.Controllers.ArticleController.Select(System.Int32,System.Nullable{System.Guid})">
+            <summary>
+            Choose Material and Color model (get)
+            </summary>
+            <param name="clientId"></param>
+            <param name="articleId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PrintingHouse.Controllers.ArticleController.GetColorModelByMaterialId(System.String)">
+            <summary>
+            Post method for Ajax request from select view.
+            Return Collection of color models for a particular material.
+            </summary>
+            <param name="materialId"></param>
+            <returns>Collection of color models in Json format</returns>
+        </member>
+        <member name="M:PrintingHouse.Controllers.ArticleController.Select(PrintingHouse.Core.Models.Article.ChooseArticleMaterialAndColorsViewModel)">
+            <summary>
+            Redirect to Create or Edit article actions
+            </summary>
+            <param name="materialColors">View model with selected material and color model</param>
+            <returns>Redirect to Create or Edit article actions</returns>
+        </member>
+        <member name="M:PrintingHouse.Controllers.ArticleController.Create(PrintingHouse.Core.Models.Article.ChooseArticleMaterialAndColorsViewModel)">
+            <summary>
+            Create new Article (get)
+            </summary>
+            <param name="materialColors">View model with selected material and color model</param>
+            <returns>View with View model</returns>
+        </member>
+        <member name="M:PrintingHouse.Controllers.ArticleController.Create(PrintingHouse.Core.Models.Article.ArticleViewModel)">
+            <summary>
+            Creates a new article
+            </summary>
+            <param name="model">View model with form data from the view</param>
+            <returns>Redirects to All clients</returns>
+        </member>
+        <member name="M:PrintingHouse.Controllers.ArticleController.Edit(System.Guid)">
+            <summary>
+            Edit a particular article
+            </summary>
+            <param name="id">Article identifier</param>
+            <returns>View with Article view model</returns>
+            <exception cref="T:System.ArgumentException">Thrown if material with given id or MaterialColorModel with given material id and color model id did'n exist</exception>
+        </member>
+        <member name="M:PrintingHouse.Controllers.ArticleController.Edit(PrintingHouse.Core.Models.Article.ArticleViewModel)">
+            <summary>
+            Change article with data from form
+            </summary>
+            <param name="model">Article view model with form data</param>
+            <returns>Redirect to action All</returns>
+        </member>
+        <member name="T:PrintingHouse.Controllers.BaseController">
+            <summary>
+            Base controller
+            </summary>
         </member>
         <member name="T:PrintingHouse.Controllers.ClientController">
             <summary>
             Client controller
             </summary>
+        </member>
+        <member name="M:PrintingHouse.Controllers.ClientController.Index">
+            <summary>
+            Redirect to All clients
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:PrintingHouse.Controllers.ClientController.Add">
             <summary>

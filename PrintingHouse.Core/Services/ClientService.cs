@@ -10,7 +10,9 @@
     using Infrastructure.Data.Common.Contracts;
     using Infrastructure.Data.Entities;
 
-
+    /// <summary>
+    /// Client service
+    /// </summary>
     public class ClientService : IClientService
     {
         private readonly IRepository repo;
@@ -20,6 +22,11 @@
             repo = _repo;
         }
 
+        /// <summary>
+        /// Create new client
+        /// </summary>
+        /// <param name="model">Add client view model with data from form</param>
+        /// <returns></returns>
         public async Task AddNewAsync(AddClientViewModel model)
         {
             var client = new Client()
@@ -34,13 +41,22 @@
             await repo.SaveChangesAsync();
         } 
 
+        /// <summary>
+        /// Whether client exist by given name
+        /// </summary>
+        /// <param name="name">Client name</param>
+        /// <returns>Boolean</returns>
         public async Task<bool> ExistByName(string name)
         {
             return await repo
-                .AllReadonly<Client>(c => c.Name == name)
+                .AllReadonly<Client>(c => c.Name == name && c.IsActive)
                 .AnyAsync();
         }
 
+        /// <summary>
+        /// Gets all active clients
+        /// </summary>
+        /// <returns>Enumeration of All client view model</returns>
         public async Task<IEnumerable<AllClientViewModel>> GetAllAsync()
         {
             return await repo.AllReadonly<Client>(c => c.IsActive)
@@ -55,13 +71,6 @@
                     Articles = c.Articles.Count(a => a.IsActive)
                 })
                 .ToArrayAsync();
-        }
-
-        public async Task<string?> GetNameByIdAsync(int id)
-        {
-            var client = await repo.GetByIdAsync<Client>(id);
-
-            return client.Name;
-        }
+        }        
     }
 }

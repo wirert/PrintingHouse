@@ -6,9 +6,10 @@
     using Core.Models.Article;
     using static Core.Constants.MessageConstants;
     using Core.Services.Contracts;
-    using System.Net.Mime;
-    using System.IO;
 
+    /// <summary>
+    /// Article controller
+    /// </summary>
     public class ArticleController : BaseController
     {
         private readonly IArticleService articleService;
@@ -16,26 +17,38 @@
         private readonly IMaterialService materialService;
         private readonly IClientService clientService;
         private readonly IFileService fileService;
+        private readonly IMaterialColorService materialColorService;
 
         public ArticleController(
                 IArticleService _articleService,
                 IColorModelService _colorModelService,
                 IMaterialService _materialService,
                 IClientService _clientService,
-                IFileService _fileService)
+                IFileService _fileService,
+                IMaterialColorService _materialColorService)
         {
             articleService = _articleService;
             colorModelService = _colorModelService;
             materialService = _materialService;
             clientService = _clientService;
             fileService = _fileService;
+            materialColorService = _materialColorService;
         }
 
+        /// <summary>
+        /// Redirect to All clients
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             return RedirectToAction("All", "Client");
         }
 
+        /// <summary>
+        /// Show all articles or All articles of client
+        /// </summary>
+        /// <param name="id">Clent Id (optional)</param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> All(int? id = null)
         {
@@ -67,6 +80,12 @@
             }
         }
 
+        /// <summary>
+        /// Download design file action
+        /// </summary>
+        /// <param name="fileName">Design file name</param>
+        /// <param name="articleId">Article identifier</param>
+        /// <returns>Design file</returns>
         public async Task<IActionResult> Download(string fileName, Guid articleId)
         {
             try
@@ -85,8 +104,14 @@
             }
         }
 
+        /// <summary>
+        /// Choose Material and Color model (get)
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <param name="articleId"></param>
+        /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> Add(int clientId, Guid? articleId = null)
+        public async Task<IActionResult> Select(int clientId, Guid? articleId = null)
         {
             var model = new ChooseArticleMaterialAndColorsViewModel();
 
@@ -95,7 +120,7 @@
                 model.ClientId = clientId;
                 model.ArticleId = articleId;
 
-                model = await articleService.FillAddModelWithDataAsync(model);
+                model = await articleService.FillSelectModelWithDataAsync(model);
 
                 ViewData["MaterialsData"] = new SelectList(model.Materials.OrderBy(s => s.Id), "Id", "Type");
                 ViewData["ColorModelsData"] = new SelectList(model.ColorModels.OrderBy(s => s.Id), "Id", "Name");
@@ -105,10 +130,17 @@
             catch (Exception)
             {
                 TempData[ErrorMessage] = "Something went wrong trying to add article! Try again.";
+
                 return RedirectToAction("All", "Client");
             }
         }
 
+        /// <summary>
+        /// Post method for Ajax request from select view.
+        /// Return Collection of color models for a particular material.
+        /// </summary>
+        /// <param name="materialId"></param>
+        /// <returns>Collection of color models in Json format</returns>
         [HttpPost]
         public async Task<JsonResult> GetColorModelByMaterialId(string materialId)
         {
@@ -117,24 +149,24 @@
             return Json(colorModelList);
         }
 
+        /// <summary>
+        /// Redirect to Create or Edit article actions
+        /// </summary>
+        /// <param name="materialColors">View model with selected material and color model</param>
+        /// <returns>Redirect to Create or Edit article actions</returns>
         [HttpPost]
-        public async Task<IActionResult> Add(ChooseArticleMaterialAndColorsViewModel materialColors)
+        public async Task<IActionResult> Select(ChooseArticleMaterialAndColorsViewModel materialColors)
         {
-            if (await colorModelService.ExistByIdAsync(materialColors.ColorModelId) == false)
+            if (await materialColorService.ExistByIds(materialColors.MaterialId, materialColors.ColorModelId) == false)
             {
-                ModelState.AddModelError(nameof(materialColors.ColorModelId), "Color model is invalid!");
-            }
-
-            if (await materialService.GetNameByIdIfExistAsync(materialColors.MaterialId) == null)
-            {
-                ModelState.AddModelError(nameof(materialColors.MaterialId), "Material is invalid!");
+                ModelState.AddModelError(string.Empty, "Invalid material or color model.");
             }
 
             if (!ModelState.IsValid)
             {
                 try
                 {
-                    materialColors = await articleService.FillAddModelWithDataAsync(materialColors);
+                    materialColors = await articleService.FillSelectModelWithDataAsync(materialColors);
 
                     return View(materialColors);
                 }
@@ -156,37 +188,35 @@
                 TempData["MaterialId"] = materialColors.MaterialId;
                 TempData["ColorModelId"] = materialColors.ColorModelId;
 
-                //Guid id =(Guid)materialColors.ArticleId;
-
                 return RedirectToAction("Edit", new { id = materialColors.ArticleId });
             }
 
             return RedirectToAction("Create", materialColors);
         }
 
-
+        /// <summary>
+        /// Create new Article (get)
+        /// </summary>
+        /// <param name="materialColors">View model with selected material and color model</param>
+        /// <returns>View with View model</returns>
         [HttpGet]
         public async Task<IActionResult> Create(ChooseArticleMaterialAndColorsViewModel materialColors)
         {
-            if (await colorModelService.ExistByIdAsync(materialColors.ColorModelId) == false)
-            {
-                ModelState.AddModelError(nameof(materialColors.ColorModelId), "Color model is invalid!");
-            }
-
             var materialName = await materialService.GetNameByIdIfExistAsync(materialColors.MaterialId);
 
-            if (materialName == null)
+            if (materialName == null ||
+                await materialColorService.ExistByIds(materialColors.MaterialId, materialColors.ColorModelId) == false)
             {
-                ModelState.AddModelError(nameof(materialColors.MaterialId), "Material is invalid!");
+                ModelState.AddModelError(string.Empty, "Material or color model is invalid!");
             }
 
             if (!ModelState.IsValid)
             {
                 try
                 {
-                    materialColors = await articleService.FillAddModelWithDataAsync(materialColors);
+                    materialColors = await articleService.FillSelectModelWithDataAsync(materialColors);
 
-                    return RedirectToAction("Add", materialColors);
+                    return RedirectToAction("Select", materialColors);
                 }
                 catch (Exception)
                 {
@@ -217,15 +247,19 @@
             }
         }
 
+        /// <summary>
+        /// Creates a new article
+        /// </summary>
+        /// <param name="model">View model with form data from the view</param>
+        /// <returns>Redirects to All clients</returns>
         [HttpPost]
         public async Task<IActionResult> Create(ArticleViewModel model)
         {
-            if (await colorModelService.ExistByIdAsync(model.ColorModelId) == false ||
-                await materialService.GetNameByIdIfExistAsync(model.MaterialId) == null)
+            if (await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId) == false)
             {
                 TempData[WarningMessage] = "Material and Color model should be accurate!";
 
-                return RedirectToAction("Add", model.ClientId);
+                return RedirectToAction("Select", model.ClientId);
             }
 
             if (model.DesignFile == null || model.DesignFile.Length == 0)
@@ -252,6 +286,12 @@
             return RedirectToAction("All", "Client");
         }
 
+        /// <summary>
+        /// Edit a particular article
+        /// </summary>
+        /// <param name="id">Article identifier</param>
+        /// <returns>View with Article view model</returns>
+        /// <exception cref="ArgumentException">Thrown if material with given id or MaterialColorModel with given material id and color model id did'n exist</exception>
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
@@ -267,7 +307,7 @@
                     var materialName = await materialService.GetNameByIdIfExistAsync(model.MaterialId);
 
                     if (materialName == null ||
-                        await colorModelService.ExistByIdAsync(model.ColorModelId) == false)
+                        await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId) == false)
                     {
                         throw new ArgumentException();
                     }
@@ -285,15 +325,19 @@
             }
         }
 
+        /// <summary>
+        /// Change article with data from form
+        /// </summary>
+        /// <param name="model">Article view model with form data</param>
+        /// <returns>Redirect to action All</returns>
         [HttpPost]
         public async Task<IActionResult> Edit(ArticleViewModel model)
         {
-            if (await colorModelService.ExistByIdAsync(model.ColorModelId) == false ||
-                await materialService.GetNameByIdIfExistAsync(model.MaterialId) == null)
+            if (await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId) == false)
             {
                 TempData[WarningMessage] = "Material and Color model should be accurate!";
 
-                return RedirectToAction("Add", model.ClientId);
+                return RedirectToAction("Select", model.ClientId);
             }
 
             if (!ModelState.IsValid)

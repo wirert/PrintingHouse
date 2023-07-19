@@ -5,6 +5,9 @@
     using PrintingHouse.Core.Services.Contracts;
     using static Core.Constants.MessageConstants;
 
+    /// <summary>
+    /// Work position controller (admin area)
+    /// </summary>
     public class PositionController : BaseController
     {
         private readonly IPositionService positionService;
@@ -14,6 +17,10 @@
             positionService = _positionService;
         }
 
+        /// <summary>
+        /// Add new position
+        /// </summary>
+        /// <returns>view with add position view model</returns>
         [HttpGet]
         public IActionResult Add()
         {
@@ -22,6 +29,11 @@
             return View(model);
         }
 
+        /// <summary>
+        /// Creates new work position
+        /// </summary>
+        /// <param name="model">Add position view model with form data</param>
+        /// <returns>Redirect to action All in Employee controller</returns>
         [HttpPost]
         public async Task<IActionResult> Add(AddPositionViewModel model)
         {
@@ -55,6 +67,10 @@
             return RedirectToAction("All", "Employee");
         }
 
+        /// <summary>
+        /// Gets all active position to view to select for deletion
+        /// </summary>
+        /// <returns>view with Enumeration of Position view model</returns>
         [HttpGet]
         public async Task<IActionResult> Delete()
         {
@@ -63,6 +79,11 @@
             return View(positions);
         }
 
+        /// <summary>
+        /// Soft delete position 
+        /// </summary>
+        /// <param name="positionId">position id</param>
+        /// <returns>Redirect to action All in Employee controller</returns>
         [HttpPost]
         public async Task<IActionResult> Delete(int positionId)
         {
