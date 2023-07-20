@@ -65,6 +65,10 @@
         /// <param name="model">Article view model</param>
         public async Task CreateAsync(ArticleViewModel model)
         {
+            var clientArticlesCount = await repo.AllReadonly<Client>(c => c.Id == model.ClientId)
+                .Select(c => c.Articles.Count)
+                .FirstAsync();
+
             var article = new Article()
             {
                 Name = model.Name,
@@ -72,7 +76,8 @@
                 MaterialId = model.MaterialId,
                 ColorModelId = model.ColorModelId,
                 MaterialQuantity = model.MaterialQuantity,
-                ImageName = model.DesignFile!.FileName
+                ImageName = model.DesignFile!.FileName,
+                ArticleNumber = $"{model.ClientId}.{clientArticlesCount++}"
             };
 
             foreach (var color in model.Colors)

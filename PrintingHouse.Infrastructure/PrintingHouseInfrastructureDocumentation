@@ -34,6 +34,11 @@
             Article design image name minimum lenght
             </summary>
         </member>
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Article.MaxArticleNoLenght">
+            <summary>
+            Maximum lenght of Article number string
+            </summary>
+        </member>
         <member name="T:PrintingHouse.Infrastructure.Constants.DataConstants.Client">
             <summary>
             Client model constants

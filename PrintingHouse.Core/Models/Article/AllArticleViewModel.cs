@@ -5,7 +5,10 @@
     public class AllArticleViewModel
     {
         public Guid Id { get; set; }
-       
+
+        [Display(Name = "Article No.")]
+        public string ArticleNumber { get; set; } = null!;
+
         public string Name { get; set; } = null!;
 
         [Display(Name = "Design file name")]

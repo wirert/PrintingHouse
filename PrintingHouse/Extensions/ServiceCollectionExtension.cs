@@ -20,8 +20,11 @@
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IRepository, Repository>();
+
             services.AddScoped<IMinIoRepository, MinIoRepository>();
             services.AddSingleton<IMinioClient, MinioClient>(cfg => cfg.GetRequiredService<MinioClient>());
+
+            services.AddScoped<IFileService, FileService>();            
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IPositionService, PositionService>();
             services.AddScoped<IClientService, ClientService>();
@@ -29,7 +32,7 @@
             services.AddScoped<IColorModelService, ColorModelService>();
             services.AddScoped<IMaterialService, MaterialService>();
             services.AddScoped<IMaterialColorService, MaterialColorService>();
-            services.AddScoped<IFileService, FileService>();            
+            services.AddScoped<IOrderService, OrderService>();
 
             return services;
         }

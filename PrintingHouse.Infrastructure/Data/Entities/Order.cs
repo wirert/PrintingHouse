@@ -11,6 +11,11 @@
     [Comment("Order from client for print")]
     public class Order
     {
+        public Order()
+        {
+            OrderTime = DateTime.UtcNow;
+        }
+
         [Comment("Order primary key")]
         [Key]
         public int Id { get; set; }
@@ -24,14 +29,17 @@
 
         [Comment("Order article quantity")]
         [Required]
-        public int Quantity { get; set; }
+        public double Quantity { get; set; }
 
         [Comment("DateTime of order creation")]
         [Required]
         public DateTime OrderTime { get; set; }
 
-        [Comment("Order expected end date if required from the client")]
+        [Comment("Order deadline date if required from the client")]
         public DateTime? EndDate { get; set; }
+
+        [Comment("Order expected print date")]
+        public DateTime? ExpectedPrintDate { get; set; }
 
         [Comment("Order current status")]
         [Required]
@@ -40,5 +48,13 @@
         [Comment("Additional information about the order.")]
         [MaxLength(MaxCommentLenght)]
         public string? Comment { get; set; }
+
+        [Comment("Expected printing machine Id for the order")]
+        [Required]
+        public int MachineId { get; set; }
+
+        [ForeignKey(nameof(MachineId))]
+        public virtual Machine Machine { get; set; } = null!;
+
     }
 }

@@ -26,6 +26,11 @@
             /// Article design image name minimum lenght
             /// </summary>
             public const int MinImageNameLenght = 1;
+
+            /// <summary>
+            /// Maximum lenght of Article number string
+            /// </summary>
+            public const int MaxArticleNoLenght = 20;            
         }
 
         /// <summary>
@@ -65,7 +70,9 @@
             /// <summary>
             /// Order comment maximum lenght
             /// </summary>
-            public const int MaxCommentLenght = 600;            
+            public const int MaxCommentLenght = 600;
+
+            public const double MaxQuantity = 5000;
         }
 
         /// <summary>

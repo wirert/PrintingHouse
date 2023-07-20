@@ -6,11 +6,13 @@
 <table class="table table-hover">
     <thead>
         <tr>
+            <th scope="col">Article No.</th>
             <th scope="col">Name</th>
             <th scope="col">Client name</th>
             <th scope="col">Material</th>
             <th scope="col">Color model</th>
             <th scope="col">Design file</th>
+            <th scope="col"></th>
             <th scope="col"></th>
             <th scope="col"></th>
         </tr>
@@ -20,6 +22,7 @@
         {
             <tr>
                 <td>@article.Name</td>
+                <td>@article.ArticleNumber</td>
                 <td>@article.ClientName</td>
                 <td>
                     @article.Material
@@ -46,6 +49,12 @@
                         <form asp-controller="Article" asp-action="Delete" method="get">
                             <input name="id" type="hidden" value="@article.Id" />
                             <button class="btn btn-sm btn-danger" type="submit">Delete Article</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form asp-controller="Order" asp-action="Create" method="get">
+                            <input name="id" type="hidden" value="@article.Id" />
+                            <button class="btn btn-sm btn-success" type="submit">Add new order</button>
                         </form>
                     </td>
                 }

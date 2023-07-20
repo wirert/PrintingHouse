@@ -21,6 +21,11 @@
         [Key]
         public Guid Id { get; set; }
 
+        [Comment("Article custom number")]
+        [Required]
+        [MaxLength(MaxArticleNoLenght)]
+        public string ArticleNumber { get; set; } = null!;
+
         [Comment("Article name.")]
         [Required]
         [MaxLength(MaxNameLenght)]

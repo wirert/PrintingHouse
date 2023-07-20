@@ -411,6 +411,19 @@
             <param name="fileName">File name</param>
             <returns>Memory stream with file content</returns>
         </member>
+        <member name="T:PrintingHouse.Core.Services.Contracts.IMaterialColorService">
+            <summary>
+            Material - Color model service interface for IoC
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IMaterialColorService.ExistByIds(System.Int32,System.Int32)">
+            <summary>
+            Whether exist MaterialColorModel with given material id and color model Id
+            </summary>
+            <param name="materialId">Material id</param>
+            <param name="colorId">ColorModel id</param>
+            <returns>Boolean</returns>
+        </member>
         <member name="T:PrintingHouse.Core.Services.Contracts.IMaterialService">
             <summary>
             Material service interface for IoC
@@ -469,6 +482,19 @@
             <param name="fileName">file name</param>
             <param name="content">File content (IFormFile)</param>
             <returns></returns>
+        </member>
+        <member name="T:PrintingHouse.Core.Services.MaterialColorService">
+            <summary>
+            Material - Color model service
+            </summary>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.MaterialColorService.ExistByIds(System.Int32,System.Int32)">
+            <summary>
+            Whether exist MaterialColorModel with given material id and color model Id
+            </summary>
+            <param name="materialId">Material id</param>
+            <param name="colorId">ColorModel id</param>
+            <returns>Boolean</returns>
         </member>
         <member name="T:PrintingHouse.Core.Services.MaterialService">
             <summary>

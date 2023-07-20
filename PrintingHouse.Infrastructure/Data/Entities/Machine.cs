@@ -11,6 +11,11 @@
     [Comment("Printing machine")]
     public class Machine
     {
+        public Machine()
+        {
+            OrdersQueue = new List<Order>();
+        }
+
         [Comment("Primary key")]
         [Key]
         public int Id { get; set; }
@@ -47,5 +52,7 @@
         [Comment("Current status of the machine (has default value)")]
         [Required]
         public MachineStatus Status { get; set; }
+
+        public virtual ICollection<Order> OrdersQueue { get; set; }
     }
 }
