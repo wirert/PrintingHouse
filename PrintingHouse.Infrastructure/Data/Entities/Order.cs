@@ -50,11 +50,10 @@
         public string? Comment { get; set; }
 
         [Comment("Expected printing machine Id for the order")]
-        [Required]
-        public int MachineId { get; set; }
+        public int? MachineId { get; set; }
 
         [ForeignKey(nameof(MachineId))]
-        public virtual Machine Machine { get; set; } = null!;
+        public virtual Machine? Machine { get; set; }
 
     }
 }

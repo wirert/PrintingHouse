@@ -508,5 +508,13 @@
             <param name="materialId">material identifier</param>
             <returns>material name or null</returns>
         </member>
+        <member name="M:PrintingHouse.Core.Services.OrderService.TakeMaterialsAndColorsIfAvailable(PrintingHouse.Infrastructure.Data.Entities.Article,System.Double)">
+            <summary>
+            Take needed quantity of material and colors if there is enough in stock
+            </summary>
+            <param name="article">Order article</param>
+            <param name="neededArticleQuantity">Order quantity of articles</param>
+            <returns>Whether operation is successfull</returns>
+        </member>
     </members>
 </doc>

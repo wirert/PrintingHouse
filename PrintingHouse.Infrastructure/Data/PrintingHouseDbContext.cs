@@ -53,9 +53,9 @@
 
             builder.Entity<ArticleColor>().HasKey(k => new {k.ArticleId, k.ColorId});
 
-            builder.Entity<Order>().HasOne(o => o.Machine)
-                .WithMany(m => m.OrdersQueue)
-                .OnDelete(DeleteBehavior.Restrict);
+            //builder.Entity<Order>().HasOne(o => o.Machine)
+            //    .WithMany(m => m.OrdersQueue)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);
         }
