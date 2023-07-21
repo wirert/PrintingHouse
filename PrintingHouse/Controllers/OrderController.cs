@@ -21,6 +21,14 @@
         }
 
         [HttpGet]
+        public Task<IActionResult> All()
+        {
+
+
+            return View(model);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Create(Guid articleId)
         {
             try

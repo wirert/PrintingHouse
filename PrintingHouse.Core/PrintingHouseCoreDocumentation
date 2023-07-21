@@ -4,6 +4,16 @@
         <name>PrintingHouse.Core</name>
     </assembly>
     <members>
+        <member name="F:PrintingHouse.Core.Constants.ModelConstants.Article_Piece_Length">
+            <summary>
+            Conversion constant for article with measure unit Piece 
+            </summary>
+        </member>
+        <member name="F:PrintingHouse.Core.Constants.ModelConstants.Kilometers_Meters">
+            <summary>
+            Constant for convertion from kilometers in meters
+            </summary>
+        </member>
         <member name="T:PrintingHouse.Core.Constants.ModelMessageConstants">
             <summary>
             Error message constants for model validation

@@ -4,15 +4,16 @@
     using Microsoft.AspNetCore.Mvc.Rendering;
 
     using Core.Models.Article;
+    using Core.Constants;
     using static Core.Constants.MessageConstants;
     using Core.Services.Contracts;
-    using PrintingHouse.Infrastructure.Data.Entities.Enums;
+    using Infrastructure.Data.Entities.Enums;
 
     /// <summary>
     /// Article controller
     /// </summary>
     public class ArticleController : BaseController
-    {
+    {     
         private readonly IArticleService articleService;
         private readonly IColorModelService colorModelService;
         private readonly IMaterialService materialService;
@@ -238,6 +239,11 @@
                     ClientName = materialColors.ClientName
                 };
 
+                if (material.MeasureUnit == MeasureUnit.Piece)
+                {
+                    model.Length = ModelConstants.Article_Piece_Length;
+                }
+
                 model.Colors = await colorModelService.GetColorModelColorsAsync(materialColors.ColorModelId);
 
                 return View(model);
@@ -316,6 +322,12 @@
 
                     model.MaterialName = material.Type;
                     model.MeasureUnit = (MeasureUnit)material.MeasureUnit!;
+
+                    if (model.MeasureUnit == MeasureUnit.Piece)
+                    {
+                        model.Length = ModelConstants.Article_Piece_Length;
+                    }
+
                     model.Colors = await colorModelService.GetColorModelColorsAsync(model.ColorModelId);
                 }
 
@@ -358,7 +370,6 @@
             {
                 TempData[ErrorMessage] = "Something went wrong trying to edit an article! Try again.";
             }
-
 
             return RedirectToAction("All", "Article");
         }

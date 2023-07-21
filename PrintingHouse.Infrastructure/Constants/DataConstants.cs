@@ -21,7 +21,7 @@
             /// <summary>
             /// Article design image name maximum lenght
             /// </summary>
-            public const int MaxImageNameLenght = 60;
+            public const int MaxImageNameLenght = 100;
             /// <summary>
             /// Article design image name minimum lenght
             /// </summary>

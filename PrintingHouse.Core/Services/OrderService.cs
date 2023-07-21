@@ -91,9 +91,14 @@
             {
                 order.ExpectedPrintDate = DateTime.UtcNow.Date;
 
-                if ((DateTime.UtcNow.TimeOfDay + order.ExpectedPrintTime) > TimeSpan.FromHours(18))
+                if ((DateTime.UtcNow.TimeOfDay + order.ExpectedPrintTime) > TimeSpan.FromHours(18d))
                 {
-                    order.ExpectedPrintDate.AddDays(1);
+                    order.ExpectedPrintDate = order.ExpectedPrintDate.AddDays(1d);
+
+                    if (order.ExpectedPrintDate.DayOfWeek == DayOfWeek.Saturday)
+                    {
+                        order.ExpectedPrintDate = order.ExpectedPrintDate.AddDays(2d);
+                    }
                 }                
             }
             else
@@ -112,12 +117,12 @@
                 order.ExpectedPrintDate = lastOrderInMachine.ExpectedPrintDate;
 
                 if (totalPrintTimeNeeded + order.ExpectedPrintTime > TimeSpan.FromHours(10))
-                {                
-                    order.ExpectedPrintDate.AddDays(1);
+                {
+                    order.ExpectedPrintDate = order.ExpectedPrintDate.AddDays(1d);
 
                     if (order.ExpectedPrintDate.DayOfWeek == DayOfWeek.Saturday)
                     {
-                        order.ExpectedPrintDate.AddDays(2);
+                        order.ExpectedPrintDate = order.ExpectedPrintDate.AddDays(2d);
                     }
                 }
             }

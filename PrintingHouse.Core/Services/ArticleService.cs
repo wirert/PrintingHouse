@@ -1,25 +1,24 @@
 ﻿namespace PrintingHouse.Core.Services
 {
+    using System.Collections.Generic;
+    using System.Linq.Expressions;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
 
     using Contracts;
+    using Constants;
     using Models.Article;
     using Models.ColorModel;
     using Models.Material;
     using Infrastructure.Data.Common.Contracts;
-    using PrintingHouse.Infrastructure.Data.Entities;
-    using System.Collections.Generic;
-    using System.Linq.Expressions;
+    using Infrastructure.Data.Entities;
 
     /// <summary>
     /// Article service
     /// </summary>
     public class ArticleService : IArticleService
-    {
-        private const int Kilometers_Meters = 1000;
-
+    {    
         private readonly IRepository repo;
         private readonly IFileService fileService;
        
@@ -77,7 +76,7 @@
                 ClientId = model.ClientId,
                 MaterialId = model.MaterialId,
                 ColorModelId = model.ColorModelId,
-                Length = model.Length / Kilometers_Meters,
+                Length = model.Length / ModelConstants.Kilometers_Meters,
                 ImageName = model.DesignFile!.FileName,
                 ArticleNumber = $"{model.ClientId}.{clientArticlesCount++}"
             };
@@ -171,7 +170,7 @@
                     MaterialId = a.MaterialId,
                     MaterialName = a.MaterialColorModel.Material.Type,
                     MeasureUnit = a.MaterialColorModel.Material.MeasureUnit,
-                    Length = a.Length * Kilometers_Meters,
+                    Length = a.Length * ModelConstants.Kilometers_Meters,
                     Colors = a.ArticleColors
                         .Select(ac => new AddArticleColorVeiwModel()
                         {
@@ -241,7 +240,7 @@
             }
 
             article.Name = model.Name;
-            article.Length = model.Length / Kilometers_Meters;
+            article.Length = model.Length / ModelConstants.Kilometers_Meters;
 
             if (model.DesignFile != null && model.DesignFile.Length > 0)
             {
