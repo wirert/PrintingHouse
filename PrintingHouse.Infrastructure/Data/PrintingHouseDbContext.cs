@@ -51,11 +51,7 @@
             builder.Entity<Client>().Property(a => a.IsActive).HasDefaultValue(true);
             builder.Entity<Client>().HasIndex(e => e.Name).IsUnique();            
 
-            builder.Entity<ArticleColor>().HasKey(k => new {k.ArticleId, k.ColorId});
-
-            //builder.Entity<Order>().HasOne(o => o.Machine)
-            //    .WithMany(m => m.OrdersQueue)
-            //    .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<ArticleColor>().HasKey(k => new {k.ArticleId, k.ColorId});            
 
             base.OnModelCreating(builder);
         }

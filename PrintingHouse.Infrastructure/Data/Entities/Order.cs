@@ -39,7 +39,10 @@
         public DateTime? EndDate { get; set; }
 
         [Comment("Order expected print date")]
-        public DateTime? ExpectedPrintDate { get; set; }
+        public DateTime ExpectedPrintDate { get; set; }
+
+        [Comment("Expected time needed for printing")]
+        public TimeSpan ExpectedPrintTime { get; set; }
 
         [Comment("Order current status")]
         [Required]

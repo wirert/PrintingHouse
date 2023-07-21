@@ -508,6 +508,12 @@
             <param name="materialId">material identifier</param>
             <returns>material name or null</returns>
         </member>
+        <member name="M:PrintingHouse.Core.Services.OrderService.SetExpectedPrintDate(PrintingHouse.Infrastructure.Data.Entities.Order)">
+            <summary>
+            Set expected print date according print time and other orders
+            </summary>
+            <param name="order">The order</param>
+        </member>
         <member name="M:PrintingHouse.Core.Services.OrderService.TakeMaterialsAndColorsIfAvailable(PrintingHouse.Infrastructure.Data.Entities.Article,System.Double)">
             <summary>
             Take needed quantity of material and colors if there is enough in stock

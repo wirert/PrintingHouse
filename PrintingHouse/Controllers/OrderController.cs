@@ -51,15 +51,18 @@
 
             try
             {
+                await orderService.CreateOrder(model);
 
+                TempData[SuccessMessage] = "Order created successfully.";
+
+                return RedirectToAction("All");
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                TempData[ErrorMessage] = "Something went wrong trying to create an order! Try again.";
 
-                throw;
+                return RedirectToAction("All", "Article");
             }
-
-            return View(model);
         }
     }
 }
