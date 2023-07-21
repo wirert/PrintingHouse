@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
     using Microsoft.EntityFrameworkCore;
-
+    using PrintingHouse.Infrastructure.Data.Entities.Enums;
     using static Infrastructure.Constants.DataConstants.Order;
 
     public class AddOrderViewModel
@@ -11,9 +11,11 @@
 
         public string ArticleName { get; set; } = null!;
 
+        public string? Material { get; set; }
+
         [Required]
         [Range(1, MaxQuantity)]
-        public double Quantity { get; set; }
+        public int Quantity { get; set; }
 
         public DateTime? EndDate { get; set; }
 

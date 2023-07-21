@@ -29,7 +29,7 @@
 
         [Comment("Order article quantity")]
         [Required]
-        public double Quantity { get; set; }
+        public int Quantity { get; set; }
 
         [Comment("DateTime of order creation")]
         [Required]

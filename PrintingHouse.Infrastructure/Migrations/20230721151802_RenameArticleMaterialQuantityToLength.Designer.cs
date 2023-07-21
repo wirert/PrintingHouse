@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PrintingHouse.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using PrintingHouse.Infrastructure.Data;
 namespace PrintingHouse.Infrastructure.Migrations
 {
     [DbContext(typeof(PrintingHouseDbContext))]
-    partial class PrintingHouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230721151802_RenameArticleMaterialQuantityToLength")]
+    partial class RenameArticleMaterialQuantityToLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -250,7 +252,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = new Guid("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a125bef2-c25a-4f38-98a7-036489fcbeb7",
+                            ConcurrencyStamp = "7e218c85-146f-4017-ace0-783bedc3ae73",
                             Email = "admin@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
@@ -259,7 +261,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@MAIL.COM",
                             NormalizedUserName = "ADMIN123",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOD2IOkRjwfk7wHLAXDNPXfu52wlKcakc4KuDXK57JmBtWbzqa5/Gsqch0HQ5ROBQw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMbxAGdBRWJVFup4VP26MtaLtEhr+EljBzXUIwVqcRNF9BbuweFg2EZgRaJu1ATnUw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "d2ecdcca-b1e6-4015-aaa1-17c22a17e6b3",
                             TwoFactorEnabled = false,
@@ -269,7 +271,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = new Guid("e7065dbb-0c70-48da-902c-9f6f2536c505"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "09ecb0b4-d8c4-4238-89db-3e756296043c",
+                            ConcurrencyStamp = "60de12ab-5982-4b4a-be1d-255de3b6bd7c",
                             Email = "merchant1@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Merchant",
@@ -278,7 +280,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MERCHANT1@MAIL.COM",
                             NormalizedUserName = "MERCHANT1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAaoMTpqvZn2M0vFc/7a9HW8VeGpn+PcPXcH0zOwOq92QjMkszdZ5SdzmfpRaSDLmw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEDGLrZpVVorxZvefFm5jLkC+9ILprg76492bCWGKiiJbsqimPjd7qNGEU4dhdgzwg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "ff91b260-0ab1-48c3-b7dd-ecb740dfce74",
                             TwoFactorEnabled = false,
@@ -288,7 +290,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = new Guid("6afbf121-61d4-42ca-a9c1-5ac694442d83"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f2f5d45a-055b-49f4-9269-5eadf1b6ae5a",
+                            ConcurrencyStamp = "35742f91-ea11-42f6-806d-02f8dc4e6299",
                             Email = "empl1@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Empl",
@@ -297,7 +299,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "EMPL1@MAIL.COM",
                             NormalizedUserName = "EMPLOYEE1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEASd82nRQrzX1LhnnUxUO1rmVrNBJQ2dEts46QlVcQck0rNejJwyB0R/9m1imBHHdg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBzMRQzcHdUhqelZ9EvhEZ/aCNvKmGFsXmG2sw1NhY9tx+thIz6hYP854XfvTnrcTg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "455036d5-b858-4330-83bb-d9bbe1e7d7a0",
                             TwoFactorEnabled = false,
@@ -857,8 +859,8 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasComment("DateTime of order creation");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int")
+                    b.Property<double>("Quantity")
+                        .HasColumnType("float")
                         .HasComment("Order article quantity");
 
                     b.Property<int>("Status")

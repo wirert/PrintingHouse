@@ -429,7 +429,7 @@
             Material service interface for IoC
             </summary>
         </member>
-        <member name="M:PrintingHouse.Core.Services.Contracts.IMaterialService.GetNameByIdIfExistAsync(System.Int32)">
+        <member name="M:PrintingHouse.Core.Services.Contracts.IMaterialService.GetMaterialByIdAsync(System.Int32)">
             <summary>
             Get material name by identifier or null if not exist
             </summary>
@@ -501,7 +501,7 @@
             Material service
             </summary>
         </member>
-        <member name="M:PrintingHouse.Core.Services.MaterialService.GetNameByIdIfExistAsync(System.Int32)">
+        <member name="M:PrintingHouse.Core.Services.MaterialService.GetMaterialByIdAsync(System.Int32)">
             <summary>
             Get material name by identifier or null if not exist
             </summary>
@@ -514,7 +514,7 @@
             </summary>
             <param name="order">The order</param>
         </member>
-        <member name="M:PrintingHouse.Core.Services.OrderService.TakeMaterialsAndColorsIfAvailable(PrintingHouse.Infrastructure.Data.Entities.Article,System.Double)">
+        <member name="M:PrintingHouse.Core.Services.OrderService.TakeMaterialsAndColorsIfAvailable(PrintingHouse.Infrastructure.Data.Entities.Article,System.Int32)">
             <summary>
             Take needed quantity of material and colors if there is enough in stock
             </summary>

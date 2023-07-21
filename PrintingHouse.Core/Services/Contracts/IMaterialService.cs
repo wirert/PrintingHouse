@@ -1,5 +1,7 @@
 ﻿namespace PrintingHouse.Core.Services.Contracts
 {
+    using PrintingHouse.Core.Models.Material;
+
     /// <summary>
     /// Material service interface for IoC
     /// </summary>
@@ -10,6 +12,6 @@
         /// </summary>
         /// <param name="materialId">material identifier</param>
         /// <returns>material name or null</returns>
-        Task<string?> GetNameByIdIfExistAsync(int materialId);
+        Task<MaterialSelectViewModel?> GetMaterialByIdAsync(int materialId);
     }
 }

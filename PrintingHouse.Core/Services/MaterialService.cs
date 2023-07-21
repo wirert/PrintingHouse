@@ -1,5 +1,7 @@
 ﻿namespace PrintingHouse.Core.Services
 {
+    using Microsoft.EntityFrameworkCore;
+    using PrintingHouse.Core.Models.Material;
     using PrintingHouse.Core.Services.Contracts;
     using PrintingHouse.Infrastructure.Data.Common.Contracts;
     using PrintingHouse.Infrastructure.Data.Entities;
@@ -22,11 +24,16 @@
         /// </summary>
         /// <param name="materialId">material identifier</param>
         /// <returns>material name or null</returns>
-        public async Task<string?> GetNameByIdIfExistAsync(int materialId)
+        public async Task<MaterialSelectViewModel?> GetMaterialByIdAsync(int materialId)
         {
-            var material = await repo.GetByIdAsync<Material>(materialId);
-
-            return material.Type;
+            return await repo.AllReadonly<Material>(m => m.Id == materialId && m.IsActive)
+                .Select(m => new MaterialSelectViewModel()
+                {
+                    Id = materialId,
+                    Type = m.Type,
+                    MeasureUnit = m.MeasureUnit
+                })
+                .FirstOrDefaultAsync();
         }
     }
 }

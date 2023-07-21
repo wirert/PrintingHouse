@@ -18,9 +18,11 @@
     /// </summary>
     public class ArticleService : IArticleService
     {
+        private const int Kilometers_Meters = 1000;
+
         private readonly IRepository repo;
         private readonly IFileService fileService;
-
+       
         public ArticleService(
             IRepository _repo,
             IFileService _fileService)
@@ -75,7 +77,7 @@
                 ClientId = model.ClientId,
                 MaterialId = model.MaterialId,
                 ColorModelId = model.ColorModelId,
-                MaterialQuantity = model.MaterialQuantity,
+                Length = model.Length / Kilometers_Meters,
                 ImageName = model.DesignFile!.FileName,
                 ArticleNumber = $"{model.ClientId}.{clientArticlesCount++}"
             };
@@ -110,7 +112,7 @@
             {
                 throw new Exception();
             }
-                
+
             model.Materials = await repo.AllReadonly<Material>(m => m.IsActive)
                 .Select(m => new MaterialSelectViewModel()
                 {
@@ -158,7 +160,7 @@
         {
             var article = await repo
                 .AllReadonly<Article>(a => a.Id == id && a.IsActive)
-                .Select(a => new ArticleViewModel() 
+                .Select(a => new ArticleViewModel()
                 {
                     Id = a.Id,
                     Name = a.Name,
@@ -168,7 +170,8 @@
                     ColorModelId = a.ColorModelId,
                     MaterialId = a.MaterialId,
                     MaterialName = a.MaterialColorModel.Material.Type,
-                    MaterialQuantity = a.MaterialQuantity,
+                    MeasureUnit = a.MaterialColorModel.Material.MeasureUnit,
+                    Length = a.Length * Kilometers_Meters,
                     Colors = a.ArticleColors
                         .Select(ac => new AddArticleColorVeiwModel()
                         {
@@ -198,7 +201,7 @@
         {
             var article = await repo.GetByIdAsync<Article>(model.Id);
 
-            if (article == null || 
+            if (article == null ||
                 article.IsActive == false ||
                 article.ClientId != model.ClientId)
             {
@@ -207,7 +210,7 @@
 
             var articleColors = repo.All<ArticleColor>(ac => ac.ArticleId == article.Id);
 
-            if (article.ColorModelId == model.ColorModelId && 
+            if (article.ColorModelId == model.ColorModelId &&
                 article.MaterialId == model.MaterialId)
             {
                 foreach (var color in articleColors)
@@ -219,7 +222,7 @@
             {
                 article.ArticleColors.Clear();
 
-               
+
 
                 repo.DeleteRange(articleColors);
 
@@ -229,7 +232,7 @@
                     {
                         Article = article,
                         ColorId = color.ColorId,
-                        ColorQuantity = color.ColorQuantity                        
+                        ColorQuantity = color.ColorQuantity
                     });
                 }
 
@@ -237,8 +240,8 @@
                 article.ColorModelId = model.ColorModelId;
             }
 
-            article.Name = model.Name;            
-            article.MaterialQuantity = model.MaterialQuantity;
+            article.Name = model.Name;
+            article.Length = model.Length / Kilometers_Meters;
 
             if (model.DesignFile != null && model.DesignFile.Length > 0)
             {

@@ -9,7 +9,8 @@
         <h1>@ViewData["Title"]</h1>
         <h4 class="mb-2">Client: @Model.ClientName</h4>
         <hr />
-        <a class="btn btn-warning btn-sm text-primary" asp-action="Select" asp-controller="Article" asp-route-clientId="@Model.ClientId">Change Material or Color model</a>
+        <h3>Material: @Model.MaterialName</h3>
+        <a class="btn btn-warning btn-sm text-primary" asp-action="Select" asp-controller="Article" asp-route-clientId="@Model.ClientId">Change Material</a>
         <form method="post" asp-action="Create" asp-controller="Article" enctype="multipart/form-data">
             <partial name="_ArticlePartial" model="@Model" />
             <button type="submit" class="w-100 btn btn-lg btn-primary mt-3">Create</button>

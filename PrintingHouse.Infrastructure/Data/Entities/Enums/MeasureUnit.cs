@@ -5,7 +5,7 @@
     /// </summary>
     public enum MeasureUnit
     {
-        Km = 0,
+        km = 0,
         Piece
     }
 }

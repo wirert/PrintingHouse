@@ -35,7 +35,7 @@
                 {
                     Id = 2,
                     Type = "Vinil 2m",
-                    MeasureUnit = MeasureUnit.Km,
+                    MeasureUnit = MeasureUnit.km,
                     Width = 0.002,
                     Lenght = 0.01,
                     Price = 1500.50m,
@@ -45,7 +45,7 @@
                 {
                     Id = 3,
                     Type = "Nylon 20cm",
-                    MeasureUnit = MeasureUnit.Km,
+                    MeasureUnit = MeasureUnit.km,
                     Width = 0.0002,
                     Lenght = 1,
                     Price = 850m,

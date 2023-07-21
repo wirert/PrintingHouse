@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Http;
 
     using static Infrastructure.Constants.DataConstants;
+    using Infrastructure.Data.Entities.Enums;
 
     public class ArticleViewModel
     {
@@ -23,12 +24,14 @@
 
         public string MaterialName { get; set; } = null!;
 
+        public MeasureUnit MeasureUnit { get; set; }
+
         [Required]
         public int ColorModelId { get; set; }
 
         [Required]
-        [Range(0, double.MaxValue)]
-        public double MaterialQuantity { get; set; }
+        [Range(0, Article.MaxLength)]
+        public double Length { get; set; } = 1;
 
         [Required]
         [Range(1, int.MaxValue)]

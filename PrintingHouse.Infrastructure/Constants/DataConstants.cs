@@ -30,7 +30,9 @@
             /// <summary>
             /// Maximum lenght of Article number string
             /// </summary>
-            public const int MaxArticleNoLenght = 20;            
+            public const int MaxArticleNoLenght = 20;
+
+            public const double MaxLength = 1000;
         }
 
         /// <summary>
@@ -72,7 +74,7 @@
             /// </summary>
             public const int MaxCommentLenght = 600;
 
-            public const double MaxQuantity = 5000;
+            public const int MaxQuantity = 500000;
         }
 
         /// <summary>

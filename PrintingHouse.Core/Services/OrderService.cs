@@ -39,6 +39,8 @@
         public async Task CreateOrder(AddOrderViewModel model)
         {
             var article = await repo.All<Article>(a => a.Id == model.ArticleId && a.IsActive)
+                .Include(a => a.MaterialColorModel)
+                .ThenInclude(mc => mc.Material)
                 .Include(a => a.ArticleColors)
                 .ThenInclude(ac => ac.Color)
                 .Include(a => a.MaterialColorModel)
@@ -69,7 +71,7 @@
             }
 
             order.Machine = machine;
-            order.ExpectedPrintTime = machine.PrintTime * order.Quantity * article.MaterialQuantity;
+            order.ExpectedPrintTime = machine.PrintTime * order.Quantity * article.Length;
 
             SetExpectedPrintDate(order);
 
@@ -127,20 +129,25 @@
         /// <param name="article">Order article</param>
         /// <param name="neededArticleQuantity">Order quantity of articles</param>
         /// <returns>Whether operation is successfull</returns>
-        private bool TakeMaterialsAndColorsIfAvailable(Article article, double neededArticleQuantity)
+        private bool TakeMaterialsAndColorsIfAvailable(Article article, int neededArticleQuantity)
         {
-            var materialNeeded = article.MaterialQuantity * neededArticleQuantity;
+            var material = article.MaterialColorModel.Material;
 
-            var materialInStock = repo.All<Material>(m => m.Id == article.MaterialId && m.IsActive).Single().InStock;
+            double materialQuantityNeeded = article.Length * neededArticleQuantity;
 
-            if (materialInStock < (int)Math.Ceiling(materialNeeded))
+            if (material.MeasureUnit == MeasureUnit.km) 
+            {
+                materialQuantityNeeded /= material.Lenght;
+            }           
+
+            if (material.InStock < (int)Math.Ceiling(materialQuantityNeeded))
             {
                 return false;
             }
 
             foreach (ArticleColor color in article.ArticleColors)
             {
-                var neededColor = color.ColorQuantity * neededArticleQuantity;
+                double neededColor = color.ColorQuantity * neededArticleQuantity;
 
                 if (color.Color.InStock < (int)Math.Ceiling(neededColor))
                 {
@@ -148,7 +155,7 @@
                 }
             }
 
-            materialInStock -= (int)Math.Ceiling(materialNeeded);
+            material.InStock -= (int)Math.Ceiling(materialQuantityNeeded);
 
             foreach (ArticleColor color in article.ArticleColors)
             {

@@ -5,7 +5,8 @@
         <h1 class="bg-dark text-light p-2">Edit article: <strong>@Model.Name</strong></h1>
         <h4 class="mb-2">Client: @Model.ClientName</h4>
         <hr />
-        <a class="btn btn-warning btn-sm text-primary" asp-action="Select" asp-controller="Article" asp-route-clientId="@Model.ClientId" asp-route-articleId="@Model.Id">Change Material or Color model</a>
+        <h3>Material: @Model.MaterialName</h3>
+        <a class="btn btn-warning btn-sm text-primary" asp-action="Select" asp-controller="Article" asp-route-clientId="@Model.ClientId" asp-route-articleId="@Model.Id">Change Material</a>
         <form method="post" asp-action="Edit" asp-controller="Article" enctype="multipart/form-data">
             <input type="hidden" asp-for="@Model.DesignName" />
             <input type="hidden" asp-for="@Model.Id" />

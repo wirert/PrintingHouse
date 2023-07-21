@@ -6,6 +6,7 @@
     using Core.Models.Article;
     using static Core.Constants.MessageConstants;
     using Core.Services.Contracts;
+    using PrintingHouse.Infrastructure.Data.Entities.Enums;
 
     /// <summary>
     /// Article controller
@@ -202,9 +203,9 @@
         [HttpGet]
         public async Task<IActionResult> Create(ChooseArticleMaterialAndColorsViewModel materialColors)
         {
-            var materialName = await materialService.GetNameByIdIfExistAsync(materialColors.MaterialId);
+            var material = await materialService.GetMaterialByIdAsync(materialColors.MaterialId);
 
-            if (materialName == null ||
+            if (material == null ||
                 await materialColorService.ExistByIds(materialColors.MaterialId, materialColors.ColorModelId) == false)
             {
                 ModelState.AddModelError(string.Empty, "Material or color model is invalid!");
@@ -230,7 +231,8 @@
                 var model = new ArticleViewModel()
                 {
                     MaterialId = materialColors.MaterialId,
-                    MaterialName = materialName!,
+                    MaterialName = material!.Type,
+                    MeasureUnit = (MeasureUnit)material.MeasureUnit!,
                     ColorModelId = materialColors.ColorModelId,
                     ClientId = materialColors.ClientId,
                     ClientName = materialColors.ClientName
@@ -304,15 +306,16 @@
                     model.ColorModelId = (int)TempData["ColorModelId"]!;
                     model.MaterialId = (int)TempData["MaterialId"]!;
 
-                    var materialName = await materialService.GetNameByIdIfExistAsync(model.MaterialId);
+                    var material = await materialService.GetMaterialByIdAsync(model.MaterialId);
 
-                    if (materialName == null ||
+                    if (material == null ||
                         await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId) == false)
                     {
                         throw new ArgumentException();
                     }
 
-                    model.MaterialName = materialName;
+                    model.MaterialName = material.Type;
+                    model.MeasureUnit = (MeasureUnit)material.MeasureUnit!;
                     model.Colors = await colorModelService.GetColorModelColorsAsync(model.ColorModelId);
                 }
 

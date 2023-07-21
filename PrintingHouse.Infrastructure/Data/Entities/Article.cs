@@ -36,9 +36,9 @@
         [MaxLength(MaxImageNameLenght)]
         public string ImageName { get; set; } = null!;
 
-        [Comment("Required material lenght")]
+        [Comment("Article length")]
         [Required]
-        public double MaterialQuantity { get; set; }       
+        public double Length { get; set; }       
 
         [Comment("Article owner id")]
         [Required]

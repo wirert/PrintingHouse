@@ -1,7 +1,6 @@
 ﻿@model ChooseArticleMaterialAndColorsViewModel
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 
-
 @{
     ViewData["Title"] = "Select Material and Color model for article";
     var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
@@ -12,7 +11,7 @@
         <h1>@ViewData["Title"]</h1>
         <h4 class="mb-2">Client: @Model.ClientName</h4>
         <hr />
-        <form method="post" asp-action="Add" asp-controller="Article" asp-antiforgery=false enctype="multipart/form-data">
+        <form method="post" asp-action="Select" asp-controller="Article" asp-antiforgery=false enctype="multipart/form-data">
             <input id="__RequestVerificationToken" type="hidden" name="__RequestVerificationToken" value="@requestToken" />
             <input type="hidden" asp-for="@Model.ClientId" />
             <input type="hidden" asp-for="@Model.ClientName" />
@@ -31,8 +30,7 @@
                             id="ddlColorModelId"></select>
                     <span asp-validation-for="ColorModelId" class="text-danger"></span>
                 </div>
-            </div>            
-            
+            </div>   
             <button type="submit" class="w-100 btn btn-lg btn-primary mt-3">Submit</button>
         </form>
     </div>
