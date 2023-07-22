@@ -1,10 +1,12 @@
 ﻿namespace PrintingHouse.Core.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
 
+    using Constants;
     using Contracts;
     using Infrastructure.Data.Common.Contracts;
     using Infrastructure.Data.Entities;
@@ -18,6 +20,48 @@
         public OrderService(IRepository _repo)
         {
             repo = _repo;
+        }
+
+        public async Task<IEnumerable<OrderViewModel>> GetAllOrdersAsync()
+        {
+            var models = await repo.AllReadonly<Order>()                
+                .Select(o => new OrderViewModel()
+                {
+                    Id = o.Id,
+                    ArticleNo = o.Article.ArticleNumber,
+                    ArticleName = o.Article.Name,
+                    ClientName = o.Article.Client.Name,
+                    Quantity = o.Quantity,
+                    Material = o.Article.MaterialColorModel.Material.Type,
+                    MeasureUnit = o.Article.MaterialColorModel.Material.MeasureUnit,
+                    MaterialLength = o.Article.MaterialColorModel.Material.Lenght,
+                    MaterialQuantity = (o.Quantity * o.Article.Length).ToString("f2"),
+                    ColorModel = o.Article.MaterialColorModel.ColorModel.Name,
+                    Width = o.Article.MaterialColorModel.Material.Width * ModelConstants.Kilometers_Meters,
+                    EndDate = o.EndDate,
+                    ExpectedPrintDate = o.ExpectedPrintDate,
+                    Comment = o.Comment,
+                    ExpectedPrintTime = o.ExpectedPrintTime,
+                    OrderTime = o.OrderTime,
+                    Status = o.Status
+                })
+                .ToListAsync();
+
+            foreach (var model in models)
+            {        
+                if (model.MeasureUnit == MeasureUnit.km)
+                {
+                    model.EmbeddedMaterialCount = (int)Math.Ceiling(double.Parse(model.MaterialQuantity) / model.MaterialLength);
+                    model.ScrappedMaterial = ((1 - (double.Parse(model.MaterialQuantity) / (model.EmbeddedMaterialCount * model.MaterialLength))) * 100).ToString();
+                }
+                else
+                {
+                    model.EmbeddedMaterialCount = (int)double.Parse(model.MaterialQuantity);
+                    model.ScrappedMaterial = 0d.ToString();
+                }
+            }
+
+            return models;
         }
 
         public async Task<AddOrderViewModel> CreateAddModelByArticleIdAsync(Guid articleId)
@@ -99,7 +143,7 @@
                     {
                         order.ExpectedPrintDate = order.ExpectedPrintDate.AddDays(2d);
                     }
-                }                
+                }
             }
             else
             {
@@ -132,27 +176,22 @@
         /// Take needed quantity of material and colors if there is enough in stock
         /// </summary>
         /// <param name="article">Order article</param>
-        /// <param name="neededArticleQuantity">Order quantity of articles</param>
+        /// <param name="neededOrderArticleQuantity">Order quantity of articles</param>
         /// <returns>Whether operation is successfull</returns>
-        private bool TakeMaterialsAndColorsIfAvailable(Article article, int neededArticleQuantity)
+        private bool TakeMaterialsAndColorsIfAvailable(Article article, int neededOrderArticleQuantity)
         {
             var material = article.MaterialColorModel.Material;
 
-            double materialQuantityNeeded = article.Length * neededArticleQuantity;
+            int materialQuantityNeeded = CalculateNeededOrderMaterialUnits(article, neededOrderArticleQuantity);
 
-            if (material.MeasureUnit == MeasureUnit.km) 
-            {
-                materialQuantityNeeded /= material.Lenght;
-            }           
-
-            if (material.InStock < (int)Math.Ceiling(materialQuantityNeeded))
+            if (material.InStock < materialQuantityNeeded)
             {
                 return false;
             }
 
             foreach (ArticleColor color in article.ArticleColors)
             {
-                double neededColor = color.ColorQuantity * neededArticleQuantity;
+                double neededColor = color.ColorQuantity * neededOrderArticleQuantity;
 
                 if (color.Color.InStock < (int)Math.Ceiling(neededColor))
                 {
@@ -160,16 +199,30 @@
                 }
             }
 
-            material.InStock -= (int)Math.Ceiling(materialQuantityNeeded);
+            material.InStock -= materialQuantityNeeded;
 
             foreach (ArticleColor color in article.ArticleColors)
             {
-                var neededColor = color.ColorQuantity * neededArticleQuantity;
+                var neededColor = color.ColorQuantity * neededOrderArticleQuantity;
 
                 color.Color.InStock -= (int)Math.Ceiling(neededColor);
             }
 
             return true;
+        }
+
+        private int CalculateNeededOrderMaterialUnits(Article article, int neededOrderArticleQuantity)
+        {
+            var material = article.MaterialColorModel.Material;
+
+            double materialQuantityNeeded = article.Length * neededOrderArticleQuantity;
+
+            if (material.MeasureUnit == MeasureUnit.km)
+            {
+                materialQuantityNeeded /= material.Lenght;
+            }
+
+            return (int)Math.Ceiling(materialQuantityNeeded);
         }
     }
 }

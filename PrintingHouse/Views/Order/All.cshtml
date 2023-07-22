@@ -1,18 +1,28 @@
-﻿@model IEnumerable<AllArticleViewModel>
+﻿@model IEnumerable<OrderViewModel>
 
 
 <h1>@ViewBag.Title</h1>
 
-<table class="table table-hover">
+<table class="table table-hover table-responsive-sm">
     <thead>
         <tr>
+            <th scope="col">No.</th>
+            <th scope="col">Created on</th>
+            <th scope="col">Status</th>
             <th scope="col">Article No.</th>
-            <th scope="col">Name</th>
-            <th scope="col">Client name</th>
+            <th scope="col">Article</th>
             <th scope="col">Material</th>
+            <th scope="col">Width (m)</th>
+            <th scope="col">Client</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Embedded material (count)</th>
+            <th scope="col">Printed material (pieces or km)</th>
+            <th scope="col">Scrapped</th>
+            <th scope="col">Deadline</th>
+            <th scope="col">Expected print date</th>
+            <th scope="col">Expected time needed</th>
             <th scope="col">Color model</th>
-            <th scope="col">Design file</th>
-            <th scope="col"></th>
+            <th scope="col">Comment</th>
             <th scope="col"></th>
             <th scope="col"></th>
         </tr>
@@ -21,22 +31,23 @@
         @foreach (var order in Model)
         {
             <tr>
-                <td>@order.Name</td>
-                <td>@order.ArticleNumber</td>
-                <td>@order.ClientName</td>
-                <td>
-                    @order.Material
-
-                </td>
+                <td>@order.Id</td>
+                <td>@order.OrderTime</td>
+                <td>@order.Status</td>
+                <td>@order.ArticleNo</td>
+                <td>@order.ArticleName</td>
+                <td>@order.Material</td>
+                <td>@order.Width</td>
+                <td>@order.ClientName</td>                
+                <td>@order.Quantity</td>                
+                <td>@order.EmbeddedMaterialCount</td>                
+                <td>@order.MaterialQuantity</td>                
+                <td>@order.ScrappedMaterial %</td>                
+                <td>@order.EndDate</td>
+                <td>@order.ExpectedPrintDate</td>
+                <td>@order.ExpectedPrintTime</td>
                 <td>@order.ColorModel</td>
-                <td>
-                    <p class="mb-1">@order.FileName</p>
-                    <form asp-controller="Article" asp-action="Download" method="get">
-                        <input name="articleId" type="hidden" value="@order.Id" />
-                        <input name="fileName" type="hidden" value="@order.FileName" />
-                        <button class="btn btn-success btn-sm" type="submit">Download</button>
-                    </form>
-                </td>
+                <td>@order.Comment</td>
                 @if (User.IsInRole(Admin) || User.IsInRole(Merchant))
                 {
                     <td>

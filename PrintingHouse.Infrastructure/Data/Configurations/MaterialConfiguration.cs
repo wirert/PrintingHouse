@@ -26,8 +26,8 @@
                     Id = 1,
                     Type = "Plain paper A2",
                     MeasureUnit = MeasureUnit.Piece,
-                    Width = 420,
-                    Lenght = 594,
+                    Width = 0.00042,
+                    Lenght = 0.000594,
                     Price = 1m,
                     InStock = 10000
                 },

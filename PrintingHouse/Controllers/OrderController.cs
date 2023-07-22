@@ -21,11 +21,20 @@
         }
 
         [HttpGet]
-        public Task<IActionResult> All()
+        public async Task<IActionResult> All()
         {
+            try
+            {
+                var models = await orderService.GetAllOrdersAsync();
 
+                return View(models);
+            }
+            catch (Exception)
+            {
+                TempData[WarningMessage] = "Unable to load orders! Try again";
 
-            return View(model);
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpGet]

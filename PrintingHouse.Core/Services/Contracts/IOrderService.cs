@@ -7,5 +7,7 @@
         Task<AddOrderViewModel> CreateAddModelByArticleIdAsync(Guid articleId);
 
         Task CreateOrder(AddOrderViewModel model);
+
+        Task<IEnumerable<OrderViewModel>> GetAllOrdersAsync();
     }
 }

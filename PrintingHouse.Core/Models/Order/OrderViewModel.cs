@@ -10,13 +10,28 @@
 
         public string ArticleName { get; set; } = null!;
 
+       // public double ArticleLength { get; set; }
+
         public string ClientName { get; set; } = null!;
 
         public int Quantity { get; set; }
 
-        public double? MaterialQuantity { get; set; }
+        public string Material { get; set; } = null!;
 
-        public int Width { get; set; }
+        public string MaterialQuantity { get; set; } = null!;
+
+        public MeasureUnit MeasureUnit { get; set; }
+
+        public double MaterialLength { get; set; }
+
+        public int EmbeddedMaterialCount { get; set; }
+
+        public string? ScrappedMaterial { get; set; }
+
+
+        public string ColorModel { get; set; } = null!;
+
+        public double Width { get; set; }
 
         public DateTime OrderTime { get; set; }
 
@@ -29,7 +44,5 @@
         public OrderStatus Status { get; set; }
 
         public string? Comment { get; set; }
-
-        public int? MachineId { get; set; }
     }
 }
