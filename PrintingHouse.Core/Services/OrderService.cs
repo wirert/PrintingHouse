@@ -37,7 +37,7 @@
                     MaterialLength = o.Article.MaterialColorModel.Material.Lenght,
                     MaterialQuantity = (o.Quantity * o.Article.Length).ToString("f2"),
                     ColorModel = o.Article.MaterialColorModel.ColorModel.Name,
-                    Width = o.Article.MaterialColorModel.Material.Width * ModelConstants.Kilometers_Meters,
+                    Width = o.Article.MaterialColorModel.Material.Width,
                     EndDate = o.EndDate,
                     ExpectedPrintDate = o.ExpectedPrintDate,
                     Comment = o.Comment,
@@ -49,10 +49,10 @@
 
             foreach (var model in models)
             {        
-                if (model.MeasureUnit == MeasureUnit.km)
+                if (model.MeasureUnit == MeasureUnit.m)
                 {
                     model.EmbeddedMaterialCount = (int)Math.Ceiling(double.Parse(model.MaterialQuantity) / model.MaterialLength);
-                    model.ScrappedMaterial = ((1 - (double.Parse(model.MaterialQuantity) / (model.EmbeddedMaterialCount * model.MaterialLength))) * 100).ToString();
+                    model.ScrappedMaterial = ((1 - (double.Parse(model.MaterialQuantity) / (model.EmbeddedMaterialCount * model.MaterialLength))) * 100).ToString("f0");
                 }
                 else
                 {
@@ -115,7 +115,7 @@
             }
 
             order.Machine = machine;
-            order.ExpectedPrintTime = machine.PrintTime * order.Quantity * article.Length;
+            order.ExpectedPrintTime = machine.PrintTime * order.Quantity * article.Length / machine.MaterialPerPrint;
 
             SetExpectedPrintDate(order);
 
@@ -142,6 +142,10 @@
                     if (order.ExpectedPrintDate.DayOfWeek == DayOfWeek.Saturday)
                     {
                         order.ExpectedPrintDate = order.ExpectedPrintDate.AddDays(2d);
+                    }
+                    else if(order.ExpectedPrintDate.DayOfWeek == DayOfWeek.Sunday)
+                    {
+                        order.ExpectedPrintDate = order.ExpectedPrintDate.AddDays(1d);
                     }
                 }
             }
@@ -215,14 +219,14 @@
         {
             var material = article.MaterialColorModel.Material;
 
-            double materialQuantityNeeded = article.Length * neededOrderArticleQuantity;
+            double materialCountNeeded = article.Length * neededOrderArticleQuantity;
 
-            if (material.MeasureUnit == MeasureUnit.km)
+            if (material.MeasureUnit == MeasureUnit.m)
             {
-                materialQuantityNeeded /= material.Lenght;
+                materialCountNeeded /= material.Lenght;
             }
 
-            return (int)Math.Ceiling(materialQuantityNeeded);
+            return (int)Math.Ceiling(materialCountNeeded);
         }
     }
 }

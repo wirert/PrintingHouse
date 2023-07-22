@@ -3,74 +3,77 @@
 
 <h1>@ViewBag.Title</h1>
 
-<table class="table table-hover table-responsive-sm">
-    <thead>
-        <tr>
-            <th scope="col">No.</th>
-            <th scope="col">Created on</th>
-            <th scope="col">Status</th>
-            <th scope="col">Article No.</th>
-            <th scope="col">Article</th>
-            <th scope="col">Material</th>
-            <th scope="col">Width (m)</th>
-            <th scope="col">Client</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Embedded material (count)</th>
-            <th scope="col">Printed material (pieces or km)</th>
-            <th scope="col">Scrapped</th>
-            <th scope="col">Deadline</th>
-            <th scope="col">Expected print date</th>
-            <th scope="col">Expected time needed</th>
-            <th scope="col">Color model</th>
-            <th scope="col">Comment</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var order in Model)
-        {
+<div class="table-responsive-sm">
+    <table class="table table-sm">
+        <caption>List of orders</caption>
+        <thead class="text-sm">
             <tr>
-                <td>@order.Id</td>
-                <td>@order.OrderTime</td>
-                <td>@order.Status</td>
-                <td>@order.ArticleNo</td>
-                <td>@order.ArticleName</td>
-                <td>@order.Material</td>
-                <td>@order.Width</td>
-                <td>@order.ClientName</td>                
-                <td>@order.Quantity</td>                
-                <td>@order.EmbeddedMaterialCount</td>                
-                <td>@order.MaterialQuantity</td>                
-                <td>@order.ScrappedMaterial %</td>                
-                <td>@order.EndDate</td>
-                <td>@order.ExpectedPrintDate</td>
-                <td>@order.ExpectedPrintTime</td>
-                <td>@order.ColorModel</td>
-                <td>@order.Comment</td>
-                @if (User.IsInRole(Admin) || User.IsInRole(Merchant))
-                {
-                    <td>
-                        <form asp-controller="Article" asp-action="Edit" method="get">
-                            <input name="id" type="hidden" value="@order.Id" />
-                            <button class="btn btn-lg btn-warning" type="submit">Edit</button>
-                        </form>
-                    </td>
-                    <td>
-                        <form asp-controller="Article" asp-action="Delete" method="get">
-                            <input name="id" type="hidden" value="@order.Id" />
-                            <button class="btn btn-sm btn-danger" type="submit">Delete Article</button>
-                        </form>
-                    </td>
-                    <td>
-                        <form asp-controller="Order" asp-action="Create" method="get">
-                            <input name="articleId" type="hidden" value="@order.Id" />
-                            <button class="btn btn-sm btn-success" type="submit">Add new order</button>
-                        </form>
-                    </td>
-                }
+                <th scope="col">No.</th>
+                <th scope="col">Created on</th>
+                <th scope="col">Status</th>
+                <th scope="col">Article No.</th>
+                <th scope="col">Article</th>
+                <th scope="col">Material</th>
+                <th scope="col">Width (m)</th>
+                <th scope="col">Client</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Embedded material (count)</th>
+                <th scope="col">Printed material (pieces or m)</th>
+                <th scope="col">Scrapped</th>
+                <th scope="col">Deadline</th>
+                <th scope="col">Expected print date</th>
+                <th scope="col">Expected time needed</th>
+                <th scope="col">Color model</th>
+                <th scope="col">Comment</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.OrderTime</td>
+                    <td>@order.Status</td>
+                    <td>@order.ArticleNo</td>
+                    <td>@order.ArticleName</td>
+                    <td>@order.Material</td>
+                    <td>@order.Width</td>
+                    <td>@order.ClientName</td>
+                    <td>@order.Quantity</td>
+                    <td>@order.EmbeddedMaterialCount</td>
+                    <td>@order.MaterialQuantity</td>
+                    <td>@order.ScrappedMaterial %</td>
+                    <td>@order.EndDate</td>
+                    <td>@order.ExpectedPrintDate</td>
+                    <td>@order.ExpectedPrintTime</td>
+                    <td>@order.ColorModel</td>
+                    <td>@order.Comment</td>
+                    @if (User.IsInRole(Admin) || User.IsInRole(Merchant))
+                    {
+                        <td>
+                            <form asp-controller="Article" asp-action="Edit" method="get">
+                                <input name="id" type="hidden" value="@order.Id" />
+                                <button class="btn btn-lg btn-warning" type="submit">Edit</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form asp-controller="Article" asp-action="Delete" method="get">
+                                <input name="id" type="hidden" value="@order.Id" />
+                                <button class="btn btn-sm btn-danger" type="submit">Delete Article</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form asp-controller="Order" asp-action="Create" method="get">
+                                <input name="articleId" type="hidden" value="@order.Id" />
+                                <button class="btn btn-sm btn-success" type="submit">Add new order</button>
+                            </form>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 

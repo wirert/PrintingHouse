@@ -10,8 +10,6 @@
 
         public string ArticleName { get; set; } = null!;
 
-       // public double ArticleLength { get; set; }
-
         public string ClientName { get; set; } = null!;
 
         public int Quantity { get; set; }

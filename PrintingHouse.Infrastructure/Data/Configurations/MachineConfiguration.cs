@@ -59,7 +59,7 @@
                     Name = "Machine 4",
                     MaterialId = 3,
                     ColorModelId = 2,
-                    MaterialPerPrint = 1,
+                    MaterialPerPrint = 500,
                     PrintTime = TimeSpan.FromMinutes(40),
                     Status = MachineStatus.Working
                 }

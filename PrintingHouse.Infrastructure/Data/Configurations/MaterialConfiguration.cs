@@ -26,8 +26,8 @@
                     Id = 1,
                     Type = "Plain paper A2",
                     MeasureUnit = MeasureUnit.Piece,
-                    Width = 0.00042,
-                    Lenght = 0.000594,
+                    Width = 0.42,
+                    Lenght = 0.594,
                     Price = 1m,
                     InStock = 10000
                 },
@@ -35,9 +35,9 @@
                 {
                     Id = 2,
                     Type = "Vinil 2m",
-                    MeasureUnit = MeasureUnit.km,
-                    Width = 0.002,
-                    Lenght = 0.01,
+                    MeasureUnit = MeasureUnit.m,
+                    Width = 2,
+                    Lenght = 10,
                     Price = 1500.50m,
                     InStock = 100
                 },
@@ -45,9 +45,9 @@
                 {
                     Id = 3,
                     Type = "Nylon 20cm",
-                    MeasureUnit = MeasureUnit.km,
-                    Width = 0.0002,
-                    Lenght = 1,
+                    MeasureUnit = MeasureUnit.m,
+                    Width = 0.2,
+                    Lenght = 1000,
                     Price = 850m,
                     InStock = 20
                 }

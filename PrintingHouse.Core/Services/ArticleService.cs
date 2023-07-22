@@ -76,7 +76,7 @@
                 ClientId = model.ClientId,
                 MaterialId = model.MaterialId,
                 ColorModelId = model.ColorModelId,
-                Length = model.Length / ModelConstants.Kilometers_Meters,
+                Length = model.Length,
                 ImageName = model.DesignFile!.FileName,
                 ArticleNumber = $"{model.ClientId}.{clientArticlesCount++}"
             };
@@ -170,7 +170,7 @@
                     MaterialId = a.MaterialId,
                     MaterialName = a.MaterialColorModel.Material.Type,
                     MeasureUnit = a.MaterialColorModel.Material.MeasureUnit,
-                    Length = a.Length * ModelConstants.Kilometers_Meters,
+                    Length = a.Length,
                     Colors = a.ArticleColors
                         .Select(ac => new AddArticleColorVeiwModel()
                         {
@@ -240,7 +240,7 @@
             }
 
             article.Name = model.Name;
-            article.Length = model.Length / ModelConstants.Kilometers_Meters;
+            article.Length = model.Length;
 
             if (model.DesignFile != null && model.DesignFile.Length > 0)
             {

@@ -15,9 +15,9 @@
         <span asp-validation-for="@Model.Name" class="text-danger"></span>
     </div>
     <div class="form-floating mt-4">
-        @if (Model.MeasureUnit == PrintingHouse.Infrastructure.Data.Entities.Enums.MeasureUnit.km)
+        @if (Model.MeasureUnit == PrintingHouse.Infrastructure.Data.Entities.Enums.MeasureUnit.m)
         {
-            <input asp-for="@Model.Length" class="form-control" aria-required="true" type="number" step="0.001" min="0" />
+            <input asp-for="@Model.Length" class="form-control" aria-required="true" type="number" step="0.1" min="0" />
         }
         else
         {
