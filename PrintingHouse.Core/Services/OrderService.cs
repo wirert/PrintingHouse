@@ -24,7 +24,7 @@
 
         public async Task<IEnumerable<OrderViewModel>> GetAllOrdersAsync()
         {
-            var models = await repo.AllReadonly<Order>()                
+            var models = await repo.AllReadonly<Order>()
                 .Select(o => new OrderViewModel()
                 {
                     Id = o.Id,
@@ -48,7 +48,7 @@
                 .ToListAsync();
 
             foreach (var model in models)
-            {        
+            {
                 if (model.MeasureUnit == MeasureUnit.m)
                 {
                     model.EmbeddedMaterialCount = (int)Math.Ceiling(double.Parse(model.MaterialQuantity) / model.MaterialLength);
@@ -123,6 +123,86 @@
             await repo.SaveChangesAsync();
         }
 
+        public async Task ChangeStatusAsync(int id, OrderStatus status)
+        {
+            var order = await repo.GetByIdAsync<Order>(id);
+
+            if (order == null)
+            {
+                throw new ArgumentException();
+            }
+
+            switch (order.Status)
+            {
+                case OrderStatus.Waiting:
+                    switch (status)
+                    {
+                        case OrderStatus.Waiting:
+                        case OrderStatus.InProgress:
+                            break;
+                        case OrderStatus.Canceled:
+
+                            var articleToCancel = await repo.All<Article>(a => a.Id == order.ArticleId)
+                                .Include(a => a.MaterialColorModel)
+                                .ThenInclude(mc => mc.Material)
+                                .Include(a => a.ArticleColors)
+                                .ThenInclude(ac => ac.Color)
+                                .FirstAsync();
+                            var materialCount = this.CalculateNeededOrderMaterialUnits(articleToCancel, order.Quantity);
+
+                            articleToCancel.MaterialColorModel.Material.InStock += materialCount;
+
+                            foreach (ArticleColor color in articleToCancel.ArticleColors)
+                            {
+                                int returnColorQuantiry = (int)Math.Ceiling(color.ColorQuantity * order.Quantity);
+
+                                color.Color.InStock += returnColorQuantiry;
+                            }
+                            order.MachineId = null;
+                            break;
+                        default:
+                            throw new ArgumentException();                            
+                    }
+                    order.Status = status;
+                    break;
+                case OrderStatus.NoConsumable:
+                    var article = await repo.GetByIdAsync<Article>(order.ArticleId);
+                    switch (status)
+                    {
+                        case OrderStatus.Completed:
+                            throw new ArgumentException();
+                        case OrderStatus.NoConsumable:
+                            break;
+                        case OrderStatus.Canceled:
+                            order.MachineId = null;
+                            order.Status = status;
+                            break;
+                        default:                            
+                            order.Status = this.TakeMaterialsAndColorsIfAvailable(article, order.Quantity) ? status : OrderStatus.NoConsumable;
+                            break;
+                    }
+                    break;
+                case OrderStatus.InProgress:
+                    switch (status)
+                    {
+                        case OrderStatus.Completed:
+                        case OrderStatus.Canceled:
+                            order.MachineId = null;
+                            break;
+                        case OrderStatus.InProgress:                            
+                            break;
+                        default:
+                            throw new ArgumentException();
+                    }
+                    order.Status = status;
+                    break;
+                default:
+                    throw new ArgumentException();
+            }
+
+            await repo.SaveChangesAsync();
+        }
+
         /// <summary>
         /// Set expected print date according print time and other orders
         /// </summary>
@@ -143,7 +223,7 @@
                     {
                         order.ExpectedPrintDate = order.ExpectedPrintDate.AddDays(2d);
                     }
-                    else if(order.ExpectedPrintDate.DayOfWeek == DayOfWeek.Sunday)
+                    else if (order.ExpectedPrintDate.DayOfWeek == DayOfWeek.Sunday)
                     {
                         order.ExpectedPrintDate = order.ExpectedPrintDate.AddDays(1d);
                     }
@@ -228,5 +308,7 @@
 
             return (int)Math.Ceiling(materialCountNeeded);
         }
+
+
     }
 }

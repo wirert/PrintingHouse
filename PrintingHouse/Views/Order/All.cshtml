@@ -1,15 +1,17 @@
-﻿@model IEnumerable<OrderViewModel>
+﻿@using PrintingHouse.Infrastructure.Data.Entities.Enums;
+@model IEnumerable<OrderViewModel>
 
 
-<h1>@ViewBag.Title</h1>
+
 
 
 <div class="row">
     <div class="table-responsive col-sm-12">
+        <h1>All Orders</h1>
         <table style="font-size:small" id="orders-table" class="table table-bordered table-hover dataTable dtr-inline" aria-describedby="example2_info">
             <thead style="font-size:x-small" class="table-dark">
                 <tr>
-                    <th class="order" data-field="No" scope="col"><a href="#">No.</a></th>
+                    <th class="order" data-field="No" scope="col">No.</th>
                     <th class ="order" data-field="CreatedOn" scope="col">Created on</th>
                     <th class="order" data-field="Status" scope="col">Status</th>
                     <th class="order" scope="col">Article No.</th>
@@ -26,7 +28,7 @@
                     <th class="order" scope="col">Expected time needed</th>
                     <th class="order" scope="col">Color model</th>
                     <th class="order" scope="col">Comment</th>
-                    <th class="order" scope="col">Actions</th>
+                    <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,9 +55,18 @@
                         <td>
                             @if (User.IsInRole(Admin) || User.IsInRole(Merchant))
                             {
+                                <form asp-controller="Order" asp-action="ChangeStatus" method="get">
+                                    <input name="id" type="hidden" value="@order.Id" />
+                                    <input asp-for="@order.Status" type="hidden" value="@OrderStatus.InProgress" >
+                                    <button class="btn btn-sm btn-success" title="Start" type="submit"><i class="fa-solid fa-play"></i></button>
+                                </form>
                                 <form asp-controller="Article" asp-action="Edit" method="get">
                                     <input name="id" type="hidden" value="@order.Id" />
-                                    <button class="btn btn-sm btn-warning" title="Edit" type="submit"><i class="fa fa-edit"></i></button>
+                                    <button class="btn btn-sm btn-warning" title="Cancel" type="submit"><i class="fa-solid fa-ban"></i></button>
+                                </form>
+                                <form asp-controller="Article" asp-action="Edit" method="get">
+                                    <input name="id" type="hidden" value="@order.Id" />
+                                    <button class="btn btn-sm btn-danger" title="Cancel" type="submit"><i class="fa-solid fa-ban"></i></button>
                                 </form>
                             }
                         </td>
@@ -79,6 +90,10 @@
             }
             .order-active span {
                 visibility: visible;
+            }
+
+            th.order{
+                cursor: pointer
             }
         `
         document.head.appendChild(styleSheet)

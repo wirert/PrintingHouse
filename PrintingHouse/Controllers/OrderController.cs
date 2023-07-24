@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Mvc;
     using PrintingHouse.Core.Models.Order;
     using PrintingHouse.Core.Services.Contracts;
+    using PrintingHouse.Infrastructure.Data.Entities.Enums;
     using static Core.Constants.MessageConstants;
 
     public class OrderController : Controller
@@ -80,6 +81,23 @@
 
                 return RedirectToAction("All", "Article");
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeStatus(int id, OrderStatus status)
+        {
+            try
+            {
+                await orderService.ChangeStatusAsync(id, status);
+
+                TempData[SuccessMessage] = $"Status changed to {status}";
+            }
+            catch (Exception)
+            {
+                TempData[WarningMessage] = "Problem occurred! Try again.";
+            }
+
+            return RedirectToAction("All");
         }
     }
 }
