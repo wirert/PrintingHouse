@@ -42,19 +42,19 @@
                     <td>
                         <form asp-controller="Article" asp-action="Edit" method="get">
                             <input name="id" type="hidden" value="@article.Id" />
-                            <button class="btn btn-lg btn-warning" type="submit">Edit</button>
+                            <button class="btn btn-sm btn-warning" title="Edit" type="submit"><i class="fa fa-edit"></i></button>
                         </form>
                     </td>
                     <td>
                         <form asp-controller="Article" asp-action="Delete" method="get">
                             <input name="id" type="hidden" value="@article.Id" />
-                            <button class="btn btn-sm btn-danger" type="submit">Delete Article</button>
+                            <button class="btn btn-sm btn-danger" title="Delete" type="submit"><i class="fa fa-trash"></i></button>
                         </form>
                     </td>
                     <td>
                         <form asp-controller="Order" asp-action="Create" method="get">
                             <input name="articleId" type="hidden" value="@article.Id" />
-                            <button class="btn btn-sm btn-success" type="submit">Add new order</button>
+                            <button class="btn btn-sm btn-success" title="Add new order" type="submit"><i class="fa-regular fa-square-plus"></i></button>
                         </form>
                     </td>
                 }

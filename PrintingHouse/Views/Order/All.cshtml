@@ -3,77 +3,121 @@
 
 <h1>@ViewBag.Title</h1>
 
-<div class="table-responsive-sm">
-    <table class="table table-sm">
-        <caption>List of orders</caption>
-        <thead class="text-sm">
-            <tr>
-                <th scope="col">No.</th>
-                <th scope="col">Created on</th>
-                <th scope="col">Status</th>
-                <th scope="col">Article No.</th>
-                <th scope="col">Article</th>
-                <th scope="col">Material</th>
-                <th scope="col">Width (m)</th>
-                <th scope="col">Client</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Embedded material (count)</th>
-                <th scope="col">Printed material (pieces or m)</th>
-                <th scope="col">Scrapped</th>
-                <th scope="col">Deadline</th>
-                <th scope="col">Expected print date</th>
-                <th scope="col">Expected time needed</th>
-                <th scope="col">Color model</th>
-                <th scope="col">Comment</th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var order in Model)
-            {
+
+<div class="row">
+    <div class="table-responsive col-sm-12">
+        <table style="font-size:small" id="orders-table" class="table table-bordered table-hover dataTable dtr-inline" aria-describedby="example2_info">
+            <thead style="font-size:x-small" class="table-dark">
                 <tr>
-                    <td>@order.Id</td>
-                    <td>@order.OrderTime</td>
-                    <td>@order.Status</td>
-                    <td>@order.ArticleNo</td>
-                    <td>@order.ArticleName</td>
-                    <td>@order.Material</td>
-                    <td>@order.Width</td>
-                    <td>@order.ClientName</td>
-                    <td>@order.Quantity</td>
-                    <td>@order.EmbeddedMaterialCount</td>
-                    <td>@order.MaterialQuantity</td>
-                    <td>@order.ScrappedMaterial %</td>
-                    <td>@order.EndDate</td>
-                    <td>@order.ExpectedPrintDate</td>
-                    <td>@order.ExpectedPrintTime</td>
-                    <td>@order.ColorModel</td>
-                    <td>@order.Comment</td>
-                    @if (User.IsInRole(Admin) || User.IsInRole(Merchant))
-                    {
-                        <td>
-                            <form asp-controller="Article" asp-action="Edit" method="get">
-                                <input name="id" type="hidden" value="@order.Id" />
-                                <button class="btn btn-lg btn-warning" type="submit">Edit</button>
-                            </form>
-                        </td>
-                        <td>
-                            <form asp-controller="Article" asp-action="Delete" method="get">
-                                <input name="id" type="hidden" value="@order.Id" />
-                                <button class="btn btn-sm btn-danger" type="submit">Delete Article</button>
-                            </form>
-                        </td>
-                        <td>
-                            <form asp-controller="Order" asp-action="Create" method="get">
-                                <input name="articleId" type="hidden" value="@order.Id" />
-                                <button class="btn btn-sm btn-success" type="submit">Add new order</button>
-                            </form>
-                        </td>
-                    }
+                    <th class="order" data-field="No" scope="col"><a href="#">No.</a></th>
+                    <th class ="order" data-field="CreatedOn" scope="col">Created on</th>
+                    <th class="order" data-field="Status" scope="col">Status</th>
+                    <th class="order" scope="col">Article No.</th>
+                    <th class="order" scope="col">Article</th>
+                    <th class="order" scope="col">Material</th>
+                    <th class="order" scope="col">Width (m)</th>
+                    <th class="order" scope="col">Client</th>
+                    <th class="order" scope="col">Quantity</th>
+                    <th class="order" scope="col">Embedded material (count)</th>
+                    <th class="order" scope="col">Printed material (pieces or m)</th>
+                    <th class="order" scope="col">Scrapped (%)</th>
+                    <th class="order" scope="col">Deadline</th>
+                    <th class="order" scope="col">Expected print date</th>
+                    <th class="order" scope="col">Expected time needed</th>
+                    <th class="order" scope="col">Color model</th>
+                    <th class="order" scope="col">Comment</th>
+                    <th class="order" scope="col">Actions</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>@order.Id</td>
+                        <td>@order.OrderTime</td>
+                        <td>@order.Status</td>
+                        <td>@order.ArticleNo</td>
+                        <td>@order.ArticleName</td>
+                        <td>@order.Material</td>
+                        <td>@order.Width</td>
+                        <td>@order.ClientName</td>
+                        <td>@order.Quantity</td>
+                        <td>@order.EmbeddedMaterialCount</td>
+                        <td>@order.MaterialQuantity</td>
+                        <td>@order.ScrappedMaterial %</td>
+                        <td>@order.EndDate</td>
+                        <td>@order.ExpectedPrintDate</td>
+                        <td>@order.ExpectedPrintTime</td>
+                        <td>@order.ColorModel</td>
+                        <td>@order.Comment</td>
+                        <td>
+                            @if (User.IsInRole(Admin) || User.IsInRole(Merchant))
+                            {
+                                <form asp-controller="Article" asp-action="Edit" method="get">
+                                    <input name="id" type="hidden" value="@order.Id" />
+                                    <button class="btn btn-sm btn-warning" title="Edit" type="submit"><i class="fa fa-edit"></i></button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
 </div>
 
+<script>
+    function table_sort() {
+        const styleSheet = document.createElement('style')
+        styleSheet.innerHTML = `
+            .order-inactive span {
+                visibility:hidden;
+            }
+            .order-inactive:hover span {
+                visibility:visible;
+            }
+            .order-active span {
+                visibility: visible;
+            }
+        `
+        document.head.appendChild(styleSheet)
+
+        document.querySelectorAll('th.order').forEach(th_elem => {
+            let asc = true
+            const span_elem = document.createElement('span')
+            span_elem.style = "font-size:0.8rem; margin-left:0.5rem"
+            span_elem.innerHTML = "▼"
+            th_elem.appendChild(span_elem)
+            th_elem.classList.add('order-inactive')
+
+            const index = Array.from(th_elem.parentNode.children).indexOf(th_elem)
+            th_elem.addEventListener('click', (e) => {
+                document.querySelectorAll('th.order').forEach(elem => {
+                    elem.classList.remove('order-active')
+                    elem.classList.add('order-inactive')
+                })
+                th_elem.classList.remove('order-inactive')
+                th_elem.classList.add('order-active')
+
+                if (!asc) {
+                    th_elem.querySelector('span').innerHTML = '▲'
+                } else {
+                    th_elem.querySelector('span').innerHTML = '▼'
+                }
+                const arr = Array.from(th_elem.closest("table").querySelectorAll('tbody tr'))
+                arr.sort((a, b) => {
+                    const a_val = a.children[index].innerText
+                    const b_val = b.children[index].innerText
+                    return (asc) ? a_val.localeCompare(b_val) : b_val.localeCompare(a_val)
+                })
+                arr.forEach(elem => {
+                    th_elem.closest("table").querySelector("tbody").appendChild(elem)
+                })
+                asc = !asc
+            })
+        })
+    }
+
+    table_sort()
+</script>
