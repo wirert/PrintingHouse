@@ -11,7 +11,6 @@
     using Infrastructure.Data.Common.Contracts;
     using Infrastructure.Data.Entities;
     using Infrastructure.Data.Entities.Enums;
-    using PrintingHouse.Core.Models.Material;
 
     public class MachineService : IMachineService
     {

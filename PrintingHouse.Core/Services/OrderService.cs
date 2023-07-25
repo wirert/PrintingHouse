@@ -6,7 +6,6 @@
 
     using Microsoft.EntityFrameworkCore;
 
-    using Constants;
     using Contracts;
     using Infrastructure.Data.Common.Contracts;
     using Infrastructure.Data.Entities;
@@ -98,15 +97,16 @@
                 Article = article,
                 EndDate = model.EndDate,
                 Comment = model.Comment,
-                Quantity = model.Quantity,
-
+                Quantity = model.Quantity                
             };
 
             order.Status = TakeMaterialsAndColorsIfAvailable(article, model.Quantity) ? OrderStatus.Waiting : OrderStatus.NoConsumable;
 
             var machine = article.MaterialColorModel.Machines
+                .Where(m => m.Status == MachineStatus.Working)
                 .OrderBy(m => m.OrdersQueue.LastOrDefault(order).ExpectedPrintDate)
                 .ThenBy(m => m.OrdersQueue.Count)
+                .ThenBy(m => m.PrintTime)
                 .FirstOrDefault();
 
             if (machine == null)
@@ -140,7 +140,7 @@
                         case OrderStatus.Waiting:
                             break;
                         case OrderStatus.InProgress:
-                            var machineOrders  = await repo.AllReadonly<Order>(o => o.MachineId == order.MachineId).ToArrayAsync();
+                            var machineOrders = await repo.AllReadonly<Order>(o => o.MachineId == order.MachineId).ToArrayAsync();
 
                             if (machineOrders.Any(o => o.Status == OrderStatus.InProgress))
                             {
@@ -150,26 +150,36 @@
                             break;
                         case OrderStatus.Canceled:
 
-                            var articleToCancel = await repo.All<Article>(a => a.Id == order.ArticleId)
+                            var articleOrderToCancel = await repo.All<Article>(a => a.Id == order.ArticleId)
                                 .Include(a => a.MaterialColorModel)
                                 .ThenInclude(mc => mc.Material)
                                 .Include(a => a.ArticleColors)
                                 .ThenInclude(ac => ac.Color)
                                 .FirstAsync();
-                            var materialCount = this.CalculateNeededOrderMaterialUnits(articleToCancel, order.Quantity);
+                            var materialCount = this.CalculateNeededOrderMaterialUnits(articleOrderToCancel, order.Quantity);
 
-                            articleToCancel.MaterialColorModel.Material.InStock += materialCount;
+                            articleOrderToCancel.MaterialColorModel.Material.InStock += materialCount;
 
-                            foreach (ArticleColor color in articleToCancel.ArticleColors)
+                            foreach (ArticleColor color in articleOrderToCancel.ArticleColors)
                             {
                                 int returnColorQuantiry = (int)Math.Ceiling(color.ColorQuantity * order.Quantity);
 
                                 color.Color.InStock += returnColorQuantiry;
                             }
-                            order.MachineId = null;
-                            break;
+
+                            order.MachineId = null;                            
+                            order.Status = status;
+
+                            await repo.SaveChangesAsync();
+
+                            int materialId = articleOrderToCancel.MaterialId;
+                            int colorModelId = articleOrderToCancel.ColorModelId;
+
+                            await RearangeAllOrderOfParticularTypeAsync(materialId, colorModelId);
+
+                            return;
                         default:
-                            throw new ArgumentException("Can't change to this status!");                            
+                            throw new ArgumentException("Can't change to this status!");
                     }
                     order.Status = status;
                     break;
@@ -185,7 +195,7 @@
                             order.MachineId = null;
                             order.Status = status;
                             break;
-                        default:                            
+                        default:
                             order.Status = this.TakeMaterialsAndColorsIfAvailable(article, order.Quantity) ? status : OrderStatus.NoConsumable;
                             break;
                     }
@@ -197,7 +207,7 @@
                         case OrderStatus.Canceled:
                             order.MachineId = null;
                             break;
-                        case OrderStatus.InProgress:                            
+                        case OrderStatus.InProgress:
                             break;
                         default:
                             throw new ArgumentException("This order is printing!");
@@ -211,15 +221,69 @@
             await repo.SaveChangesAsync();
         }
 
+        private async Task RearangeAllOrderOfParticularTypeAsync(int materialId, int colorModelId, int? orderId = null)
+        {
+            var orders = await repo
+                .All<Order>(o => o.Article.MaterialId == materialId
+                              && o.Article.ColorModelId == colorModelId
+                             && (o.Status == OrderStatus.Waiting || o.Status == OrderStatus.NoConsumable))
+                .Include(o => o.Article)
+                .OrderBy(o => o.OrderTime)
+                .ToListAsync();
+
+            var machines = await repo
+                .All<Machine>(m => m.MaterialId == materialId
+                                && m.ColorModelId == colorModelId
+                                && m.Status == MachineStatus.Working)
+                .ToListAsync();
+
+            foreach (var order in orders)
+            {
+                order.MachineId = null;
+                order.Machine = null;                
+            }
+
+            foreach (var machine in machines)
+            {
+                machine.OrdersQueue.Clear();
+            }
+
+            if (orderId != null)
+            {
+                var priorityOrder = orders.First(o => o.Id == orderId);
+                priorityOrder.Machine = machines.OrderBy(m => m.PrintTime).First();
+                priorityOrder.ExpectedPrintTime = priorityOrder.Machine.PrintTime * priorityOrder.Quantity * priorityOrder.Article.Length / priorityOrder.Machine.MaterialPerPrint;
+
+                SetExpectedPrintDate(priorityOrder);
+            }
+
+            foreach (var order in orders.Where(o => o.Id != orderId))
+            {
+                order.Machine = machines
+                            .OrderBy(m => m.OrdersQueue.LastOrDefault(order).ExpectedPrintDate)
+                            .ThenBy(m => m.OrdersQueue.Count)
+                            .ThenBy(m => m.PrintTime)
+                            .First();
+                order.ExpectedPrintTime = order.Machine.PrintTime * order.Quantity * order.Article.Length / order.Machine.MaterialPerPrint;
+
+                SetExpectedPrintDate(order);
+            }
+
+            await repo.SaveChangesAsync();
+        }
+
         /// <summary>
         /// Set expected print date according print time and other orders
         /// </summary>
         /// <param name="order">The order</param>
-        private static void SetExpectedPrintDate(Order order)
+        private void SetExpectedPrintDate(Order order)
         {
-            var lastOrderInMachine = order.Machine!.OrdersQueue.LastOrDefault();
+            var lastOrderInMachine = order.Machine!.OrdersQueue.OrderBy(o => o.Id).LastOrDefault();
 
-            if (lastOrderInMachine == null)
+            if (lastOrderInMachine == null
+                || DateTime.UtcNow.Hour >= 18
+                || lastOrderInMachine.ExpectedPrintDate < DateTime.UtcNow.Date
+                || lastOrderInMachine.ExpectedPrintTime > TimeSpan.FromHours(10d))
             {
                 order.ExpectedPrintDate = DateTime.UtcNow.Date;
 
@@ -241,6 +305,7 @@
             {
                 var ordersForDay = order.Machine.OrdersQueue
                     .Where(o => o.ExpectedPrintDate == lastOrderInMachine.ExpectedPrintDate)
+                    .OrderBy(o => o.Id)
                     .ToList();
 
                 TimeSpan totalPrintTimeNeeded = TimeSpan.Zero;

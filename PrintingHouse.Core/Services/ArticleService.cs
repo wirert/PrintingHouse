@@ -7,7 +7,6 @@
     using Microsoft.EntityFrameworkCore;
 
     using Contracts;
-    using Constants;
     using Models.Article;
     using Models.ColorModel;
     using Models.Material;
@@ -220,8 +219,6 @@
             else
             {
                 article.ArticleColors.Clear();
-
-
 
                 repo.DeleteRange(articleColors);
 

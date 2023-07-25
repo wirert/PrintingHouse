@@ -23,7 +23,7 @@
                                 <span class="order-status">@order.Status</span>
                                 <div class="ms-2">
                                     <h6 class="mb-0">#@order.Id: @order.ArticleNo. @order.ArticleName</h6>
-                                    <div class="d-flex flex-row mt-1 text-black-50 date-time">
+                                    <div class="d-flex flex-row mt-1 text-black-50 machine-date-time">
                                         <div><i class="fa-regular fa-calendar"></i><span class="ms-2">@order.ExpectedPrintDate, Expected time: @currentTime</span></div>
                                         <div class="ms-3"><i class="fa-regular fa-clock"></i><span class="ms-2">@order.ExpectedPrintTime</span></div>
                                     </div>
@@ -37,17 +37,17 @@
                                         <form asp-controller="Order" asp-action="ChangeStatus" method="post">
                                             <input name="id" type="hidden" value="@order.Id" />
                                             <input name="status" type="hidden" value="@OrderStatus.InProgress">
-                                            <button class="btn btn-sm btn-success rounded-circle" width="30" title="Print" type="submit"><i class="fa-solid fa-play"></i></button>
+                                            <button class="btn btn-sm btn-success rounded-circle me-2" width="35" title="Print" type="submit"><i class="fa-solid fa-play"></i></button>
                                         </form>
                                         <form asp-controller="Order" asp-action="ChangeStatus" method="post">
                                             <input name="id" type="hidden" value="@order.Id" />
                                             <input name="status" type="hidden" value="@OrderStatus.Completed">
-                                            <button class="btn btn-sm btn-warning rounded-circle" width="30" title="Complete" type="submit"><i class="fa-solid fa-circle-stop"></i></button>
+                                            <button class="btn btn-sm btn-warning rounded-circle me-2" width="35" title="Complete" type="submit"><i class="fa-solid fa-circle-stop"></i></button>
                                         </form>
                                         <form asp-controller="Order" asp-action="ChangeStatus" method="post">
                                             <input name="id" type="hidden" value="@order.Id" />
                                             <input name="status" type="hidden" value="@OrderStatus.Canceled">
-                                            <button class="btn btn-sm btn-danger rounded-circle" width="30" title="Cancel" type="submit"><i class="fa-solid fa-ban"></i></button>
+                                            <button class="btn btn-sm btn-danger rounded-circle me-2" width="35" title="Cancel" type="submit"><i class="fa-solid fa-ban"></i></button>
                                         </form>
                                     }
                                 </div>
