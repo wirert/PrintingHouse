@@ -17,3 +17,30 @@ html {
 body {
     /*margin-bottom: 60px;*/
 }
+
+.machine-icons i {
+    color: #b5b3b3;
+    border: 1px solid #b5b3b3;
+    padding: 6px;
+    margin-left: 4px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.machine-activity-done {
+    font-weight: 600;
+}
+
+.machine-list li {
+    list-style: none;
+    padding: 10px;
+    border: 1px solid #e3dada;
+    margin-top: 12px;
+    border-radius: 5px;
+    background: #fff;
+}
+
+.machine-date-time {
+    font-size: 12px;
+}
+

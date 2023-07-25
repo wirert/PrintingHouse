@@ -12,7 +12,7 @@
             <thead style="font-size:x-small" class="table-dark">
                 <tr>
                     <th class="order" data-field="No" scope="col">No.</th>
-                    <th class ="order" data-field="CreatedOn" scope="col">Created on</th>
+                    <th class="order" data-field="CreatedOn" scope="col">Created on</th>
                     <th class="order" data-field="Status" scope="col">Status</th>
                     <th class="order" scope="col">Article No.</th>
                     <th class="order" scope="col">Article</th>
@@ -55,21 +55,23 @@
                         <td>
                             @if (User.IsInRole(Admin) || User.IsInRole(Merchant))
                             {
-                                <form asp-controller="Order" asp-action="ChangeStatus" method="post">
-                                    <input name="id" type="hidden" value="@order.Id" />
-                                    <input name="status" type="hidden" value="@OrderStatus.InProgress" >
-                                    <button class="btn btn-sm btn-success" title="Print" type="submit"><i class="fa-solid fa-play"></i></button>
-                                </form>
-                                <form asp-controller="Order" asp-action="ChangeStatus" method="post">
-                                    <input name="id" type="hidden" value="@order.Id" />
-                                    <input name="status" type="hidden" value="@OrderStatus.Completed">
-                                    <button class="btn btn-sm btn-warning" title="Complete" type="submit"><i class="fa-solid fa-circle-stop"></i></button>
-                                </form>
-                                <form asp-controller="Order" asp-action="ChangeStatus" method="post">
-                                    <input name="id" type="hidden" value="@order.Id" />
-                                    <input name="status" type="hidden" value="@OrderStatus.Canceled">
-                                    <button class="btn btn-sm btn-danger" title="Cancel" type="submit"><i class="fa-solid fa-ban"></i></button>
-                                </form>
+                                <div class="d-flex">
+                                    <form asp-controller="Order" asp-action="ChangeStatus" method="post">
+                                        <input name="id" type="hidden" value="@order.Id" />
+                                        <input name="status" type="hidden" value="@OrderStatus.InProgress">
+                                        <button class="btn btn-sm btn-success m-1" title="Print" type="submit"><i class="fa-solid fa-play"></i></button>
+                                    </form>
+                                    <form asp-controller="Order" asp-action="ChangeStatus" method="post">
+                                        <input name="id" type="hidden" value="@order.Id" />
+                                        <input name="status" type="hidden" value="@OrderStatus.Completed">
+                                        <button class="btn btn-sm btn-warning m-1" title="Complete" type="submit"><i class="fa-solid fa-circle-stop"></i></button>
+                                    </form>
+                                    <form asp-controller="Order" asp-action="ChangeStatus" method="post">
+                                        <input name="id" type="hidden" value="@order.Id" />
+                                        <input name="status" type="hidden" value="@OrderStatus.Canceled">
+                                        <button class="btn btn-sm btn-danger m-1" title="Cancel" type="submit"><i class="fa-solid fa-ban"></i></button>
+                                    </form>
+                                </div>
                             }
                         </td>
                     </tr>
@@ -90,44 +92,44 @@
         var currentText = node.childNodes[0].nodeValue;
 
         //check for 'one' and assign this table cell's background color accordingly
-        if (currentText === "Canceled"){
+        if (currentText === "Canceled") {
             node.style.color = "red";
             node.style.fontWeight = "bold";
-        }           
-        else if (currentText === "InProgress"){
+        }
+        else if (currentText === "InProgress") {
             node.style.color = "blue";
             node.style.fontWeight = "bold";
         }
-        else if (currentText === "Completed"){
+        else if (currentText === "Completed") {
             node.style.color = "green";
             node.style.fontWeight = "bold";
         }
-        else if (currentText === "Waiting"){
+        else if (currentText === "Waiting") {
             node.style.color = "orange";
             node.style.fontWeight = "bold";
-            
+
         }
-    }    
+    }
 </script>
 
 <script>
     function table_sort() {
         const styleSheet = document.createElement('style')
         styleSheet.innerHTML = `
-            .order-inactive span {
-                visibility:hidden;
-            }
-            .order-inactive:hover span {
-                visibility:visible;
-            }
-            .order-active span {
-                visibility: visible;
-            }
+                .order-inactive span {
+                    visibility:hidden;
+                }
+                .order-inactive:hover span {
+                    visibility:visible;
+                }
+                .order-active span {
+                    visibility: visible;
+                }
 
-            th.order{
-                cursor: pointer
-            }
-        `
+                th.order{
+                    cursor: pointer
+                }
+            `
         document.head.appendChild(styleSheet)
 
         document.querySelectorAll('th.order').forEach(th_elem => {

@@ -6,51 +6,91 @@
     TimeSpan currentTime = TimeSpan.FromHours(8d);
 }
 
-<div class="row d-flex justify-content-center mt-70 mb-70">
-
-    <div class="col-md-6">
-
-        <div class="main-card mb-3 card">
-            <div class="card-body">
-                <h5 class="card-title">Machine schedule</h5>
-                <div class="vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
-
-
-                    @foreach (var order in Model.Orders.Where(o => o.ExpectedPrintDate == DateTime.UtcNow.Date))
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center activity">
+                <div><i class="fa fa-clock-o"></i><span class="ms-2">11h 25m</span></div>
+                <div><span class="machine-activity-done">Done Activities(4)</span></div>
+                <div class="machine-icons"><i class="fa fa-search"></i><i class="fa fa-ellipsis-h"></i></div>
+            </div>
+            <div class="mt-3">
+                <ul class="machine-list list-inline">
+                    @foreach (var order in Model.Orders)
                     {
-
-                        <div class="vertical-timeline-item vertical-timeline-element">
-                            <div>
-                                <span class="vertical-timeline-element-icon bounce-in">
-                                    <i class="badge badge-dot badge-dot-xl badge-success"></i>
-                                </span>
-                                <div class="vertical-timeline-element-content bounce-in">
-                                    <h4 class="timeline-title">@order.Id</h4>
-                                    <h4 class="timeline-title">@order.ArticleName</h4>
-                                    <p>
-                                        @order.EndDate
-                                        @order.EndDate
-
-                                    </p>
-                                    <span class="vertical-timeline-element-date">@currentTime</span>
+                        <li class="d-flex justify-content-between">
+                            <div class="d-flex flex-row align-items-center">
+                                <span class="order-status">@order.Status</span>
+                                <div class="ms-2">
+                                    <h6 class="mb-0">#@order.Id: @order.ArticleNo. @order.ArticleName</h6>
+                                    <div class="d-flex flex-row mt-1 text-black-50 date-time">
+                                        <div><i class="fa-regular fa-calendar"></i><span class="ms-2">@order.ExpectedPrintDate, Expected time: @currentTime</span></div>
+                                        <div class="ms-3"><i class="fa-regular fa-clock"></i><span class="ms-2">@order.ExpectedPrintTime</span></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        currentTime += order.ExpectedPrintTime;
+                            <div class="d-flex flex-column mr-2">
+                                <div class="d-flex flex-row">
+                                    @if (User.IsInRole(Admin) || User.IsInRole(Merchant))
+                                    {
+                                        <form asp-controller="Order" asp-action="ChangeStatus" method="post">
+                                            <input name="id" type="hidden" value="@order.Id" />
+                                            <input name="status" type="hidden" value="@OrderStatus.InProgress">
+                                            <button class="btn btn-sm btn-success rounded-circle" width="30" title="Print" type="submit"><i class="fa-solid fa-play"></i></button>
+                                        </form>
+                                        <form asp-controller="Order" asp-action="ChangeStatus" method="post">
+                                            <input name="id" type="hidden" value="@order.Id" />
+                                            <input name="status" type="hidden" value="@OrderStatus.Completed">
+                                            <button class="btn btn-sm btn-warning rounded-circle" width="30" title="Complete" type="submit"><i class="fa-solid fa-circle-stop"></i></button>
+                                        </form>
+                                        <form asp-controller="Order" asp-action="ChangeStatus" method="post">
+                                            <input name="id" type="hidden" value="@order.Id" />
+                                            <input name="status" type="hidden" value="@OrderStatus.Canceled">
+                                            <button class="btn btn-sm btn-danger rounded-circle" width="30" title="Cancel" type="submit"><i class="fa-solid fa-ban"></i></button>
+                                        </form>
+                                    }
+                                </div>
+                                <span class="machine-date-time">11/4/2020 12:55</span>
+                            </div>
+                        </li>
                     }
-                </div>
+
+                </ul>
             </div>
         </div>
     </div>
 </div>
 
-@section Scripts{
-    <link rel="stylesheet" href="~/css/Machines.css" />
-}
+<script>
+    var allTableCells = document.getElementsByClassName("order-status");
 
+    for (var i = 0, max = allTableCells.length; i < max; i++) {
+        var node = allTableCells[i];
 
+        //get the text from the first child node - which should be a text node
+        var currentText = node.childNodes[0].nodeValue;
 
+        //check for 'one' and assign this table cell's background color accordingly
+        if (currentText === "Canceled") {
+            node.style.color = "red";
+            node.style.fontWeight = "bold";
+        }
+        else if (currentText === "InProgress") {
+            node.style.color = "blue";
+            node.style.fontWeight = "bold";
+        }
+        else if (currentText === "Completed") {
+            node.style.color = "green";
+            node.style.fontWeight = "bold";
+        }
+        else if (currentText === "Waiting") {
+            node.style.color = "orange";
+            node.style.fontWeight = "bold";
+
+        }
+    }
+</script>
 
 @*<div class="row">
     <div class="table-responsive col-sm-12">
@@ -100,24 +140,7 @@
                         <td>@order.ColorModel</td>
                         <td>@order.Comment</td>
                         <td>
-                            @if (User.IsInRole(Admin) || User.IsInRole(Merchant))
-                            {
-                                <form asp-controller="Order" asp-action="ChangeStatus" method="post">
-                                    <input name="id" type="hidden" value="@order.Id" />
-                                    <input name="status" type="hidden" value="@OrderStatus.InProgress" >
-                                    <button class="btn btn-sm btn-success" title="Print" type="submit"><i class="fa-solid fa-play"></i></button>
-                                </form>
-                                <form asp-controller="Order" asp-action="ChangeStatus" method="post">
-                                    <input name="id" type="hidden" value="@order.Id" />
-                                    <input name="status" type="hidden" value="@OrderStatus.Completed">
-                                    <button class="btn btn-sm btn-warning" title="Complete" type="submit"><i class="fa-solid fa-circle-stop"></i></button>
-                                </form>
-                                <form asp-controller="Order" asp-action="ChangeStatus" method="post">
-                                    <input name="id" type="hidden" value="@order.Id" />
-                                    <input name="status" type="hidden" value="@OrderStatus.Canceled">
-                                    <button class="btn btn-sm btn-danger" title="Cancel" type="submit"><i class="fa-solid fa-ban"></i></button>
-                                </form>
-                            }
+
                         </td>
                     </tr>
                 }
@@ -140,7 +163,7 @@
         if (currentText === "Canceled"){
             node.style.color = "red";
             node.style.fontWeight = "bold";
-        }           
+        }
         else if (currentText === "InProgress"){
             node.style.color = "blue";
             node.style.fontWeight = "bold";
@@ -152,9 +175,9 @@
         else if (currentText === "Waiting"){
             node.style.color = "orange";
             node.style.fontWeight = "bold";
-            
+
         }
-    }    
+    }
 </script>
 
 <script>
