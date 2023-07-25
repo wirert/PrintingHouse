@@ -92,6 +92,10 @@
 
                 TempData[SuccessMessage] = $"Status changed to {status}";
             }
+            catch (ArgumentException ae)
+            {
+                TempData[WarningMessage] = ae.Message;
+            }
             catch (Exception)
             {
                 TempData[WarningMessage] = "Problem occurred! Try again.";

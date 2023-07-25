@@ -129,7 +129,7 @@
 
             if (order == null)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Error finding order");
             }
 
             switch (order.Status)
@@ -138,7 +138,15 @@
                     switch (status)
                     {
                         case OrderStatus.Waiting:
+                            break;
                         case OrderStatus.InProgress:
+                            var machineOrders  = await repo.AllReadonly<Order>(o => o.MachineId == order.MachineId).ToArrayAsync();
+
+                            if (machineOrders.Any(o => o.Status == OrderStatus.InProgress))
+                            {
+                                throw new ArgumentException("The machine is buzy! Wait to finish current print.");
+                            }
+
                             break;
                         case OrderStatus.Canceled:
 
@@ -161,7 +169,7 @@
                             order.MachineId = null;
                             break;
                         default:
-                            throw new ArgumentException();                            
+                            throw new ArgumentException("Can't change to this status!");                            
                     }
                     order.Status = status;
                     break;
@@ -170,7 +178,7 @@
                     switch (status)
                     {
                         case OrderStatus.Completed:
-                            throw new ArgumentException();
+                            throw new ArgumentException("This order is waiting for print!");
                         case OrderStatus.NoConsumable:
                             break;
                         case OrderStatus.Canceled:
@@ -192,12 +200,12 @@
                         case OrderStatus.InProgress:                            
                             break;
                         default:
-                            throw new ArgumentException();
+                            throw new ArgumentException("This order is printing!");
                     }
                     order.Status = status;
                     break;
                 default:
-                    throw new ArgumentException();
+                    throw new ArgumentException("Can't change the status of this order!");
             }
 
             await repo.SaveChangesAsync();

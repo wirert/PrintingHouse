@@ -1,13 +1,60 @@
-﻿@using PrintingHouse.Infrastructure.Data.Entities.Enums;
-@model IEnumerable<OrderViewModel>
+﻿@model MachineOrderViewModel
+
+@using PrintingHouse.Infrastructure.Data.Entities.Enums;
+
+@{
+    TimeSpan currentTime = TimeSpan.FromHours(8d);
+}
+
+<div class="row d-flex justify-content-center mt-70 mb-70">
+
+    <div class="col-md-6">
+
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <h5 class="card-title">Machine schedule</h5>
+                <div class="vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
+
+
+                    @foreach (var order in Model.Orders.Where(o => o.ExpectedPrintDate == DateTime.UtcNow.Date))
+                    {
+
+                        <div class="vertical-timeline-item vertical-timeline-element">
+                            <div>
+                                <span class="vertical-timeline-element-icon bounce-in">
+                                    <i class="badge badge-dot badge-dot-xl badge-success"></i>
+                                </span>
+                                <div class="vertical-timeline-element-content bounce-in">
+                                    <h4 class="timeline-title">@order.Id</h4>
+                                    <h4 class="timeline-title">@order.ArticleName</h4>
+                                    <p>
+                                        @order.EndDate
+                                        @order.EndDate
+
+                                    </p>
+                                    <span class="vertical-timeline-element-date">@currentTime</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        currentTime += order.ExpectedPrintTime;
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <link rel="stylesheet" href="~/css/Machines.css" />
+}
 
 
 
 
-
-<div class="row">
+@*<div class="row">
     <div class="table-responsive col-sm-12">
-        <h1>All Orders</h1>
+        <h1>Orders for @Model.Name</h1>
         <table style="font-size:small" id="orders-table" class="table table-bordered table-hover dataTable dtr-inline" aria-describedby="example2_info">
             <thead style="font-size:x-small" class="table-dark">
                 <tr>
@@ -32,7 +79,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var order in Model)
+                @foreach (var order in Model.Orders)
                 {
                     <tr>
                         <td>@order.Id</td>
@@ -167,4 +214,4 @@
     }
 
     table_sort()
-</script>
+</script>*@

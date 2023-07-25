@@ -33,6 +33,7 @@
             services.AddScoped<IMaterialService, MaterialService>();
             services.AddScoped<IMaterialColorService, MaterialColorService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IMachineService, MachineService>();
 
             return services;
         }

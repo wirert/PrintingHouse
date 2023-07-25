@@ -1,0 +1,39 @@
+﻿@model MachineOrderViewModel
+
+@{
+    TimeSpan currentTime = TimeSpan.FromHours(8d);
+}
+
+
+
+<div class="col-md-6 pt-2">
+    <form method="get">
+        <select asp-for="Id" class="form-control text-center"
+                asp-items="ViewBag.Machines"
+                id="Id" onchange="loadOrders(this)"></select>
+    </form>
+</div>
+
+<div id="machine-partial">
+</div>
+
+
+@section Scripts{
+
+
+    <script>
+        function loadOrders(obj) {
+            var id = obj.value;
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetOrders")",
+                data: { id: id },
+                success: function (viewHTML) {
+                    $("#machine-partial").html(viewHTML);
+                },
+                error: function (errorData) { onError(errorData); }
+            });
+        }
+    </script>
+}
+
