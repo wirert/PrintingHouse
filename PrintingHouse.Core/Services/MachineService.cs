@@ -15,15 +15,17 @@
     public class MachineService : IMachineService
     {
         private readonly IRepository repo;
+        private readonly IOrderService orderService;
 
-        public MachineService(IRepository _repo)
+        public MachineService(IRepository _repo, IOrderService _orderService)
         {
             repo = _repo;
+            orderService = _orderService;
         }
 
         public async Task<MachineOrderViewModel> GetMachineOrdersAsync(int machineId)
         {
-            return await repo
+            var result =  await repo
                 .AllReadonly<Machine>(m => m.Id == machineId && m.Status != MachineStatus.Scrapped)
                 .Select(m => new MachineOrderViewModel()
                 {
@@ -47,13 +49,21 @@
                         MeasureUnit = o.Article.MaterialColorModel.Material.MeasureUnit,
                         Comment = o.Comment,
                         OrderTime = o.OrderTime,
-                        ExpectedPrintTime = o.ExpectedPrintTime,
+                        ExpectedPrintTime = o.ExpectedPrintDuration,
                         Status = o.Status,
                         Quantity = o.Quantity
                     })
+                    .OrderBy(o => o.Status)
                     .ToList(),
                 })
                 .FirstAsync();
+
+            if (result.Orders.Any() == false)
+            {
+                throw new ArgumentException();
+            }
+
+            return result;
         }
 
         public async Task<IEnumerable<MachineSelectViewModel>> GetMachinesIdsAsync()
@@ -74,6 +84,19 @@
             });
 
             return machines;
+        }
+
+        public async Task MoveOrderInFrontAsync(int orderId)
+        {
+           var obj =  await repo.AllReadonly<Order>(o => o.Id == orderId)
+                .Select(o => new
+                {
+                    o.Article.MaterialId,
+                    o.Article.ColorModelId
+                })
+                .FirstAsync();
+
+            await orderService.RearangeAllOrderOfParticularTypeAsync(obj.MaterialId, obj.ColorModelId, orderId);
         }
     }
 }

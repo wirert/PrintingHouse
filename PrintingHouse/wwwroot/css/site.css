@@ -19,6 +19,11 @@ body {
     background: linear-gradient(to bottom, rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 62%,rgba(254,254,254,1) 100%);    
 }
 
+div.machine-info {
+    background-color: dimgray;
+    border-radius: 10px;    
+}
+
 .machine-icons i {
     color: #b5b3b3;
     border: 1px solid #b5b3b3;
@@ -26,10 +31,6 @@ body {
     margin-left: 4px;
     border-radius: 5px;
     cursor: pointer;
-}
-
-.machine-activity-done {
-    font-weight: 600;
 }
 
 .machine-list li {
@@ -42,6 +43,6 @@ body {
 }
 
 .machine-date-time {
-    font-size: 14px;
+    font-size: 12px;
 }
 

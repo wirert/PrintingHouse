@@ -5,10 +5,10 @@
     /// </summary>
     public enum OrderStatus
     {
-        Waiting = 0,
-        InProgress = 1,
-        Completed = 2,
-        NoConsumable = 3,
+        Printing = 0,
+        Waiting = 1,
+        NoConsumable = 2,
+        Completed = 3,
         Canceled = 4
     }
 }

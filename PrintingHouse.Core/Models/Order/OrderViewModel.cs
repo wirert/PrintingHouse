@@ -35,9 +35,9 @@
 
         public DateTime? EndDate { get; set; }
 
-        public DateTime? ExpectedPrintDate { get; set; }
+        public DateTime ExpectedPrintDate { get; set; }
 
-        public TimeSpan? ExpectedPrintTime { get; set; }
+        public TimeSpan ExpectedPrintTime { get; set; }
 
         public OrderStatus Status { get; set; }
 

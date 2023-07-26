@@ -11,11 +11,7 @@
                 
         public string? Model { get; set; }
                 
-        public TimeSpan PrintTime { get; set; }
-
-        public string Material { get; set; } = null!;
-
-        public string ColorModel { get; set; } = null!;
+        public TimeSpan PrintTime { get; set; }        
         
         public double MaterialPerPrint { get; set; }
 

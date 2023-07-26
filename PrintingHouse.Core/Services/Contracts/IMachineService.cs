@@ -7,5 +7,7 @@
         Task<IEnumerable<MachineSelectViewModel>> GetMachinesIdsAsync();
 
         Task<MachineOrderViewModel> GetMachineOrdersAsync(int machineId);
+
+        Task MoveOrderInFrontAsync(int orderId);
     }
 }

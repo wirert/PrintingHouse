@@ -12,5 +12,7 @@
         Task<IEnumerable<OrderViewModel>> GetAllOrdersAsync();
 
         Task ChangeStatusAsync(int id, OrderStatus status);
+
+        Task RearangeAllOrderOfParticularTypeAsync(int materialId, int colorModelId, int? orderId = null);
     }
 }

@@ -1,12 +1,10 @@
-using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 using Minio;
 using Minio.AspNetCore;
 using Minio.AspNetCore.HealthChecks;
-using PrintingHouse.Core.Constants;
+
 using PrintingHouse.Infrastructure.Data;
 using PrintingHouse.Infrastructure.Data.Entities.Account;
 using PrintingHouse.ModelBinders;
@@ -35,7 +33,7 @@ builder.Services.AddControllersWithViews()
     {
         options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
         options.ModelBinderProviders.Insert(1, new DoubleModelBinderProvider());
-        options.ModelBinderProviders.Insert(2, new DateTimeModelBinderProvider(FormattingConstants.DateTimeFormat));
+        //options.ModelBinderProviders.Insert(2, new DateTimeModelBinderProvider(FormattingConstants.DateTimeFormat));
     });
 
 builder.Services.AddAntiforgery(options =>

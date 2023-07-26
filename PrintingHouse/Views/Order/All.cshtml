@@ -2,18 +2,15 @@
 @model IEnumerable<OrderViewModel>
 
 
-
-
-
 <div class="row">
     <div class="table-responsive col-sm-12">
         <h1>All Orders</h1>
         <table style="font-size:small" id="orders-table" class="table table-bordered table-hover dataTable dtr-inline" aria-describedby="example2_info">
             <thead style="font-size:x-small" class="table-dark">
                 <tr>
-                    <th class="order" data-field="No" scope="col">No.</th>
-                    <th class="order" data-field="CreatedOn" scope="col">Created on</th>
-                    <th class="order" data-field="Status" scope="col">Status</th>
+                    <th class="order" scope="col">No.</th>
+                    <th class="order" scope="col">Created on</th>
+                    <th class="order" scope="col">Status</th>
                     <th class="order" scope="col">Article No.</th>
                     <th class="order" scope="col">Article</th>
                     <th class="order" scope="col">Material</th>
@@ -47,30 +44,28 @@
                         <td>@order.EmbeddedMaterialCount</td>
                         <td>@order.MaterialQuantity</td>
                         <td>@order.ScrappedMaterial %</td>
-                        <td>@order.EndDate</td>
-                        <td>@order.ExpectedPrintDate</td>
+                        <td>@order.EndDate?.ToString("d")</td>
+                        <td>@order.ExpectedPrintDate.ToString("d")</td>
                         <td>@order.ExpectedPrintTime</td>
                         <td>@order.ColorModel</td>
                         <td>@order.Comment</td>
                         <td>
                             @if (User.IsInRole(Admin) || User.IsInRole(Merchant))
                             {
-                                <div class="d-flex">
-                                    <form asp-controller="Order" asp-action="ChangeStatus" method="post">
-                                        <input name="id" type="hidden" value="@order.Id" />
-                                        <input name="status" type="hidden" value="@OrderStatus.InProgress">
-                                        <button class="btn btn-sm btn-success m-1" title="Print" type="submit"><i class="fa-solid fa-play"></i></button>
-                                    </form>
-                                    <form asp-controller="Order" asp-action="ChangeStatus" method="post">
-                                        <input name="id" type="hidden" value="@order.Id" />
-                                        <input name="status" type="hidden" value="@OrderStatus.Completed">
-                                        <button class="btn btn-sm btn-warning m-1" title="Complete" type="submit"><i class="fa-solid fa-circle-stop"></i></button>
-                                    </form>
+                                <div class="d-flex flex-column">                                                                    
                                     <form asp-controller="Order" asp-action="ChangeStatus" method="post">
                                         <input name="id" type="hidden" value="@order.Id" />
                                         <input name="status" type="hidden" value="@OrderStatus.Canceled">
-                                        <button class="btn btn-sm btn-danger m-1" title="Cancel" type="submit"><i class="fa-solid fa-ban"></i></button>
+                                        <button class="btn btn-sm btn-danger m-1" title="Cancel order" type="submit"><i class="fa-solid fa-ban"></i></button>
                                     </form>
+                                    @if (order.Status == OrderStatus.NoConsumable)
+                                    {
+                                        <form asp-controller="Order" asp-action="ChangeStatus" method="post">
+                                            <input name="id" type="hidden" value="@order.Id" />
+                                            <input name="status" type="hidden" value="@OrderStatus.Waiting">
+                                            <button class="btn btn-sm btn-warning m-1" title="Take consumables" type="submit"><i class="fas fa-truck-loading"></i></button>
+                                        </form>
+                                    }
                                 </div>
                             }
                         </td>
@@ -86,17 +81,14 @@
     var allTableCells = document.getElementsByClassName("order-status");
 
     for (var i = 0, max = allTableCells.length; i < max; i++) {
-        var node = allTableCells[i];
-
-        //get the text from the first child node - which should be a text node
+        var node = allTableCells[i];                
         var currentText = node.childNodes[0].nodeValue;
-
-        //check for 'one' and assign this table cell's background color accordingly
+                
         if (currentText === "Canceled") {
             node.style.color = "red";
             node.style.fontWeight = "bold";
         }
-        else if (currentText === "InProgress") {
+        else if (currentText === "Printing") {
             node.style.color = "blue";
             node.style.fontWeight = "bold";
         }
@@ -107,7 +99,11 @@
         else if (currentText === "Waiting") {
             node.style.color = "orange";
             node.style.fontWeight = "bold";
-
+        }
+        else {
+            node.style.color = "grey";
+            node.style.fontWeight = "bold";
+            node.style.fontSize = "12px";
         }
     }
 </script>
@@ -116,20 +112,19 @@
     function table_sort() {
         const styleSheet = document.createElement('style')
         styleSheet.innerHTML = `
-                .order-inactive span {
-                    visibility:hidden;
-                }
-                .order-inactive:hover span {
-                    visibility:visible;
-                }
-                .order-active span {
-                    visibility: visible;
-                }
-
-                th.order{
-                    cursor: pointer
-                }
-            `
+                    .order-inactive span {
+                        visibility:hidden;
+                    }
+                    .order-inactive:hover span {
+                        visibility:visible;
+                    }
+                    .order-active span {
+                        visibility: visible;
+                    }
+                    th.order{
+                        cursor: pointer
+                    }
+                `
         document.head.appendChild(styleSheet)
 
         document.querySelectorAll('th.order').forEach(th_elem => {

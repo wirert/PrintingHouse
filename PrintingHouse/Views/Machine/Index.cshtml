@@ -18,8 +18,8 @@
 </div>
 
 
-@section Scripts{
-
+@section Scripts{    
+    <partial name="_ValidationScriptsPartial" />
 
     <script>
         function loadOrders(obj) {
@@ -31,7 +31,9 @@
                 success: function (viewHTML) {
                     $("#machine-partial").html(viewHTML);
                 },
-                error: function (errorData) { onError(errorData); }
+                error: function (response) {
+                    alert(response.responseText);
+                }
             });
         }
     </script>

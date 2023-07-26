@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PrintingHouse.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using PrintingHouse.Infrastructure.Data;
 namespace PrintingHouse.Infrastructure.Migrations
 {
     [DbContext(typeof(PrintingHouseDbContext))]
-    partial class PrintingHouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230726123150_RenameOrderExpectedPrintTime")]
+    partial class RenameOrderExpectedPrintTime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -358,7 +360,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasIndex("MaterialId", "ColorModelId");
 
-                    b.ToTable("Articles", (string)null);
+                    b.ToTable("Articles");
 
                     b.HasComment("Particular client article ready for print.");
                 });
@@ -381,7 +383,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasIndex("ColorId");
 
-                    b.ToTable("ArticleColors", (string)null);
+                    b.ToTable("ArticleColors");
 
                     b.HasComment("Article color with required quantity");
                 });
@@ -430,7 +432,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Clients", (string)null);
+                    b.ToTable("Clients");
 
                     b.HasComment("Printing house client");
                 });
@@ -466,7 +468,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasIndex("ColorModelId");
 
-                    b.ToTable("Color", (string)null);
+                    b.ToTable("Color");
 
                     b.HasComment("Color");
 
@@ -546,7 +548,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ColorModel", (string)null);
+                    b.ToTable("ColorModel");
 
                     b.HasComment("Printing color model");
 
@@ -593,7 +595,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasIndex("PositionId");
 
-                    b.ToTable("Employees", (string)null);
+                    b.ToTable("Employees");
 
                     b.HasComment("Employee entity");
 
@@ -653,7 +655,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasIndex("MaterialId", "ColorModelId");
 
-                    b.ToTable("Machines", (string)null);
+                    b.ToTable("Machines");
 
                     b.HasComment("Printing machine");
 
@@ -743,7 +745,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Materials", (string)null);
+                    b.ToTable("Materials");
 
                     b.HasComment("Мaterial on which it is printed");
 
@@ -797,7 +799,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasIndex("ColorModelId");
 
-                    b.ToTable("MaterialsColorModels", (string)null);
+                    b.ToTable("MaterialsColorModels");
 
                     b.HasComment("Machine material and color model connecting table with article colors");
 
@@ -871,7 +873,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasIndex("MachineId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
 
                     b.HasComment("Order from client for print");
                 });
@@ -897,7 +899,7 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Positions", (string)null);
+                    b.ToTable("Positions");
 
                     b.HasComment("Office position");
 

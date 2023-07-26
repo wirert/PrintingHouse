@@ -26,8 +26,8 @@
                     Id = 1,
                     Type = "Plain paper A2",
                     MeasureUnit = MeasureUnit.Piece,
-                    Width = 0.42,
-                    Lenght = 0.594,
+                    Width = 0.42d,
+                    Lenght = 0.594d,
                     Price = 1m,
                     InStock = 10000
                 },
@@ -46,7 +46,7 @@
                     Id = 3,
                     Type = "Nylon 20cm",
                     MeasureUnit = MeasureUnit.m,
-                    Width = 0.2,
+                    Width = 0.2d,
                     Lenght = 1000,
                     Price = 850m,
                     InStock = 20
