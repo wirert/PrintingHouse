@@ -70,9 +70,7 @@
             var clientArticlesCount = await repo.AllReadonly<Client>(c => c.Id == model.ClientId)
                 .Select(c => c.Articles.Count)
                 .FirstAsync();
-            var rnd = new Random();
-            var fileName = $"{model.Name}_{rnd.Next(10000)}";
-
+           
             var article = new Article()
             {
                 Name = model.Name,                
@@ -80,9 +78,12 @@
                 MaterialId = model.MaterialId,
                 ColorModelId = model.ColorModelId,
                 Length = model.Length,
-                ImageName = fileName,
                 ArticleNumber = $"{model.ClientId}.{clientArticlesCount++}"
             };
+
+            var rnd = new Random();
+            var extention = model.DesignFile!.FileName.Split('.', StringSplitOptions.RemoveEmptyEntries).Last();
+            article.ImageName = $"{article.ArticleNumber}_{rnd.Next(10000)}.{extention}";
 
             foreach (var color in model.Colors)
             {
@@ -94,7 +95,7 @@
                 });
             }
 
-            await fileService.SaveFileAsync(article.Id, fileName, model.DesignFile!);
+            await fileService.SaveFileAsync(article.Id, article.ImageName, model.DesignFile!);
 
             await repo.AddAsync(article);
             await repo.SaveChangesAsync();
@@ -246,7 +247,8 @@
             if (model.DesignFile != null && model.DesignFile.Length > 0)
             {
                 var rnd = new Random();
-                var newFileName = $"{article.Name}_{rnd.Next(10000)}";
+                var extention = model.DesignFile.FileName.Split('.', StringSplitOptions.RemoveEmptyEntries).Last();
+                var newFileName = $"{article.ArticleNumber}_{rnd.Next(10000)}.{extention}";
 
                 await fileService.SaveFileAsync(article.Id, newFileName, model.DesignFile);
 

@@ -11,6 +11,7 @@
     using Infrastructure.Data.Entities;
     using Infrastructure.Data.Entities.Enums;
     using Models.Order;
+    using Microsoft.AspNetCore.Identity;
 
     public class OrderService : IOrderService
     {
@@ -139,7 +140,7 @@
                     {
                         case OrderStatus.Waiting:
                             break;
-                        case OrderStatus.Printing:
+                        case OrderStatus.Printing: 
                             var machineOrders = await repo.AllReadonly<Order>(o => o.MachineId == order.MachineId).ToArrayAsync();
 
                             if (machineOrders.Any(o => o.Status == OrderStatus.Printing))
@@ -209,6 +210,8 @@
                             await RearangeAllOrderOfParticularTypeAsync(materialId, colorModelId);
 
                             return;
+                        case OrderStatus.Printing:
+                            throw new ArgumentException("There is no enough consumables!");
                         default:
                             order.Status = this.TakeMaterialsAndColorsIfAvailable(article, order.Quantity) ? status : OrderStatus.NoConsumable;
                             break;

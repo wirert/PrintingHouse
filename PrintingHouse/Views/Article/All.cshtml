@@ -29,7 +29,7 @@
                 <td>@article.ClientName</td>
                 <td>@article.Material</td>
                 <td>@article.ColorModel</td>
-                <td>                     
+                <td>
                     <form asp-controller="Article" asp-action="Download" method="get">
                         <input name="articleId" type="hidden" value="@article.Id" />
                         <input name="fileName" type="hidden" value="@article.FileName" />

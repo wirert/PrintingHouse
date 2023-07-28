@@ -1,10 +1,12 @@
 ﻿namespace PrintingHouse.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using PrintingHouse.Core.Exceptions;
     using PrintingHouse.Core.Models.Order;
     using PrintingHouse.Core.Services.Contracts;
     using PrintingHouse.Infrastructure.Data.Entities.Enums;
     using static Core.Constants.MessageConstants;
+    using static Core.Constants.RoleNamesConstants;
 
     public class OrderController : Controller
     {
@@ -75,7 +77,7 @@
 
                 return RedirectToAction("All");
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 TempData[ErrorMessage] = "Something went wrong trying to create an order! Try again.";
 
@@ -88,9 +90,35 @@
         {
             try
             {
+                switch (status)
+                {
+                    case OrderStatus.Printing:
+                    case OrderStatus.Completed:
+                        if (User.IsInRole(Printer) == false)
+                        {
+                            throw new StatusPermitionException();
+                        }
+                        break;                        
+                    case OrderStatus.Waiting:
+                    case OrderStatus.NoConsumable:
+                    case OrderStatus.Canceled:
+                        if (User.IsInRole(Admin) == false && 
+                            User.IsInRole(Merchant) == false)
+                        {
+                            throw new StatusPermitionException();
+                        }
+                            break;
+                    default:
+                        throw new StatusPermitionException();
+                }
+
                 await orderService.ChangeStatusAsync(id, status);
 
                 TempData[SuccessMessage] = $"Status changed to {status}";
+            }
+            catch(StatusPermitionException)
+            {
+                TempData[WarningMessage] = "You don't have permission to change to this status";
             }
             catch (ArgumentException ae)
             {

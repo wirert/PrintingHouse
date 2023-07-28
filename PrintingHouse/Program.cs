@@ -24,6 +24,8 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequireNonAlphanumeric = builder.Configuration.GetValue<bool>("Identity:RequireNonAlphanumeric");
     options.Password.RequireLowercase = builder.Configuration.GetValue<bool>("Identity:RequireLowercase");
     options.Password.RequireUppercase = builder.Configuration.GetValue<bool>("Identity:RequireUppercase");
+
+    options.Lockout.MaxFailedAccessAttempts = builder.Configuration.GetValue<int>("Identity:MaxFailedAccessAttempts");
 })
     .AddRoles<IdentityRole<Guid>>()
     .AddEntityFrameworkStores<PrintingHouseDbContext>();
@@ -63,6 +65,7 @@ builder.Services.AddMinio(options =>
 
 builder.Services.ConfigureApplicationCookie(cfg =>
 {
+    cfg.Cookie.HttpOnly = true;
     cfg.LoginPath = "/Account/Login";
 });
 

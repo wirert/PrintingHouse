@@ -56,20 +56,22 @@
                                     <p>Deadline: <span class="text-warning bg-dark">@order.EndDate?.ToString("d")</span></p>
                                 </div>
                             </div>
-
                             <div class="d-inline-flex">
-                                @if (User.IsInRole(Admin) || User.IsInRole(Merchant))
+                                @if (User.IsInRole(Printer))
                                 {
                                     <form asp-controller="Machine" asp-action="ChangeStatus" method="post">
                                         <input name="id" type="hidden" value="@order.Id" />
                                         <input name="status" type="hidden" value="@OrderStatus.Printing">
-                                        <button class="btn btn-success rounded-circle me-2"  title="Print" type="submit"><i class="fas fa-play fa-lg"></i></button>
+                                        <button class="btn btn-success rounded-circle me-2" title="Print" type="submit"><i class="fas fa-play fa-lg"></i></button>
                                     </form>
                                     <form asp-controller="Machine" asp-action="ChangeStatus" method="post">
                                         <input name="id" type="hidden" value="@order.Id" />
                                         <input name="status" type="hidden" value="@OrderStatus.Completed">
                                         <button class="btn btn-warning rounded-circle me-3" title="Complete" type="submit"><i class="fas fa-power-off fa-sm"></i></button>
                                     </form>
+                                }
+                                @if (User.IsInRole(Admin) || User.IsInRole(Merchant))
+                                {                                    
                                     <form asp-controller="Machine" asp-action="MoveInFront" method="post">
                                         <input name="id" type="hidden" value="@order.Id" />
                                         <input name="status" type="hidden" value="@order.Status" />
@@ -86,7 +88,6 @@
 
                         currentTime += order.ExpectedPrintTime;
                     }
-
                 </ul>
             </div>
         </div>

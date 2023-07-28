@@ -2,10 +2,12 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
-    using PrintingHouse.Core.Services;
-    using PrintingHouse.Core.Services.Contracts;
-    using PrintingHouse.Infrastructure.Data.Entities.Enums;
+
+    using Core.Exceptions;
+    using Core.Services.Contracts;
     using static Core.Constants.MessageConstants;
+    using static Core.Constants.RoleNamesConstants;
+    using Infrastructure.Data.Entities.Enums;
 
     public class MachineController : BaseController
     {
@@ -78,6 +80,28 @@
         {
             try
             {
+                switch (status)
+                {
+                    case OrderStatus.Printing:
+                    case OrderStatus.Completed:
+                        if (User.IsInRole(Printer) == false)
+                        {
+                            throw new StatusPermitionException();
+                        }
+                        break;
+                    case OrderStatus.Waiting:
+                    case OrderStatus.NoConsumable:
+                    case OrderStatus.Canceled:
+                        if (User.IsInRole(Admin) == false &&
+                            User.IsInRole(Merchant) == false)
+                        {
+                            throw new StatusPermitionException();
+                        }
+                        break;
+                    default:
+                        throw new StatusPermitionException();
+                }
+
                 await orderService.ChangeStatusAsync(id, status);
 
                 TempData[SuccessMessage] = $"Status changed to {status}";

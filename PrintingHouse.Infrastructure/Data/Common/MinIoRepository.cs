@@ -76,8 +76,10 @@
                     await stream.CopyToAsync(result);
                 });
 
-            await minioClient.GetObjectAsync(args);
+           await minioClient.GetObjectAsync(args);
+
             
+
             return result;
         }
     }
