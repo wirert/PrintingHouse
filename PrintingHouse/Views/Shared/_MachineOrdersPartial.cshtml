@@ -50,10 +50,10 @@
                             </div>
                             <div>
                                 <div class="machine-date-time text-black-50">
-                                    <h6>Created on: @order.OrderTime</h6>
+                                    <p>Created on: @order.OrderTime</p>
                                 </div>
                                 <div class="machine-date-time text-black-50">
-                                    <h6>Deadline: @order.EndDate?.ToString("d")</h6>
+                                    <p>Deadline: <span class="text-warning bg-dark">@order.EndDate?.ToString("d")</span></p>
                                 </div>
                             </div>
 

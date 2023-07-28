@@ -12,33 +12,38 @@
             <th scope="col">Material</th>
             <th scope="col">Color model</th>
             <th scope="col">Design file</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th scope="col"></th>
+            @if (User.IsInRole(Admin) || User.IsInRole(Merchant))
+            {
+                <th scope="col">Add order</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
+            }
         </tr>
     </thead>
     <tbody>
         @foreach (var article in Model)
         {
             <tr>
-                <td>@article.Name</td>
                 <td>@article.ArticleNumber</td>
+                <td>@article.Name</td>
                 <td>@article.ClientName</td>
-                <td>
-                    @article.Material
-                    
-                </td>
+                <td>@article.Material</td>
                 <td>@article.ColorModel</td>
-                <td> 
-                    <p class="mb-1">@article.FileName</p>
+                <td>                     
                     <form asp-controller="Article" asp-action="Download" method="get">
                         <input name="articleId" type="hidden" value="@article.Id" />
                         <input name="fileName" type="hidden" value="@article.FileName" />
-                        <button class="btn btn-success btn-sm" type="submit">Download</button>
+                        <button class="btn btn-success btn-sm" type="submit">Download file</button>
                     </form>
                 </td>
                 @if (User.IsInRole(Admin) || User.IsInRole(Merchant))
                 {
+                    <td>
+                        <form asp-controller="Order" asp-action="Create" method="get">
+                            <input name="articleId" type="hidden" value="@article.Id" />
+                            <button class="btn btn-sm btn-success" title="Add new order" type="submit"><i class="fa-regular fa-square-plus"></i></button>
+                        </form>
+                    </td>
                     <td>
                         <form asp-controller="Article" asp-action="Edit" method="get">
                             <input name="id" type="hidden" value="@article.Id" />
@@ -46,15 +51,9 @@
                         </form>
                     </td>
                     <td>
-                        <form asp-controller="Article" asp-action="Delete" method="get">
+                        <form asp-controller="Article" asp-action="Delete" method="post">
                             <input name="id" type="hidden" value="@article.Id" />
                             <button class="btn btn-sm btn-danger" title="Delete" type="submit"><i class="fa fa-trash"></i></button>
-                        </form>
-                    </td>
-                    <td>
-                        <form asp-controller="Order" asp-action="Create" method="get">
-                            <input name="articleId" type="hidden" value="@article.Id" />
-                            <button class="btn btn-sm btn-success" title="Add new order" type="submit"><i class="fa-regular fa-square-plus"></i></button>
                         </form>
                     </td>
                 }

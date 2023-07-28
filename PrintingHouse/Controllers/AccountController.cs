@@ -1,15 +1,16 @@
 ﻿namespace PrintingHouse.Controllers
 {
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
 
     using Core.Models.Account;
-    using Infrastructure.Data.Entities.Account;
-
     using static Core.Constants.RoleNamesConstants;
     using static Core.Constants.MessageConstants;
-    using Microsoft.EntityFrameworkCore;
+    using Infrastructure.Data.Entities.Account;
+    using System.Security.Claims;
 
     public class AccountController : BaseController
     {
@@ -66,9 +67,13 @@
             };
 
             var result = await userManager.CreateAsync(user, model.Password);
+
+            
                         
             if (result.Succeeded)
             {
+                await userManager.AddClaimAsync(user, new Claim("FullName", $"{user.FirstName} {user.LastName}"));
+
                 await signInManager.SignInAsync(user, isPersistent: false);
 
                 return RedirectToAction("Index", "Home");
@@ -91,6 +96,8 @@
         [AllowAnonymous]
         public IActionResult Login(string? returnUrl = null)
         {
+            //await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
             var model = new LoginViewModel()
             {
                 ReturnUrl = returnUrl
@@ -112,7 +119,7 @@
             {
                 return View(model);
             }
-
+                        
             var user = await userManager.FindByNameAsync(model.UserName);
 
             if (user != null)

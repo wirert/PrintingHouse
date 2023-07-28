@@ -50,5 +50,12 @@
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">thrown when Article is null or IsActive is false, or ClientId is different</exception>
         Task EditAsync(ArticleViewModel model);
+
+        /// <summary>
+        /// Soft delete article
+        /// </summary>
+        /// <param name="id">Article id</param>
+        /// <returns></returns>
+        Task DeleteByIdAsync(Guid id);
     }
 }

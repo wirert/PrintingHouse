@@ -212,6 +212,13 @@
             <returns></returns>
             <exception cref="T:System.ArgumentNullException">thrown when Article is null or IsActive is false, or ClientId is different</exception>
         </member>
+        <member name="M:PrintingHouse.Core.Services.ArticleService.DeleteByIdAsync(System.Guid)">
+            <summary>
+            Soft delete article
+            </summary>
+            <param name="id">Article id</param>
+            <returns></returns>
+        </member>
         <member name="T:PrintingHouse.Core.Services.ClientService">
             <summary>
             Client service
@@ -305,6 +312,13 @@
             <param name="model">Article view model with data changes</param>
             <returns></returns>
             <exception cref="T:System.ArgumentNullException">thrown when Article is null or IsActive is false, or ClientId is different</exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IArticleService.DeleteByIdAsync(System.Guid)">
+            <summary>
+            Soft delete article
+            </summary>
+            <param name="id">Article id</param>
+            <returns></returns>
         </member>
         <member name="T:PrintingHouse.Core.Services.Contracts.IClientService">
             <summary>

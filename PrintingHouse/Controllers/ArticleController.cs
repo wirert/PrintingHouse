@@ -373,6 +373,23 @@
 
             return RedirectToAction("All", "Article");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            try
+            {
+                await articleService.DeleteByIdAsync(id);
+
+                TempData[SuccessMessage] = "Article successfully deleted";
+            }
+            catch (Exception)
+            {
+                TempData[ErrorMessage] = "Unable to delete article! Try again later";
+            }
+
+            return RedirectToAction("All");
+        }
     }
 }
 

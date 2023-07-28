@@ -12,6 +12,7 @@
     using Models.Material;
     using Infrastructure.Data.Common.Contracts;
     using Infrastructure.Data.Entities;
+    using System.Text.Encodings.Web;
 
     /// <summary>
     /// Article service
@@ -47,6 +48,7 @@
                 .Select(a => new AllArticleViewModel()
                 {
                     Id = a.Id,
+                    ArticleNumber = a.ArticleNumber,
                     Name = a.Name,
                     ClientId = a.ClientId,
                     ClientName = a.Client.Name,
@@ -68,15 +70,17 @@
             var clientArticlesCount = await repo.AllReadonly<Client>(c => c.Id == model.ClientId)
                 .Select(c => c.Articles.Count)
                 .FirstAsync();
+            var rnd = new Random();
+            var fileName = $"{model.Name}_{rnd.Next(10000)}";
 
             var article = new Article()
             {
-                Name = model.Name,
+                Name = model.Name,                
                 ClientId = model.ClientId,
                 MaterialId = model.MaterialId,
                 ColorModelId = model.ColorModelId,
                 Length = model.Length,
-                ImageName = model.DesignFile!.FileName,
+                ImageName = fileName,
                 ArticleNumber = $"{model.ClientId}.{clientArticlesCount++}"
             };
 
@@ -90,7 +94,7 @@
                 });
             }
 
-            await fileService.SaveFileAsync(article.Id, model.DesignFile.FileName, model.DesignFile);
+            await fileService.SaveFileAsync(article.Id, fileName, model.DesignFile!);
 
             await repo.AddAsync(article);
             await repo.SaveChangesAsync();
@@ -163,7 +167,7 @@
                     Id = a.Id,
                     Name = a.Name,
                     ClientId = a.ClientId,
-                    DesignName = a.ImageName,
+                    DesignName = HtmlEncoder.Default.Encode(a.ImageName),
                     ClientName = a.Client.Name,
                     ColorModelId = a.ColorModelId,
                     MaterialId = a.MaterialId,
@@ -241,10 +245,27 @@
 
             if (model.DesignFile != null && model.DesignFile.Length > 0)
             {
-                await fileService.SaveFileAsync(article.Id, model.DesignFile.FileName, model.DesignFile);
+                var rnd = new Random();
+                var newFileName = $"{article.Name}_{rnd.Next(10000)}";
 
-                article.ImageName = model.DesignFile.FileName;
+                await fileService.SaveFileAsync(article.Id, newFileName, model.DesignFile);
+
+                article.ImageName = newFileName;
             }
+
+            await repo.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Soft delete article
+        /// </summary>
+        /// <param name="id">Article id</param>
+        /// <returns></returns>
+        public async Task DeleteByIdAsync(Guid id)
+        {
+            var article = await repo.GetByIdAsync<Article>(id);
+
+            article.IsActive = false;
 
             await repo.SaveChangesAsync();
         }
