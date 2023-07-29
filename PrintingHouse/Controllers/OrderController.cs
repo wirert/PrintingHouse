@@ -89,9 +89,9 @@
             }
         }
 
-        
+        [HttpPost]
         [Authorize(Roles = $"{Admin}, {Merchant}, {Printer}")]
-        private async Task<IActionResult> ChangeStatus(int id, OrderStatus status)
+        public async Task<IActionResult> ChangeStatus(int id, OrderStatus status, string returnUrl)
         {
             try
             {
@@ -134,7 +134,7 @@
                 TempData[WarningMessage] = "Problem occurred! Try again.";
             }
 
-            return RedirectToAction("All");
+            return Redirect(returnUrl);
         }
     }
 }

@@ -5,6 +5,7 @@
 @{
     TimeSpan currentTime = TimeSpan.FromHours(8d);
     DateTime date = Model.Orders.First().ExpectedPrintDate;
+    string returnUrl = $"/Machine/Index";
 }
 
 <div class="container mt-5">
@@ -59,14 +60,16 @@
                             <div class="d-inline-flex">
                                 @if (User.IsInRole(Printer))
                                 {
-                                    <form asp-controller="Machine" asp-action="ChangeStatus" method="post">
+                                    <form asp-controller="Order" asp-action="ChangeStatus" method="post">
                                         <input name="id" type="hidden" value="@order.Id" />
                                         <input name="status" type="hidden" value="@OrderStatus.Printing">
+                                        <input name="returnUrl" type="hidden" , value="@returnUrl">
                                         <button class="btn btn-success rounded-circle me-2" title="Print" type="submit"><i class="fas fa-play fa-lg"></i></button>
                                     </form>
-                                    <form asp-controller="Machine" asp-action="ChangeStatus" method="post">
+                                    <form asp-controller="Order" asp-action="ChangeStatus" method="post">
                                         <input name="id" type="hidden" value="@order.Id" />
                                         <input name="status" type="hidden" value="@OrderStatus.Completed">
+                                        <input name="returnUrl" type="hidden" , value="@returnUrl">
                                         <button class="btn btn-warning rounded-circle me-3" title="Complete" type="submit"><i class="fas fa-power-off fa-sm"></i></button>
                                     </form>
                                 }
@@ -75,10 +78,12 @@
                                     <form asp-controller="Machine" asp-action="MoveInFront" asp- method="post">
                                         <input name="id" type="hidden" value="@order.Id" />
                                         <input name="status" type="hidden" value="@order.Status" />
+                                        <input name="returnUrl" type="hidden" , value="@returnUrl">
                                         <button class="btn btn-primary rounded-circle me-3" title="MakeFirst" type="submit"><i class="fa-solid fa-forward-fast"></i></button>
                                     </form>
-                                    <form asp-controller="Machine" asp-action="ChangeStatus" method="post">
+                                    <form asp-controller="Order" asp-action="ChangeStatus" method="post">
                                         <input name="id" type="hidden" value="@order.Id" />
+                                       <input name="returnUrl" type="hidden", value="@returnUrl">
                                         <input name="status" type="hidden" value="@OrderStatus.Canceled">
                                         <button class="btn btn-danger rounded-circle" title="Cancel order" type="submit"><i class="fas fa-eject"></i></button>
                                     </form>

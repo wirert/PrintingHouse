@@ -1,6 +1,8 @@
 ﻿@using PrintingHouse.Infrastructure.Data.Entities.Enums;
 @model IEnumerable<OrderViewModel>
-
+@{
+    string returnUrl = ViewContext.HttpContext.Request.Path;
+}
 
 <div class="row">
     <div class="table-responsive col-sm-12">
@@ -56,12 +58,14 @@
                                     <form asp-controller="Order" asp-action="ChangeStatus" method="post">
                                         <input name="id" type="hidden" value="@order.Id" />
                                         <input name="status" type="hidden" value="@OrderStatus.Canceled">
+                                        <input name="returnUrl" type="hidden" , value="@returnUrl">
                                         <button class="btn btn-sm btn-danger m-1" title="Cancel order" type="submit"><i class="fa-solid fa-ban"></i></button>
                                     </form>
                                     @if (order.Status == OrderStatus.NoConsumable)
                                     {
                                         <form asp-controller="Order" asp-action="ChangeStatus" method="post">
                                             <input name="id" type="hidden" value="@order.Id" />
+                                            <input name="returnUrl" type="hidden" , value="@returnUrl">
                                             <input name="status" type="hidden" value="@OrderStatus.Waiting">
                                             <button class="btn btn-sm btn-warning m-1" title="Take consumables" type="submit"><i class="fas fa-truck-loading"></i></button>
                                         </form>

@@ -1,21 +1,20 @@
 ﻿namespace PrintingHouse.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
 
-    using Core.Exceptions;
     using Core.Services.Contracts;
     using static Core.Constants.MessageConstants;
     using static Core.Constants.RoleNamesConstants;
     using Infrastructure.Data.Entities.Enums;
-    using Microsoft.AspNetCore.Authorization;
 
     public class MachineController : BaseController
     {
         private readonly IMachineService machineService;
         private readonly IOrderService orderService;
 
-        public MachineController(IMachineService _machineService, 
+        public MachineController(IMachineService _machineService,
             IOrderService _orderService)
         {
             machineService = _machineService;
@@ -26,7 +25,7 @@
         {
             try
             {
-                var machines =  await machineService.GetMachinesIdsAsync();
+                var machines = await machineService.GetMachinesIdsAsync();
 
                 ViewBag.Machines = new SelectList(machines.OrderBy(m => m.Id), "Id", "Name");
 
@@ -71,55 +70,7 @@
             }
             catch (Exception)
             {
-                TempData[ErrorMessage] = "Unable to change possition of this order";                
-            }
-
-            return RedirectToAction("Index");
-        }
-
-        [HttpPost]
-        [Authorize(Roles = $"{Admin}, {Merchant}, {Printer}")]
-        public async Task<IActionResult> ChangeStatus(int id, OrderStatus status)
-        {
-            try
-            {
-                switch (status)
-                {
-                    case OrderStatus.Printing:
-                    case OrderStatus.Completed:
-                        if (User.IsInRole(Printer) == false)
-                        {
-                            throw new StatusPermitionException();
-                        }
-                        break;
-                    case OrderStatus.Waiting:
-                    case OrderStatus.NoConsumable:
-                    case OrderStatus.Canceled:
-                        if (User.IsInRole(Admin) == false &&
-                            User.IsInRole(Merchant) == false)
-                        {
-                            throw new StatusPermitionException();
-                        }
-                        break;
-                    default:
-                        throw new StatusPermitionException();
-                }
-
-                await orderService.ChangeStatusAsync(id, status);
-
-                TempData[SuccessMessage] = $"Status changed to {status}";
-            }
-            catch (StatusPermitionException)
-            {
-                TempData[WarningMessage] = "You don't have permission to change to this status";
-            }
-            catch (ArgumentException ae)
-            {
-                TempData[WarningMessage] = ae.Message;
-            }
-            catch (Exception)
-            {
-                TempData[WarningMessage] = "Problem occurred! Try again.";
+                TempData[ErrorMessage] = "Unable to change possition of this order";
             }
 
             return RedirectToAction("Index");
