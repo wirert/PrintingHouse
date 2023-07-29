@@ -72,7 +72,7 @@
                                 }
                                 @if (User.IsInRole(Admin) || User.IsInRole(Merchant))
                                 {                                    
-                                    <form asp-controller="Machine" asp-action="MoveInFront" method="post">
+                                    <form asp-controller="Machine" asp-action="MoveInFront" asp- method="post">
                                         <input name="id" type="hidden" value="@order.Id" />
                                         <input name="status" type="hidden" value="@order.Status" />
                                         <button class="btn btn-primary rounded-circle me-3" title="MakeFirst" type="submit"><i class="fa-solid fa-forward-fast"></i></button>

@@ -219,6 +219,13 @@
             <param name="id">Article id</param>
             <returns></returns>
         </member>
+        <member name="M:PrintingHouse.Core.Services.ArticleService.GetFileNameByIdAsync(System.Guid)">
+            <summary>
+            Get design name by article id
+            </summary>
+            <param name="id">Article identifier</param>
+            <returns>Design name</returns>
+        </member>
         <member name="T:PrintingHouse.Core.Services.ClientService">
             <summary>
             Client service
@@ -319,6 +326,13 @@
             </summary>
             <param name="id">Article id</param>
             <returns></returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IArticleService.GetFileNameByIdAsync(System.Guid)">
+            <summary>
+            Get design name by article id
+            </summary>
+            <param name="id">Article identifier</param>
+            <returns>Design name</returns>
         </member>
         <member name="T:PrintingHouse.Core.Services.Contracts.IClientService">
             <summary>

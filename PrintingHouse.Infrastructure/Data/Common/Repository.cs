@@ -9,10 +9,8 @@
 
     /// <summary>
     /// Implementation of repository access methods
-    /// for Relational Database Engine
+    /// for Relational Database Engine with generic methods
     /// </summary>
-    /// <typeparam name="T">Type of the data table to which 
-    /// current reposity is attached</typeparam>
     public class Repository : IRepository
     {
         /// <summary>
@@ -24,6 +22,9 @@
         /// <summary>
         /// Representation of table in database
         /// </summary>
+        /// <typeparam name="T">Generic parameter of type class
+        /// representing data table</typeparam>
+        /// <returns></returns>
         protected DbSet<T> DbSet<T>() where T : class
         {
             return Context.Set<T>();
@@ -37,6 +38,8 @@
         /// <summary>
         /// Adds entity to the database
         /// </summary>
+        /// <typeparam name="T">Generic parameter of type class
+        /// representing data table</typeparam>
         /// <param name="entity">Entity to add</param>
         public async Task AddAsync<T>(T entity) where T : class
         {
@@ -46,6 +49,8 @@
         /// <summary>
         /// Ads collection of entities to the database
         /// </summary>
+        /// <typeparam name="T">Generic parameter of type class
+        /// representing data table</typeparam>
         /// <param name="entities">Enumerable list of entities</param>
         public async Task AddRangeAsync<T>(IEnumerable<T> entities) where T : class
         {
@@ -55,6 +60,8 @@
         /// <summary>
         /// All records in a table
         /// </summary>
+        /// <typeparam name="T">Generic parameter of type class
+        /// representing data table</typeparam>
         /// <returns>Queryable expression tree</returns>
         public IQueryable<T> All<T>() where T : class
         {
@@ -69,6 +76,8 @@
         /// <summary>
         /// The result collection won't be tracked by the context
         /// </summary>
+        /// <typeparam name="T">Generic parameter of type class
+        /// representing data table</typeparam>
         /// <returns>Expression tree</returns>
         public IQueryable<T> AllReadonly<T>() where T : class
         {
@@ -85,10 +94,17 @@
         /// <summary>
         /// Deletes a record from database
         /// </summary>
+        /// <typeparam name="T">Generic parameter of type class
+        /// representing data table</typeparam>
         /// <param name="id">Identificator of record to be deleted</param>
         public async Task DeleteAsync<T>(object id) where T : class
         {
-            T entity = await GetByIdAsync<T>(id);
+            T? entity = await GetByIdAsync<T>(id);
+
+            if (entity == null)
+            {
+                throw new ArgumentNullException();
+            }
 
             Delete(entity);
         }
@@ -96,6 +112,8 @@
         /// <summary>
         /// Deletes a record from database
         /// </summary>
+        /// <typeparam name="T">Generic parameter of type class
+        /// representing data table</typeparam>
         /// <param name="entity">Entity representing record to be deleted</param>
         public void Delete<T>(T entity) where T : class
         {
@@ -112,6 +130,8 @@
         /// <summary>
         /// Detaches given entity from the context
         /// </summary>
+        /// <typeparam name="T">Generic parameter of type class
+        /// representing data table</typeparam>
         /// <param name="entity">Entity to be detached</param>
         public void Detach<T>(T entity) where T : class
         {
@@ -133,14 +153,23 @@
         /// <summary>
         /// Gets specific record from database by primary key
         /// </summary>
+        /// <typeparam name="T">Generic parameter of type class
+        /// representing data table</typeparam>
         /// <param name="id">record identificator</param>
-        /// <returns>Single record</returns>
-        public async Task<T> GetByIdAsync<T>(object? id) where T : class
+        /// <returns>Single record (nullable)</returns>
+        public async Task<T?> GetByIdAsync<T>(object? id) where T : class
         {
             return await DbSet<T>().FindAsync(id);
         }
 
-        public async Task<T> GetByIdsAsync<T>(object[] id) where T : class
+        /// <summary>
+        /// Gets specific record from database by composed primary key
+        /// </summary>
+        /// <typeparam name="T">Generic parameter of type class
+        /// representing data table</typeparam>
+        /// <param name="id">Object array of identificators</param>
+        /// <returns>Single record (nullable)</returns>
+        public async Task<T?> GetByIdsAsync<T>(object[] id) where T : class
         {
             return await DbSet<T>().FindAsync(id);
         }
@@ -157,6 +186,8 @@
         /// <summary>
         /// Updates a record in database
         /// </summary>
+        /// <typeparam name="T">Generic parameter of type class
+        /// representing data table</typeparam>
         /// <param name="entity">Entity for record to be updated</param>
         public void Update<T>(T entity) where T : class
         {
@@ -166,6 +197,8 @@
         /// <summary>
         /// Updates set of records in the database
         /// </summary>
+        /// <typeparam name="T">Generic parameter of type class
+        /// representing data table</typeparam>
         /// <param name="entities">Enumerable collection of entities to be updated</param>
         public void UpdateRange<T>(IEnumerable<T> entities) where T : class
         {
@@ -175,7 +208,8 @@
         /// <summary>
         /// Remove set of records from the database
         /// </summary>
-        /// <typeparam name="T">Generic parameter of type class</typeparam>
+        /// <typeparam name="T">Generic parameter of type class
+        /// representing data table</typeparam>
         /// <param name="entities">Enumerable collection of entities to be removed</param>
         public void DeleteRange<T>(IEnumerable<T> entities) where T : class
         {
@@ -185,7 +219,8 @@
         /// <summary>
         /// Remove set of records from the database with Where clause
         /// </summary>
-        /// <typeparam name="T">Generic parameter of type class</typeparam>
+        /// <typeparam name="T">Generic parameter of type class
+        /// representing data table</typeparam>
         /// <param name="deleteWhereClause">Delegate function as lambda expression to filter result</param>
         public void DeleteRange<T>(Expression<Func<T, bool>> deleteWhereClause) where T : class
         {

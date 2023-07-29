@@ -8,6 +8,7 @@
     using static Core.Constants.MessageConstants;
     using static Core.Constants.RoleNamesConstants;
     using Infrastructure.Data.Entities.Enums;
+    using Microsoft.AspNetCore.Authorization;
 
     public class MachineController : BaseController
     {
@@ -54,6 +55,7 @@
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{Admin}, {Merchant}")]
         public async Task<IActionResult> MoveInFront(int id, OrderStatus status)
         {
             try
@@ -76,6 +78,7 @@
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{Admin}, {Merchant}, {Printer}")]
         public async Task<IActionResult> ChangeStatus(int id, OrderStatus status)
         {
             try
@@ -105,6 +108,10 @@
                 await orderService.ChangeStatusAsync(id, status);
 
                 TempData[SuccessMessage] = $"Status changed to {status}";
+            }
+            catch (StatusPermitionException)
+            {
+                TempData[WarningMessage] = "You don't have permission to change to this status";
             }
             catch (ArgumentException ae)
             {

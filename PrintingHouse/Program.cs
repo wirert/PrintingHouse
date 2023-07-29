@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<PrintingHouseDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString!));
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
@@ -48,9 +48,9 @@ builder.Services.AddAntiforgery(options =>
 builder.Services.AddApplicationServices();
 builder.Services.AddMinio(options =>
 {
-    options.Endpoint = builder.Configuration.GetValue<string>("MinIo:Endpoint");
-    options.AccessKey = builder.Configuration.GetValue<string>("MinIo:AccessKey");
-    options.SecretKey = builder.Configuration.GetValue<string>("MinIo:SecretKey");
+    options.Endpoint = builder.Configuration.GetValue<string>("MinIo:Endpoint")!;
+    options.AccessKey = builder.Configuration.GetValue<string>("MinIo:AccessKey")!;
+    options.SecretKey = builder.Configuration.GetValue<string>("MinIo:SecretKey")!;
 
     options.ConfigureClient(client => 
     {

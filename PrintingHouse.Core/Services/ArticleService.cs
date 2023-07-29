@@ -167,8 +167,7 @@
                 {
                     Id = a.Id,
                     Name = a.Name,
-                    ClientId = a.ClientId,
-                    DesignName = HtmlEncoder.Default.Encode(a.ImageName),
+                    ClientId = a.ClientId,                    
                     ClientName = a.Client.Name,
                     ColorModelId = a.ColorModelId,
                     MaterialId = a.MaterialId,
@@ -267,9 +266,26 @@
         {
             var article = await repo.GetByIdAsync<Article>(id);
 
+            if (article == null)
+            {
+                throw new ArgumentNullException(nameof(article));
+            }
+
             article.IsActive = false;
 
             await repo.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Get design name by article id
+        /// </summary>
+        /// <param name="id">Article identifier</param>
+        /// <returns>Design name</returns>
+        public async Task<string> GetFileNameByIdAsync(Guid id)
+        {
+           return await repo.AllReadonly<Article>(a => a.Id == id && a.IsActive)
+                .Select(a => a.ImageName)
+                .SingleAsync();           
         }
     }
 }

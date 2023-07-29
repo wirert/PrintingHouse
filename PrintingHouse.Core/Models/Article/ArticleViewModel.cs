@@ -17,8 +17,6 @@
 
         public IFormFile? DesignFile { get; set; }
 
-        public string? DesignName { get; set; }
-
         [Required]
         public int MaterialId { get; set; }
 

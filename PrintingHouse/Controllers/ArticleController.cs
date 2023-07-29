@@ -6,8 +6,10 @@
     using Core.Models.Article;
     using Core.Constants;
     using static Core.Constants.MessageConstants;
+    using static Core.Constants.RoleNamesConstants;
     using Core.Services.Contracts;
     using Infrastructure.Data.Entities.Enums;
+    using Microsoft.AspNetCore.Authorization;
 
     /// <summary>
     /// Article controller
@@ -85,13 +87,14 @@
         /// <summary>
         /// Download design file action
         /// </summary>
-        /// <param name="fileName">Design file name</param>
         /// <param name="articleId">Article identifier</param>
         /// <returns>Design file</returns>
-        public async Task<IActionResult> Download(string fileName, Guid articleId)
+        public async Task<IActionResult> Download(Guid articleId)
         {
             try
             {
+                string fileName = await articleService.GetFileNameByIdAsync(articleId);
+
                 using var stream = await fileService.GetFileAsync(articleId, fileName);
 
                 byte[] data = stream.ToArray();
@@ -113,6 +116,7 @@
         /// <param name="articleId"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = $"{Admin}, {Merchant}")]
         public async Task<IActionResult> Select(int clientId, Guid? articleId = null)
         {
             var model = new ChooseArticleMaterialAndColorsViewModel();
@@ -157,6 +161,7 @@
         /// <param name="materialColors">View model with selected material and color model</param>
         /// <returns>Redirect to Create or Edit article actions</returns>
         [HttpPost]
+        [Authorize(Roles = $"{Admin}, {Merchant}")]
         public async Task<IActionResult> Select(ChooseArticleMaterialAndColorsViewModel materialColors)
         {
             if (await materialColorService.ExistByIds(materialColors.MaterialId, materialColors.ColorModelId) == false)
@@ -202,6 +207,7 @@
         /// <param name="materialColors">View model with selected material and color model</param>
         /// <returns>View with View model</returns>
         [HttpGet]
+        [Authorize(Roles = $"{Admin}, {Merchant}")]
         public async Task<IActionResult> Create(ChooseArticleMaterialAndColorsViewModel materialColors)
         {
             var material = await materialService.GetMaterialByIdAsync(materialColors.MaterialId);
@@ -261,6 +267,7 @@
         /// <param name="model">View model with form data from the view</param>
         /// <returns>Redirects to All clients</returns>
         [HttpPost]
+        [Authorize(Roles = $"{Admin}, {Merchant}")]
         public async Task<IActionResult> Create(ArticleViewModel model)
         {
             if (await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId) == false)
@@ -301,6 +308,7 @@
         /// <returns>View with Article view model</returns>
         /// <exception cref="ArgumentException">Thrown if material with given id or MaterialColorModel with given material id and color model id did'n exist</exception>
         [HttpGet]
+        [Authorize(Roles = $"{Admin}, {Merchant}")]
         public async Task<IActionResult> Edit(Guid id)
         {
             try
@@ -346,6 +354,7 @@
         /// <param name="model">Article view model with form data</param>
         /// <returns>Redirect to action All</returns>
         [HttpPost]
+        [Authorize(Roles = $"{Admin}, {Merchant}")]
         public async Task<IActionResult> Edit(ArticleViewModel model)
         {
             if (await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId) == false)
@@ -362,9 +371,9 @@
 
             try
             {
-                TempData[SuccessMessage] = $"Successfully edited article {model.Name}.";
-
                 await articleService.EditAsync(model);
+
+                TempData[SuccessMessage] = $"Successfully edited article {model.Name}.";
             }
             catch (Exception)
             {
@@ -375,6 +384,7 @@
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{Admin}, {Merchant}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try

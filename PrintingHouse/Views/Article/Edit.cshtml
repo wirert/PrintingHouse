@@ -8,7 +8,6 @@
         <h3>Material: @Model.MaterialName</h3>
         <a class="btn btn-warning btn-sm text-primary" asp-action="Select" asp-controller="Article" asp-route-clientId="@Model.ClientId" asp-route-articleId="@Model.Id">Change Material</a>
         <form method="post" asp-action="Edit" asp-controller="Article" enctype="multipart/form-data">
-            <input type="hidden" asp-for="@Model.DesignName" />
             <input type="hidden" asp-for="@Model.Id" />
 
             <partial name="_ArticlePartial" model="@Model" />

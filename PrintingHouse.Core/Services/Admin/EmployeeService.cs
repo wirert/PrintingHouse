@@ -6,12 +6,12 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
+    using AdminModels.ApplicationUser;
     using AdminModels.Employee;
     using Contracts;
     using Infrastructure.Data.Common.Contracts;
     using Infrastructure.Data.Entities;
     using Infrastructure.Data.Entities.Account;
-    using PrintingHouse.Core.AdminModels.ApplicationUser;
 
     /// <summary>
     /// Employee service
@@ -53,6 +53,11 @@
         {
             var employee = await repo.GetByIdAsync<Employee>(id);
 
+            if (employee == null)
+            {
+                throw new ArgumentNullException(nameof(employee));
+            }
+
             employee.IsActive = false;
 
             await repo.SaveChangesAsync();
@@ -64,8 +69,8 @@
         /// <param name="model">Edit employee view model</param>
         public async Task ChnagePositionAsync(EditEmployeeViewModel model)
         {
-            var employee = await repo.GetByIdAsync<Employee>(model.Id);
-
+            var employee = await repo.GetByIdAsync<Employee>(model.Id) ?? throw new ArgumentNullException($"Employee {model.Id} not exist");
+            
             if (employee.PositionId == model.PositionId)
             {
                 return;

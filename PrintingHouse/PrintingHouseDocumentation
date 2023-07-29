@@ -141,11 +141,10 @@
             <param name="id">Clent Id (optional)</param>
             <returns></returns>
         </member>
-        <member name="M:PrintingHouse.Controllers.ArticleController.Download(System.String,System.Guid)">
+        <member name="M:PrintingHouse.Controllers.ArticleController.Download(System.Guid)">
             <summary>
             Download design file action
             </summary>
-            <param name="fileName">Design file name</param>
             <param name="articleId">Article identifier</param>
             <returns>Design file</returns>
         </member>

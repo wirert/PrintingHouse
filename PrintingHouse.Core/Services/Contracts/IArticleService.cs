@@ -57,5 +57,12 @@
         /// <param name="id">Article id</param>
         /// <returns></returns>
         Task DeleteByIdAsync(Guid id);
+
+        /// <summary>
+        /// Get design name by article id
+        /// </summary>
+        /// <param name="id">Article identifier</param>
+        /// <returns>Design name</returns>
+        Task<string> GetFileNameByIdAsync(Guid id);
     }
 }

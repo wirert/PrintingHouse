@@ -1,12 +1,14 @@
 ﻿namespace PrintingHouse.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using PrintingHouse.Core.Exceptions;
-    using PrintingHouse.Core.Models.Order;
-    using PrintingHouse.Core.Services.Contracts;
-    using PrintingHouse.Infrastructure.Data.Entities.Enums;
+
+    using Core.Exceptions;
+    using Core.Models.Order;
+    using Core.Services.Contracts;
     using static Core.Constants.MessageConstants;
     using static Core.Constants.RoleNamesConstants;
+    using Infrastructure.Data.Entities.Enums;
 
     public class OrderController : Controller
     {
@@ -41,6 +43,7 @@
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{Admin}, {Merchant}")]
         public async Task<IActionResult> Create(Guid articleId)
         {
             try
@@ -57,6 +60,7 @@
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{Admin}, {Merchant}")]
         public async Task<IActionResult> Create(AddOrderViewModel model)
         {
             if (model.EndDate < DateTime.Now.Date) 
@@ -85,8 +89,9 @@
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ChangeStatus(int id, OrderStatus status)
+        
+        [Authorize(Roles = $"{Admin}, {Merchant}, {Printer}")]
+        private async Task<IActionResult> ChangeStatus(int id, OrderStatus status)
         {
             try
             {
