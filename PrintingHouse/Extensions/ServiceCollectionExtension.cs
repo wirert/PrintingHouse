@@ -1,11 +1,14 @@
 ﻿namespace Microsoft.Extensions.DependencyInjection
 {
+    using Microsoft.EntityFrameworkCore;
     using Minio;
     using PrintingHouse.Core.Services;
     using PrintingHouse.Core.Services.Admin;
     using PrintingHouse.Core.Services.Contracts;
     using PrintingHouse.Infrastructure.Data.Common;
     using PrintingHouse.Infrastructure.Data.Common.Contracts;
+    using PrintingHouse.Infrastructure.Data.Configurations;
+    using PrintingHouse.Infrastructure.Data.Entities;
 
     /// <summary>
     /// Adds extention methods to the ServiceCollection of application
@@ -34,6 +37,11 @@
             services.AddScoped<IMaterialColorService, MaterialColorService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IMachineService, MachineService>();
+
+
+            services.AddScoped<IEntityTypeConfiguration<Article>, ArticleConfiguration>();
+
+
 
             return services;
         }

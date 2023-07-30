@@ -42,6 +42,11 @@
                 {
                     Id = 5,
                     Name = "Manager"
+                },
+                    new Position
+                {
+                    Id = 6,
+                    Name = "Printer"
                 }
             };
         }

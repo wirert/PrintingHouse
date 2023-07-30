@@ -78,7 +78,7 @@
                 MaterialId = model.MaterialId,
                 ColorModelId = model.ColorModelId,
                 Length = model.Length,
-                ArticleNumber = $"{model.ClientId}.{clientArticlesCount++}"
+                ArticleNumber = $"{model.ClientId}.{++clientArticlesCount}"
             };
 
             var rnd = new Random();

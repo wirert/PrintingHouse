@@ -75,6 +75,23 @@
 
             users.Add(user);
 
+            user = new ApplicationUser()
+            {
+                Id = Guid.Parse("ab1c2588-4ee2-408f-a302-fbddfd8ec1b8"),
+                UserName = "Printer1",
+                NormalizedUserName = "PRINTER1",
+                Email = "printer1@mail.com",
+                NormalizedEmail = "PRINTER1@MAIL.COM",
+                FirstName = "Printer",
+                LastName = "Georgiev",
+                SecurityStamp = "636d473a-af8e-4b21-b069-02f511f4be73"
+            };
+
+            user.PasswordHash =
+                 hasher.HashPassword(user, "123456");
+
+            users.Add(user);
+
             return users;
         }
     }

@@ -74,6 +74,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<PrintingHouseDbContext>();
+
+        dbContext.Database.EnsureDeleted();
+        dbContext.Database.EnsureCreated();
+    }
 }
 else
 {
@@ -101,7 +109,7 @@ app.UseEndpoints(endpoints =>
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}"
         );
-
+    
     endpoints.MapRazorPages();
 });
 

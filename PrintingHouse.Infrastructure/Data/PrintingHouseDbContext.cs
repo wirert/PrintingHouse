@@ -7,15 +7,20 @@
     using Configurations;
     using Entities;
     using Entities.Account;
+    using PrintingHouse.Infrastructure.Data.Common.Contracts;
 
     /// <summary>
     /// Application database context
     /// </summary>
     public class PrintingHouseDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
-        public PrintingHouseDbContext(DbContextOptions<PrintingHouseDbContext> options)
+        //Only for testing!! Shoud be removed.
+        private readonly IEntityTypeConfiguration<Article> articleConfig;
+
+        public PrintingHouseDbContext(DbContextOptions<PrintingHouseDbContext> options, IEntityTypeConfiguration<Article> _articleConfig)
             : base(options)
-        {
+        {     
+            articleConfig = _articleConfig;
         }
 
         public virtual DbSet<Article> Articles { get; set; } = null!;
@@ -32,24 +37,27 @@
 
 
         protected override void OnModelCreating(ModelBuilder builder)
-        {
+        {     
             builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new PositionConfiguration());
             builder.ApplyConfiguration(new EmployeeConfiguration());
+            builder.ApplyConfiguration(new ClientConfiguration());
             builder.ApplyConfiguration(new ColorConfiguration());
             builder.ApplyConfiguration(new ColorModelConfiguration());
             builder.ApplyConfiguration(new MaterialConfiguration());
             builder.ApplyConfiguration(new MaterialColorModelConfiguration());
             builder.ApplyConfiguration(new MachineConfiguration());
 
+            //Added only for test data seeding in db
+            // !! Should be removed !!
+            builder.ApplyConfiguration(articleConfig);
+            builder.ApplyConfiguration(new ArticleColorConfiguration());
+
             builder.Entity<Article>().Property(a => a.IsActive).HasDefaultValue(true);
             builder.Entity<Article>()
                 .HasOne(m => m.MaterialColorModel)
                 .WithMany(mc => mc.Articles)
-                .HasForeignKey(m => new { m.MaterialId, m.ColorModelId });
-
-            builder.Entity<Client>().Property(a => a.IsActive).HasDefaultValue(true);
-            builder.Entity<Client>().HasIndex(e => e.Name).IsUnique();            
+                .HasForeignKey(m => new { m.MaterialId, m.ColorModelId });                 
 
             builder.Entity<ArticleColor>().HasKey(k => new {k.ArticleId, k.ColorId});            
 

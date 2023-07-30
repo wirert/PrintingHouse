@@ -25,7 +25,7 @@
                     Id = 1,
                     Type = "Red",
                     Price = 50m,
-                    InStock = 104,
+                    InStock = 250,
                     ColorModelId = 1
                 },
                  new Color()
@@ -33,7 +33,7 @@
                     Id = 2,
                     Type = "Green",
                     Price = 48m,
-                    InStock = 92,
+                    InStock = 300,
                     ColorModelId = 1
                 },
                   new Color()
@@ -41,7 +41,7 @@
                     Id = 3,
                     Type = "Blue",
                     Price = 57m,
-                    InStock = 67,
+                    InStock = 280,
                     ColorModelId = 1
                 },
                    new Color()
@@ -49,7 +49,7 @@
                     Id = 4,
                     Type = "Cyan",
                     Price = 52m,
-                    InStock = 47,
+                    InStock = 180,
                     ColorModelId = 2
                 },
                 new Color()
@@ -57,7 +57,7 @@
                     Id = 5,
                     Type = "Magenta",
                     Price = 55m,
-                    InStock = 38,
+                    InStock = 200,
                     ColorModelId = 2
                 },
                 new Color()
@@ -65,7 +65,7 @@
                     Id = 6,
                     Type = "Yellow",
                     Price = 47m,
-                    InStock = 50,
+                    InStock = 200,
                     ColorModelId = 2
                 },
                 new Color()
@@ -73,7 +73,7 @@
                     Id = 7,
                     Type = "Black",
                     Price = 40m,
-                    InStock = 60,
+                    InStock = 230,
                     ColorModelId = 2
                 }
             };

@@ -49,7 +49,7 @@
                     Width = 0.2d,
                     Lenght = 1000,
                     Price = 850m,
-                    InStock = 20
+                    InStock = 100
                 }
             };
         }
