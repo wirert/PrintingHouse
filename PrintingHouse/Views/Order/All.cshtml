@@ -50,7 +50,7 @@
                         <td>@order.ExpectedPrintDate.ToString("d")</td>
                         <td>@order.ExpectedPrintTime</td>
                         <td>@order.ColorModel</td>
-                        <td>@order.Comment</td>
+                        <td>@Html.Raw(order.Comment)</td>
                         <td>
                             @if (User.IsInRole(Admin) || User.IsInRole(Merchant))
                             {

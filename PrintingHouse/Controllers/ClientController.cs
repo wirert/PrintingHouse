@@ -6,8 +6,8 @@
     using static Core.Constants.MessageConstants;
     using static Core.Constants.RoleNamesConstants;
     using Core.Models.Client;
+    using Core.Services.Contracts;
     using Extensions;
-    using PrintingHouse.Core.Services.Contracts;
 
     /// <summary>
     /// Client controller

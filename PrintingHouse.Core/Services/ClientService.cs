@@ -1,6 +1,7 @@
 ﻿namespace PrintingHouse.Core.Services
 {
     using System.Collections.Generic;
+    using System.Net;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
@@ -31,9 +32,9 @@
         {
             var client = new Client()
             {
-                Name = model.Name,
-                PhoneNumber = model.PhoneNumber,
-                Email = model.Email,
+                Name = WebUtility.HtmlEncode(model.Name),
+                PhoneNumber = WebUtility.HtmlEncode(model.PhoneNumber),
+                Email = WebUtility.HtmlEncode(model.Email),
                 MerchantId = model.MerchantId
             };
 

@@ -11,8 +11,8 @@
         <h1>@ViewData["Title"]</h1>
         <h4 class="mb-2">Client: @Model.ClientName</h4>
         <hr />
-        <form method="post" asp-action="Select" asp-controller="Article" asp-antiforgery=false enctype="multipart/form-data">
-            <input id="__RequestVerificationToken" type="hidden" name="__RequestVerificationToken" value="@requestToken" />
+        <input id="__RequestVerificationToken" type="hidden" name="__RequestVerificationToken" value="@requestToken" />
+        <form method="post" asp-action="Select" asp-controller="Article" enctype="multipart/form-data">
             <input type="hidden" asp-for="@Model.ClientId" />
             <input type="hidden" asp-for="@Model.ClientName" />
             <input type="hidden" asp-for="@Model.ArticleId" />            

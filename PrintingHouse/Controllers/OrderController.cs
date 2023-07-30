@@ -134,7 +134,10 @@
                 TempData[WarningMessage] = "Problem occurred! Try again.";
             }
 
-            return Redirect(returnUrl);
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                return Redirect(returnUrl);
+            else
+                return RedirectToAction("Index", "Home");            
         }
     }
 }

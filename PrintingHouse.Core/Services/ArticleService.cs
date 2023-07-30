@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq.Expressions;
+    using System.Net;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,6 @@
     using Models.Material;
     using Infrastructure.Data.Common.Contracts;
     using Infrastructure.Data.Entities;
-    using System.Text.Encodings.Web;
 
     /// <summary>
     /// Article service
@@ -73,7 +73,7 @@
            
             var article = new Article()
             {
-                Name = model.Name,                
+                Name = WebUtility.HtmlEncode(model.Name),                
                 ClientId = model.ClientId,
                 MaterialId = model.MaterialId,
                 ColorModelId = model.ColorModelId,
@@ -240,7 +240,7 @@
                 article.ColorModelId = model.ColorModelId;
             }
 
-            article.Name = model.Name;
+            article.Name = WebUtility.HtmlEncode(model.Name);
             article.Length = model.Length;
 
             if (model.DesignFile != null && model.DesignFile.Length > 0)

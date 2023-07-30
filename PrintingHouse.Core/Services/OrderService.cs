@@ -2,16 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Net;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
+    using Ganss.Xss;
 
     using Contracts;
     using Infrastructure.Data.Common.Contracts;
     using Infrastructure.Data.Entities;
     using Infrastructure.Data.Entities.Enums;
     using Models.Order;
-    using Microsoft.AspNetCore.Identity;
 
     public class OrderService : IOrderService
     {
@@ -40,7 +41,7 @@
                     Width = o.Article.MaterialColorModel.Material.Width,
                     EndDate = o.EndDate,
                     ExpectedPrintDate = o.ExpectedPrintDate,
-                    Comment = o.Comment,
+                    Comment = WebUtility.HtmlDecode(o.Comment),
                     ExpectedPrintTime = o.ExpectedPrintDuration,
                     OrderTime = o.OrderTime,
                     Status = o.Status
@@ -82,6 +83,8 @@
 
         public async Task CreateOrder(AddOrderViewModel model)
         {
+            var sanitizer = new HtmlSanitizer();
+
             var article = await repo.All<Article>(a => a.Id == model.ArticleId && a.IsActive)
                 .Include(a => a.MaterialColorModel)
                 .ThenInclude(mc => mc.Material)
@@ -97,7 +100,7 @@
                 ArticleId = model.ArticleId,
                 Article = article,
                 EndDate = model.EndDate,
-                Comment = model.Comment,
+                Comment = WebUtility.HtmlEncode(sanitizer.Sanitize((model.Comment) ?? "")),
                 Quantity = model.Quantity
             };
 

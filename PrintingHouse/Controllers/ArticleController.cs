@@ -1,5 +1,6 @@
 ﻿namespace PrintingHouse.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -9,7 +10,6 @@
     using static Core.Constants.RoleNamesConstants;
     using Core.Services.Contracts;
     using Infrastructure.Data.Entities.Enums;
-    using Microsoft.AspNetCore.Authorization;
 
     /// <summary>
     /// Article controller
@@ -168,6 +168,8 @@
             {
                 ModelState.AddModelError(string.Empty, "Invalid material or color model.");
             }
+
+            //validate client name
 
             if (!ModelState.IsValid)
             {

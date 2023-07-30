@@ -1,34 +1,27 @@
 ﻿namespace PrintingHouse.Controllers
 {
+    using System.Net;
+    using System.Security.Claims;
+
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
 
     using Core.Models.Account;
-    using static Core.Constants.RoleNamesConstants;
-    using static Core.Constants.MessageConstants;
     using Infrastructure.Data.Entities.Account;
-    using System.Security.Claims;
 
     public class AccountController : BaseController
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
-        private readonly RoleManager<IdentityRole<Guid>> roleManager;
-        private readonly IHostEnvironment hostEnvironment;
+        
 
         public AccountController(
             UserManager<ApplicationUser> _userManager,
-            SignInManager<ApplicationUser> _signInManager,
-            RoleManager<IdentityRole<Guid>> _roleManager,
-            IHostEnvironment _hostEnvironment)
+            SignInManager<ApplicationUser> _signInManager)
         {
             userManager = _userManager;
-            signInManager = _signInManager;
-            roleManager = _roleManager;
-            hostEnvironment = _hostEnvironment;
+            signInManager = _signInManager;            
         }
 
         /// <summary>
@@ -59,16 +52,14 @@
 
             var user = new ApplicationUser()
             {
-                Email = model.Email,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                UserName = model.UserName,
+                Email = WebUtility.HtmlEncode( model.Email),
+                FirstName = WebUtility.HtmlEncode(model.FirstName),
+                LastName = WebUtility.HtmlEncode(model.LastName),
+                UserName = WebUtility.HtmlEncode(model.UserName),
                 PhoneNumber = model.PhoneNumber
             };
 
             var result = await userManager.CreateAsync(user, model.Password);
-
-            
                         
             if (result.Succeeded)
             {
