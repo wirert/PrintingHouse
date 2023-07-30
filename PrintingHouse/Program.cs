@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Minio;
 using Minio.AspNetCore;
 using Minio.AspNetCore.HealthChecks;
-
+using PrintingHouse.Extensions;
 using PrintingHouse.Infrastructure.Data;
 using PrintingHouse.Infrastructure.Data.Entities.Account;
 using PrintingHouse.ModelBinders;
@@ -74,14 +74,6 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-
-    using (var scope = app.Services.CreateScope())
-    {
-        var dbContext = scope.ServiceProvider.GetRequiredService<PrintingHouseDbContext>();
-
-        dbContext.Database.EnsureDeleted();
-        dbContext.Database.EnsureCreated();
-    }
 }
 else
 {
@@ -113,5 +105,6 @@ app.UseEndpoints(endpoints =>
     endpoints.MapRazorPages();
 });
 
+app.SeedRoles().Wait();
 
 app.Run();

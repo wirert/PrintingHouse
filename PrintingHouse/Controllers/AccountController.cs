@@ -151,31 +151,6 @@
             await signInManager.SignOutAsync();
 
             return RedirectToAction("Index", "Home");
-        }
-
-        /// <summary>
-        /// Add admin role to user(only for development purpose)
-        /// </summary>
-        /// <returns>Redirect to Index action in Home controller</returns>        
-        public async Task<IActionResult> AddRoles()
-        {
-            if (!hostEnvironment.IsDevelopment())
-            {
-                return NotFound();
-            }
-
-            await roleManager.CreateAsync(new IdentityRole<Guid>(Admin));
-            await roleManager.CreateAsync(new IdentityRole<Guid>(Employee));
-            await roleManager.CreateAsync(new IdentityRole<Guid>(Merchant));
-            await roleManager.CreateAsync(new IdentityRole<Guid>(Printer));
-
-            var user = await userManager.Users.FirstAsync(u => u.Id == Guid.Parse("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"));
-
-            await userManager.AddToRoleAsync(user!, Admin);
-
-            TempData[SuccessMessage] = "Admin role added to Admin123";
-
-            return RedirectToAction("Index", "Home");
-        }       
+        }   
     }
 }

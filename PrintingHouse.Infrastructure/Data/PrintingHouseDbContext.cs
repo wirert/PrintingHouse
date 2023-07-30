@@ -53,6 +53,7 @@
             builder.ApplyConfiguration(articleConfig);
             builder.ApplyConfiguration(new ArticleColorConfiguration());
 
+
             builder.Entity<Article>().Property(a => a.IsActive).HasDefaultValue(true);
             builder.Entity<Article>()
                 .HasOne(m => m.MaterialColorModel)

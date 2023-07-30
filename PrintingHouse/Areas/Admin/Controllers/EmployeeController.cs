@@ -84,21 +84,21 @@
 
                 if (positions.All(p => p.Id != model.PositionId))
                 {
-                    ModelState.AddModelError(nameof(model.PositionId), "Selected position does not exist!");
+                    ModelState.AddModelError(nameof(model.PositionId), "You should select a position!");
                 }
 
                 var user = await userManager.FindByIdAsync(model.ApplicationUserId.ToString());
 
                 if (user == null || user.IsActive == false)
                 {
-                    ModelState.AddModelError(nameof(model.ApplicationUserId), "Selected user does not exist!");
+                    ModelState.AddModelError(nameof(model.ApplicationUserId), "You should select a user!");
                 }
 
                 var role = await roleManager.FindByNameAsync(model.Role);
 
                 if (role == null)
                 {
-                    ModelState.AddModelError(nameof(model.Role), "Selected role does not exist!");
+                    ModelState.AddModelError(nameof(model.Role), "You should select a role!");
                 }
 
                 if (!ModelState.IsValid)
@@ -201,21 +201,21 @@
 
                 if (positions.All(p => p.Id != model.PositionId))
                 {
-                    ModelState.AddModelError(nameof(model.PositionId), "Selected position does not exist!");
+                    ModelState.AddModelError(nameof(model.PositionId), "You should select a position!");
                 }
 
                 var user = await userManager.FindByIdAsync(model.ApplicationUserId.ToString());
 
                 if (user == null || user.IsActive == false)
                 {
-                    ModelState.AddModelError(nameof(model.ApplicationUserId), "Selected employee does not exist!");
+                    ModelState.AddModelError(nameof(model.ApplicationUserId), "You should select a user!");
                 }
 
                 var role = await roleManager.FindByNameAsync(model.Role);
 
                 if (role == null)
                 {
-                    ModelState.AddModelError(nameof(model.Role), "Selected role does not exist!");
+                    ModelState.AddModelError(nameof(model.Role), "You should select a role!");
                 }
 
                 if (!ModelState.IsValid)

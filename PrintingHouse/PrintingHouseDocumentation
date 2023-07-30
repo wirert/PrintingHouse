@@ -117,12 +117,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:PrintingHouse.Controllers.AccountController.AddRoles">
-            <summary>
-            Add admin role to user(only for development purpose)
-            </summary>
-            <returns>Redirect to Index action in Home controller</returns>        
-        </member>
         <member name="T:PrintingHouse.Controllers.ArticleController">
             <summary>
             Article controller
