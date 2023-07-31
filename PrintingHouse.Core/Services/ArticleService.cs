@@ -113,7 +113,7 @@
 
             if (client == null || client.IsActive == false)
             {
-                throw new Exception();
+                throw new ArgumentNullException(nameof(client));
             }
 
             model.Materials = await repo.AllReadonly<Material>(m => m.IsActive)
@@ -187,7 +187,7 @@
 
             if (article == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(article));
             }
 
             return article;
@@ -207,7 +207,7 @@
                 article.IsActive == false ||
                 article.ClientId != model.ClientId)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(article));
             }
 
             var articleColors = repo.All<ArticleColor>(ac => ac.ArticleId == article.Id);

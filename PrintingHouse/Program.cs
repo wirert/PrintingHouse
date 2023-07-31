@@ -65,20 +65,22 @@ builder.Services.AddMinio(options =>
 
 builder.Services.ConfigureApplicationCookie(cfg =>
 {
+    cfg.Cookie.SameSite = SameSiteMode.Strict;
     cfg.Cookie.HttpOnly = true;
     cfg.LoginPath = "/Account/Login";
+    cfg.AccessDeniedPath = "/Home/Error";
 });
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
+    app.UseDeveloperExceptionPage();    
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
-
+    app.UseExceptionHandler("/Home/Error/500");
+    app.UseStatusCodePagesWithRedirects("/Home/Error?statusCode={0}");
     app.UseHsts();
 }
 

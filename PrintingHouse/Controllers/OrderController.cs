@@ -10,7 +10,7 @@
     using static Core.Constants.RoleNamesConstants;
     using Infrastructure.Data.Entities.Enums;
 
-    public class OrderController : Controller
+    public class OrderController : BaseController
     {
         private readonly IOrderService orderService;
 

@@ -60,18 +60,24 @@
                             <div class="d-inline-flex">
                                 @if (User.IsInRole(Printer))
                                 {
-                                    <form asp-controller="Order" asp-action="ChangeStatus" method="post">
-                                        <input name="id" type="hidden" value="@order.Id" />
-                                        <input name="status" type="hidden" value="@OrderStatus.Printing">
-                                        <input name="returnUrl" type="hidden" , value="@returnUrl">
-                                        <button class="btn btn-success rounded-circle me-2" title="Print" type="submit"><i class="fas fa-play fa-lg"></i></button>
-                                    </form>
-                                    <form asp-controller="Order" asp-action="ChangeStatus" method="post">
-                                        <input name="id" type="hidden" value="@order.Id" />
-                                        <input name="status" type="hidden" value="@OrderStatus.Completed">
-                                        <input name="returnUrl" type="hidden" , value="@returnUrl">
-                                        <button class="btn btn-warning rounded-circle me-3" title="Complete" type="submit"><i class="fas fa-power-off fa-sm"></i></button>
-                                    </form>
+                                    if (order.Status != OrderStatus.Printing)
+                                    {
+                                        <form asp-controller="Order" asp-action="ChangeStatus" method="post">
+                                            <input name="id" type="hidden" value="@order.Id" />
+                                            <input name="status" type="hidden" value="@OrderStatus.Printing">
+                                            <input name="returnUrl" type="hidden" , value="@returnUrl">
+                                            <button class="btn btn-success rounded-circle me-2" title="Print" type="submit"><i class="fas fa-play fa-lg"></i></button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form asp-controller="Order" asp-action="ChangeStatus" method="post">
+                                            <input name="id" type="hidden" value="@order.Id" />
+                                            <input name="status" type="hidden" value="@OrderStatus.Completed">
+                                            <input name="returnUrl" type="hidden" , value="@returnUrl">
+                                            <button class="btn btn-warning rounded-circle me-3" title="Complete" type="submit"><i class="fas fa-power-off fa-sm"></i></button>
+                                        </form>
+                                    }
                                 }
                                 @if (User.IsInRole(Admin) || User.IsInRole(Merchant))
                                 {                                    

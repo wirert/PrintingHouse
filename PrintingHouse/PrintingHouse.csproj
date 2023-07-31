@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
+    <None Include="wwwroot\pictures\error-401.png" />
   </ItemGroup>
 
   <ItemGroup>
