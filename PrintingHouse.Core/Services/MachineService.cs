@@ -86,7 +86,7 @@
             return machines;
         }
 
-        public async Task MoveOrderInFrontAsync(int orderId)
+        public async Task MoveOrderInFrontAsync(Guid orderId)
         {
            var obj =  await repo.AllReadonly<Order>(o => o.Id == orderId)
                 .Select(o => new

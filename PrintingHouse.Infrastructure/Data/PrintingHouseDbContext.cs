@@ -60,7 +60,9 @@
                 .WithMany(mc => mc.Articles)
                 .HasForeignKey(m => new { m.MaterialId, m.ColorModelId });                 
 
-            builder.Entity<ArticleColor>().HasKey(k => new {k.ArticleId, k.ColorId});            
+            builder.Entity<ArticleColor>().HasKey(k => new {k.ArticleId, k.ColorId});
+
+            builder.Entity<Order>().Property(o => o.Number).ValueGeneratedOnAdd();
 
             base.OnModelCreating(builder);
         }

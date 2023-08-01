@@ -55,7 +55,7 @@
 
         [HttpPost]
         [Authorize(Roles = $"{Admin}, {Merchant}")]
-        public async Task<IActionResult> MoveInFront(int id, OrderStatus status)
+        public async Task<IActionResult> MoveInFront(Guid id, OrderStatus status)
         {
             try
             {

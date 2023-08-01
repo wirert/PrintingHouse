@@ -91,7 +91,7 @@
 
         [HttpPost]
         [Authorize(Roles = $"{Admin}, {Merchant}, {Printer}")]
-        public async Task<IActionResult> ChangeStatus(int id, OrderStatus status, string returnUrl)
+        public async Task<IActionResult> ChangeStatus(Guid id, OrderStatus status, string returnUrl)
         {
             try
             {

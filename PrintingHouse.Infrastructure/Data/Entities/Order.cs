@@ -14,11 +14,14 @@
         public Order()
         {
             OrderTime = DateTime.UtcNow;
+            Id = Guid.NewGuid();
         }
 
         [Comment("Order primary key")]
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
+
+        public int Number { get; set; }
 
         [Comment("Order article id")]
         [Required]

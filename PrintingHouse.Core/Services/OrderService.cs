@@ -127,7 +127,7 @@
             await repo.SaveChangesAsync();
         }
 
-        public async Task ChangeStatusAsync(int id, OrderStatus status)
+        public async Task ChangeStatusAsync(Guid id, OrderStatus status)
         {
             var order = await repo.GetByIdAsync<Order>(id);
 
@@ -246,7 +246,7 @@
             await repo.SaveChangesAsync();
         }
 
-        public async Task RearangeAllOrderOfParticularTypeAsync(int materialId, int colorModelId, int? orderId = null)
+        public async Task RearangeAllOrderOfParticularTypeAsync(int materialId, int colorModelId, Guid? orderId = null)
         {
             var orders = await repo
                 .All<Order>(o => o.Article.MaterialId == materialId

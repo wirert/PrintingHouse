@@ -185,7 +185,6 @@
             </summary>
             <param name="id">Article identifier</param>
             <returns>View with Article view model</returns>
-            <exception cref="T:System.ArgumentException">Thrown if material with given id or MaterialColorModel with given material id and color model id did'n exist</exception>
         </member>
         <member name="M:PrintingHouse.Controllers.ArticleController.Edit(PrintingHouse.Core.Models.Article.ArticleViewModel)">
             <summary>

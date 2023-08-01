@@ -31,8 +31,7 @@
         [Range(0, Article.MaxLength)]
         public double Length { get; set; } = 1;
 
-        [Required]
-        [Range(1, int.MaxValue)]
+        [Required]        
         public Guid ClientId { get; set; }
 
         public int ClientNumber { get; set; }

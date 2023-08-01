@@ -4,7 +4,9 @@
 
     public class OrderViewModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
+
+        public int Number { get; set; }
 
         public string ArticleNo { get; set; } = null!;
 

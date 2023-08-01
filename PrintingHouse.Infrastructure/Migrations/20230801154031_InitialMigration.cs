@@ -396,7 +396,8 @@ namespace PrintingHouse.Infrastructure.Migrations
                 name: "Orders",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false, comment: "Order primary key")
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Order primary key"),
+                    Number = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Order article id"),
                     Quantity = table.Column<int>(type: "int", nullable: false, comment: "Order article quantity"),
@@ -430,10 +431,10 @@ namespace PrintingHouse.Infrastructure.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PictureName", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"), 0, "c85e382a-1570-459a-b462-561378b05f21", "admin@mail.com", false, "Admin", "Petrov", false, null, "ADMIN@MAIL.COM", "ADMIN123", "AQAAAAEAACcQAAAAEGwxjJIUYZui17WUdCkKbBIAoaFp2bIFpDjZjhbH1YaWKavhsIG3qwt7zFcGmZXWFw==", null, false, null, "d2ecdcca-b1e6-4015-aaa1-17c22a17e6b3", false, "Admin123" },
-                    { new Guid("6afbf121-61d4-42ca-a9c1-5ac694442d83"), 0, "ce2abfad-62e9-4bdc-9253-5c4de87e2a13", "empl1@mail.com", false, "Empl", "Nikolov", false, null, "EMPL1@MAIL.COM", "EMPLOYEE1", "AQAAAAEAACcQAAAAEA6JzgDCYAu7f5e3IKfMhF2fYBUH2Auhbdv416qVpujuv3yljYpUbWZ7LmXCaPGHBg==", null, false, null, "455036d5-b858-4330-83bb-d9bbe1e7d7a0", false, "Employee1" },
-                    { new Guid("ab1c2588-4ee2-408f-a302-fbddfd8ec1b8"), 0, "240346e6-5157-4338-a8f3-37980e43c256", "printer1@mail.com", false, "Printer", "Georgiev", false, null, "PRINTER1@MAIL.COM", "PRINTER1", "AQAAAAEAACcQAAAAEM7v+SXRWnPch7ZtjBYHzlUNhZxE86kYxb4TrP3eFCxwOcGuCPHF9VOIYPJePXI3FQ==", null, false, null, "636d473a-af8e-4b21-b069-02f511f4be73", false, "Printer1" },
-                    { new Guid("e7065dbb-0c70-48da-902c-9f6f2536c505"), 0, "179c04dd-0f59-4f8a-9035-e53784e20a5e", "merchant1@mail.com", false, "Merchant", "Georgiev", false, null, "MERCHANT1@MAIL.COM", "MERCHANT1", "AQAAAAEAACcQAAAAECtbHhY2qjFLgWaOWKEeTp6zXN24sKknWKV6UJzurNBUU6lgvWIPz0QDb0bAgelW4A==", null, false, null, "ff91b260-0ab1-48c3-b7dd-ecb740dfce74", false, "Merchant1" }
+                    { new Guid("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"), 0, "98a6aa3d-8ef5-46aa-bb53-1eb9b886a786", "admin@mail.com", false, "Admin", "Petrov", false, null, "ADMIN@MAIL.COM", "ADMIN123", "AQAAAAEAACcQAAAAED5fybgGDmh/uwccedr6kWJ8psyB7O6Zc4TORMKhBFQRalzBlxmTSU276vFVGpC+BA==", null, false, null, "d2ecdcca-b1e6-4015-aaa1-17c22a17e6b3", false, "Admin123" },
+                    { new Guid("6afbf121-61d4-42ca-a9c1-5ac694442d83"), 0, "f0037a82-6600-4336-a442-bdfe852665bd", "empl1@mail.com", false, "Empl", "Nikolov", false, null, "EMPL1@MAIL.COM", "EMPLOYEE1", "AQAAAAEAACcQAAAAECye9fPJGSJ4faR/JpcLmapblYUMvcKQ2dnEfS7m28hptiWRAXxKNIF8bpXUKqCIWQ==", null, false, null, "455036d5-b858-4330-83bb-d9bbe1e7d7a0", false, "Employee1" },
+                    { new Guid("ab1c2588-4ee2-408f-a302-fbddfd8ec1b8"), 0, "39c7eb9f-6bcc-4f76-a377-f78edfce7368", "printer1@mail.com", false, "Printer", "Georgiev", false, null, "PRINTER1@MAIL.COM", "PRINTER1", "AQAAAAEAACcQAAAAEBznfPtwocPhIyEVh+zRVQMCeZqatgN30irOBYxhxq24WEQalEzpuk5zB7+auv82MA==", null, false, null, "636d473a-af8e-4b21-b069-02f511f4be73", false, "Printer1" },
+                    { new Guid("e7065dbb-0c70-48da-902c-9f6f2536c505"), 0, "1abd7b69-062e-4d4e-84d7-430e14c93987", "merchant1@mail.com", false, "Merchant", "Georgiev", false, null, "MERCHANT1@MAIL.COM", "MERCHANT1", "AQAAAAEAACcQAAAAEEApF1U6C4QcEzx9OTtW2LCtSSGto0b/M6/pAjck2GCyRlpvaRjpcMuWtl8WtT5YKQ==", null, false, null, "ff91b260-0ab1-48c3-b7dd-ecb740dfce74", false, "Merchant1" }
                 });
 
             migrationBuilder.InsertData(
@@ -525,27 +526,27 @@ namespace PrintingHouse.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "Articles",
                 columns: new[] { "Id", "ArticleNumber", "ClientId", "ColorModelId", "ImageName", "IsActive", "Length", "MaterialId", "Name" },
-                values: new object[] { new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"), "101.2", new Guid("ffbddf06-701d-49f2-8e4b-df760d13b2a6"), 2, "101.2_1.jpg", true, 0.29999999999999999, 3, "Salami Teleshki 0.3" });
+                values: new object[] { new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"), "1.2", new Guid("ffbddf06-701d-49f2-8e4b-df760d13b2a6"), 2, "1.2_1.jpg", true, 0.29999999999999999, 3, "Salami Teleshki 0.3" });
 
             migrationBuilder.InsertData(
                 table: "Articles",
                 columns: new[] { "Id", "ArticleNumber", "ClientId", "ColorModelId", "ImageName", "IsActive", "Length", "MaterialId", "Name" },
-                values: new object[] { new Guid("500f8057-d4bb-4839-9e15-bd260bbf532e"), "101.1", new Guid("ffbddf06-701d-49f2-8e4b-df760d13b2a6"), 2, "101.1_1.jpg", true, 4.5, 2, "Vinil Article" });
+                values: new object[] { new Guid("500f8057-d4bb-4839-9e15-bd260bbf532e"), "1.1", new Guid("ffbddf06-701d-49f2-8e4b-df760d13b2a6"), 2, "1.1_1.jpg", true, 4.5, 2, "Vinil Article" });
 
             migrationBuilder.InsertData(
                 table: "Articles",
                 columns: new[] { "Id", "ArticleNumber", "ClientId", "ColorModelId", "ImageName", "IsActive", "Length", "MaterialId", "Name" },
-                values: new object[] { new Guid("8919b7b3-86b2-4a83-8495-7eba2a58c358"), "102.1", new Guid("cb76cf2f-c998-459a-83aa-46035256deea"), 1, "102.1_1.webp", true, 1.0, 1, "Movie poster A2" });
+                values: new object[] { new Guid("8919b7b3-86b2-4a83-8495-7eba2a58c358"), "2.1", new Guid("cb76cf2f-c998-459a-83aa-46035256deea"), 1, "2.1_1.webp", true, 1.0, 1, "Movie poster A2" });
 
             migrationBuilder.InsertData(
                 table: "ArticleColors",
                 columns: new[] { "ArticleId", "ColorId", "ColorQuantity" },
                 values: new object[,]
                 {
-                    { new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"), 4, 0.20000000000000001 },
-                    { new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"), 5, 0.19 },
-                    { new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"), 6, 0.089999999999999997 },
-                    { new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"), 7, 0.10000000000000001 },
+                    { new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"), 4, 0.002 },
+                    { new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"), 5, 0.0089999999999999993 },
+                    { new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"), 6, 0.0050000000000000001 },
+                    { new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"), 7, 0.01 },
                     { new Guid("500f8057-d4bb-4839-9e15-bd260bbf532e"), 4, 0.080000000000000002 },
                     { new Guid("500f8057-d4bb-4839-9e15-bd260bbf532e"), 5, 0.17000000000000001 },
                     { new Guid("500f8057-d4bb-4839-9e15-bd260bbf532e"), 6, 0.089999999999999997 },

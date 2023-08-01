@@ -8,7 +8,6 @@
 
     using Entities;
     using Common.Contracts;
-    using PrintingHouse.Infrastructure.Data.Common;
 
 
     //Only for testing! Shoud be changed or removed.
@@ -38,7 +37,7 @@
                 MaterialId = 2,
                 ColorModelId = 2,
                 Length = 4.5,                
-                ArticleNumber = "101.1"                
+                ArticleNumber = "1.1"                
             };
 
             article.ImageName = $"{article.ArticleNumber}_1.jpg";
@@ -60,7 +59,7 @@
                 MaterialId = 1,
                 ColorModelId = 1,
                 Length = 1,
-                ArticleNumber = "102.1"
+                ArticleNumber = "2.1"
             };
 
             article.ImageName = $"{article.ArticleNumber}_1.webp";
@@ -82,7 +81,7 @@
                 MaterialId = 3,
                 ColorModelId = 2,
                 Length = 0.3,
-                ArticleNumber = "101.2"
+                ArticleNumber = "1.2"
             };
 
             article.ImageName = $"{article.ArticleNumber}_1.jpg";

@@ -64,25 +64,25 @@
                         {
                             ArticleId = Guid.Parse("0c4b3ad4-545e-4805-b34d-2b5572d000a7"),
                             ColorId = 4,
-                            ColorQuantity = 0.2
+                            ColorQuantity = 0.002
                         },
                         new ArticleColor()
                         {
                             ArticleId = Guid.Parse("0c4b3ad4-545e-4805-b34d-2b5572d000a7"),
                             ColorId = 5,
-                            ColorQuantity = 0.19
+                            ColorQuantity = 0.009
                         },
                         new ArticleColor()
                         {
                             ArticleId = Guid.Parse("0c4b3ad4-545e-4805-b34d-2b5572d000a7"),
                             ColorId = 6,
-                            ColorQuantity = 0.09
+                            ColorQuantity = 0.005
                         },
                         new ArticleColor()
                         {
                             ArticleId = Guid.Parse("0c4b3ad4-545e-4805-b34d-2b5572d000a7"),
                             ColorId = 7,
-                            ColorQuantity = 0.1
+                            ColorQuantity = 0.01
                         }
             };
         }

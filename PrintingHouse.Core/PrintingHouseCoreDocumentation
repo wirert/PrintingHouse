@@ -202,7 +202,6 @@
             </summary>
             <param name="id">Guid article id</param>
             <returns>Article view model</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown when Article is null</exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.ArticleService.EditAsync(PrintingHouse.Core.Models.Article.ArticleViewModel)">
             <summary>
@@ -210,7 +209,7 @@
             </summary>
             <param name="model">Article view model with data changes</param>
             <returns></returns>
-            <exception cref="T:System.ArgumentNullException">thrown when Article is null or IsActive is false, or ClientId is different</exception>
+            <exception cref="T:System.ArgumentException">thrown when Article is null or IsActive is false, or ClientId is different</exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.ArticleService.DeleteByIdAsync(System.Guid)">
             <summary>
@@ -269,7 +268,6 @@
             </summary>
             <param name="colorModelId">Color model identifier</param>
             <returns>List of color View model</returns>
-            <exception cref="T:System.ArgumentException">Throw exception if identifier is invalid</exception>
         </member>
         <member name="T:PrintingHouse.Core.Services.Contracts.IArticleService">
             <summary>
@@ -310,7 +308,6 @@
             </summary>
             <param name="id">Guid article id</param>
             <returns>Article view model</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown when Article is null</exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.Contracts.IArticleService.EditAsync(PrintingHouse.Core.Models.Article.ArticleViewModel)">
             <summary>
@@ -318,7 +315,7 @@
             </summary>
             <param name="model">Article view model with data changes</param>
             <returns></returns>
-            <exception cref="T:System.ArgumentNullException">thrown when Article is null or IsActive is false, or ClientId is different</exception>
+            <exception cref="T:System.ArgumentException">thrown when Article is null or IsActive is false, or ClientId is different</exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.Contracts.IArticleService.DeleteByIdAsync(System.Guid)">
             <summary>
