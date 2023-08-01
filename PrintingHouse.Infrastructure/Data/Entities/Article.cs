@@ -42,7 +42,7 @@
 
         [Comment("Article owner id")]
         [Required]
-        public int ClientId { get; set; }
+        public Guid ClientId { get; set; }
 
         [ForeignKey(nameof(ClientId))]
         public virtual Client Client { get; set; } = null!;

@@ -313,7 +313,8 @@ namespace PrintingHouse.Infrastructure.Migrations
                 name: "Clients",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false, comment: "Client primary key")
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Client primary key"),
+                    ClientNumber = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false, comment: "Client name"),
                     Email = table.Column<string>(type: "nvarchar(70)", maxLength: 70, nullable: false, comment: "Client e-mail"),
@@ -338,10 +339,11 @@ namespace PrintingHouse.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Article primary key."),
+                    ArticleNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false, comment: "Article custom number"),
                     Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false, comment: "Article name."),
-                    ImageName = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false, comment: "Name of design image"),
-                    MaterialQuantity = table.Column<double>(type: "float", nullable: false, comment: "Required material lenght"),
-                    ClientId = table.Column<int>(type: "int", nullable: false, comment: "Article owner id"),
+                    ImageName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, comment: "Name of design image"),
+                    Length = table.Column<double>(type: "float", nullable: false, comment: "Article length"),
+                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Article owner id"),
                     MaterialId = table.Column<int>(type: "int", nullable: false, comment: "Foreign key to MaterialColorModel table"),
                     ColorModelId = table.Column<int>(type: "int", nullable: false, comment: "Foreign key to MaterialColorModel table"),
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true, comment: "Soft delete boolean property")
@@ -399,9 +401,12 @@ namespace PrintingHouse.Infrastructure.Migrations
                     ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Order article id"),
                     Quantity = table.Column<int>(type: "int", nullable: false, comment: "Order article quantity"),
                     OrderTime = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "DateTime of order creation"),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true, comment: "Order expected end date if required from the client"),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true, comment: "Order deadline date if required from the client"),
+                    ExpectedPrintDate = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "Order expected print date"),
+                    ExpectedPrintDuration = table.Column<TimeSpan>(type: "time", nullable: false, comment: "Expected time needed for printing"),
                     Status = table.Column<int>(type: "int", nullable: false, comment: "Order current status"),
-                    Comment = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: true, comment: "Additional information about the order.")
+                    Comment = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: true, comment: "Additional information about the order."),
+                    MachineId = table.Column<int>(type: "int", nullable: true, comment: "Expected printing machine Id for the order")
                 },
                 constraints: table =>
                 {
@@ -412,6 +417,11 @@ namespace PrintingHouse.Infrastructure.Migrations
                         principalTable: "Articles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_Machines_MachineId",
+                        column: x => x.MachineId,
+                        principalTable: "Machines",
+                        principalColumn: "Id");
                 },
                 comment: "Order from client for print");
 
@@ -420,9 +430,10 @@ namespace PrintingHouse.Infrastructure.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PictureName", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"), 0, "f391a5b2-078f-4bac-aecf-bf071b646306", "admin@mail.com", false, "Admin", "Petrov", false, null, "ADMIN@MAIL.COM", "ADMIN123", "AQAAAAEAACcQAAAAEHJhxuLXWf5igzFtlPGT/vOgHD31VzAvG3vuAFMYvUQy2DFe+KWSHWLT9R5kHKE/vA==", null, false, null, "d2ecdcca-b1e6-4015-aaa1-17c22a17e6b3", false, "Admin123" },
-                    { new Guid("6afbf121-61d4-42ca-a9c1-5ac694442d83"), 0, "d802d894-dc3d-4b4b-8735-6e97e4496c4b", "empl1@mail.com", false, "Empl", "Nikolov", false, null, "EMPL1@MAIL.COM", "EMPLOYEE1", "AQAAAAEAACcQAAAAEH2jMWzk77ERO8cewJZA4gtIukkIAoRcyWhiyq7actAPY5H8yfRk7HZRUj8/rjMivQ==", null, false, null, "455036d5-b858-4330-83bb-d9bbe1e7d7a0", false, "Employee1" },
-                    { new Guid("e7065dbb-0c70-48da-902c-9f6f2536c505"), 0, "1436b11c-c659-443b-a780-58d9e2adf477", "merchant1@mail.com", false, "Merchant", "Georgiev", false, null, "MERCHANT1@MAIL.COM", "MERCHANT1", "AQAAAAEAACcQAAAAEGO/XRqDFZPqxHxaLGqHnMSztXttaUzdKUmQghMQmlOe/mOkcmYG1XkvR/UnG2TO+g==", null, false, null, "ff91b260-0ab1-48c3-b7dd-ecb740dfce74", false, "Merchant1" }
+                    { new Guid("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"), 0, "c85e382a-1570-459a-b462-561378b05f21", "admin@mail.com", false, "Admin", "Petrov", false, null, "ADMIN@MAIL.COM", "ADMIN123", "AQAAAAEAACcQAAAAEGwxjJIUYZui17WUdCkKbBIAoaFp2bIFpDjZjhbH1YaWKavhsIG3qwt7zFcGmZXWFw==", null, false, null, "d2ecdcca-b1e6-4015-aaa1-17c22a17e6b3", false, "Admin123" },
+                    { new Guid("6afbf121-61d4-42ca-a9c1-5ac694442d83"), 0, "ce2abfad-62e9-4bdc-9253-5c4de87e2a13", "empl1@mail.com", false, "Empl", "Nikolov", false, null, "EMPL1@MAIL.COM", "EMPLOYEE1", "AQAAAAEAACcQAAAAEA6JzgDCYAu7f5e3IKfMhF2fYBUH2Auhbdv416qVpujuv3yljYpUbWZ7LmXCaPGHBg==", null, false, null, "455036d5-b858-4330-83bb-d9bbe1e7d7a0", false, "Employee1" },
+                    { new Guid("ab1c2588-4ee2-408f-a302-fbddfd8ec1b8"), 0, "240346e6-5157-4338-a8f3-37980e43c256", "printer1@mail.com", false, "Printer", "Georgiev", false, null, "PRINTER1@MAIL.COM", "PRINTER1", "AQAAAAEAACcQAAAAEM7v+SXRWnPch7ZtjBYHzlUNhZxE86kYxb4TrP3eFCxwOcGuCPHF9VOIYPJePXI3FQ==", null, false, null, "636d473a-af8e-4b21-b069-02f511f4be73", false, "Printer1" },
+                    { new Guid("e7065dbb-0c70-48da-902c-9f6f2536c505"), 0, "179c04dd-0f59-4f8a-9035-e53784e20a5e", "merchant1@mail.com", false, "Merchant", "Georgiev", false, null, "MERCHANT1@MAIL.COM", "MERCHANT1", "AQAAAAEAACcQAAAAECtbHhY2qjFLgWaOWKEeTp6zXN24sKknWKV6UJzurNBUU6lgvWIPz0QDb0bAgelW4A==", null, false, null, "ff91b260-0ab1-48c3-b7dd-ecb740dfce74", false, "Merchant1" }
                 });
 
             migrationBuilder.InsertData(
@@ -439,9 +450,9 @@ namespace PrintingHouse.Infrastructure.Migrations
                 columns: new[] { "Id", "InStock", "IsActive", "Lenght", "MeasureUnit", "Price", "Type", "Width" },
                 values: new object[,]
                 {
-                    { 1, 10000, true, 594.0, 1, 1m, "Plain paper A2", 420.0 },
-                    { 2, 100, true, 0.01, 0, 1500.50m, "Vinil 2m", 0.002 },
-                    { 3, 20, true, 1.0, 0, 850m, "Nylon 20cm", 0.00020000000000000001 }
+                    { 1, 10000, true, 0.59399999999999997, 1, 1m, "Plain paper A2", 0.41999999999999998 },
+                    { 2, 100, true, 10.0, 0, 1500.50m, "Vinil 2m", 2.0 },
+                    { 3, 100, true, 1000.0, 0, 850m, "Nylon 20cm", 0.20000000000000001 }
                 });
 
             migrationBuilder.InsertData(
@@ -453,7 +464,8 @@ namespace PrintingHouse.Infrastructure.Migrations
                     { 2, true, "Merchant" },
                     { 3, true, "Employee" },
                     { 4, true, "Designer" },
-                    { 5, true, "Manager" }
+                    { 5, true, "Manager" },
+                    { 6, true, "Printer" }
                 });
 
             migrationBuilder.InsertData(
@@ -461,19 +473,24 @@ namespace PrintingHouse.Infrastructure.Migrations
                 columns: new[] { "Id", "ColorModelId", "InStock", "Price", "Type" },
                 values: new object[,]
                 {
-                    { 1, 1, 104, 50m, "Red" },
-                    { 2, 1, 92, 48m, "Green" },
-                    { 3, 1, 67, 57m, "Blue" },
-                    { 4, 2, 47, 52m, "Cyan" },
-                    { 5, 2, 38, 55m, "Magenta" },
-                    { 6, 2, 50, 47m, "Yellow" },
-                    { 7, 2, 60, 40m, "Black" }
+                    { 1, 1, 250, 50m, "Red" },
+                    { 2, 1, 300, 48m, "Green" },
+                    { 3, 1, 280, 57m, "Blue" },
+                    { 4, 2, 180, 52m, "Cyan" },
+                    { 5, 2, 200, 55m, "Magenta" },
+                    { 6, 2, 200, 47m, "Yellow" },
+                    { 7, 2, 230, 40m, "Black" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Employees",
                 columns: new[] { "Id", "ApplicationUserId", "IsActive", "PositionId" },
-                values: new object[] { 1, new Guid("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"), true, 1 });
+                values: new object[,]
+                {
+                    { 1, new Guid("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"), true, 1 },
+                    { 2, new Guid("e7065dbb-0c70-48da-902c-9f6f2536c505"), true, 2 },
+                    { 3, new Guid("ab1c2588-4ee2-408f-a302-fbddfd8ec1b8"), true, 6 }
+                });
 
             migrationBuilder.InsertData(
                 table: "MaterialsColorModels",
@@ -486,6 +503,15 @@ namespace PrintingHouse.Infrastructure.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Clients",
+                columns: new[] { "Id", "Email", "IsActive", "MerchantId", "Name", "PhoneNumber" },
+                values: new object[,]
+                {
+                    { new Guid("cb76cf2f-c998-459a-83aa-46035256deea"), "client@email.com", true, 2, "Client 2", "+056568645" },
+                    { new Guid("ffbddf06-701d-49f2-8e4b-df760d13b2a6"), "TestClient@email.com", true, 2, "Test Client", "1234567890" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Machines",
                 columns: new[] { "Id", "ColorModelId", "MaterialId", "MaterialPerPrint", "Model", "Name", "PrintTime" },
                 values: new object[,]
@@ -493,7 +519,40 @@ namespace PrintingHouse.Infrastructure.Migrations
                     { 1, 2, 2, 5.0, null, "Machine 1", new TimeSpan(0, 0, 3, 0, 0) },
                     { 2, 2, 2, 5.0, null, "Machine 2", new TimeSpan(0, 0, 2, 30, 0) },
                     { 3, 1, 1, 1.0, null, "Machine 3", new TimeSpan(0, 0, 0, 3, 0) },
-                    { 4, 2, 3, 1.0, null, "Machine 4", new TimeSpan(0, 0, 40, 0, 0) }
+                    { 4, 2, 3, 500.0, null, "Machine 4", new TimeSpan(0, 0, 40, 0, 0) }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Articles",
+                columns: new[] { "Id", "ArticleNumber", "ClientId", "ColorModelId", "ImageName", "IsActive", "Length", "MaterialId", "Name" },
+                values: new object[] { new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"), "101.2", new Guid("ffbddf06-701d-49f2-8e4b-df760d13b2a6"), 2, "101.2_1.jpg", true, 0.29999999999999999, 3, "Salami Teleshki 0.3" });
+
+            migrationBuilder.InsertData(
+                table: "Articles",
+                columns: new[] { "Id", "ArticleNumber", "ClientId", "ColorModelId", "ImageName", "IsActive", "Length", "MaterialId", "Name" },
+                values: new object[] { new Guid("500f8057-d4bb-4839-9e15-bd260bbf532e"), "101.1", new Guid("ffbddf06-701d-49f2-8e4b-df760d13b2a6"), 2, "101.1_1.jpg", true, 4.5, 2, "Vinil Article" });
+
+            migrationBuilder.InsertData(
+                table: "Articles",
+                columns: new[] { "Id", "ArticleNumber", "ClientId", "ColorModelId", "ImageName", "IsActive", "Length", "MaterialId", "Name" },
+                values: new object[] { new Guid("8919b7b3-86b2-4a83-8495-7eba2a58c358"), "102.1", new Guid("cb76cf2f-c998-459a-83aa-46035256deea"), 1, "102.1_1.webp", true, 1.0, 1, "Movie poster A2" });
+
+            migrationBuilder.InsertData(
+                table: "ArticleColors",
+                columns: new[] { "ArticleId", "ColorId", "ColorQuantity" },
+                values: new object[,]
+                {
+                    { new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"), 4, 0.20000000000000001 },
+                    { new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"), 5, 0.19 },
+                    { new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"), 6, 0.089999999999999997 },
+                    { new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"), 7, 0.10000000000000001 },
+                    { new Guid("500f8057-d4bb-4839-9e15-bd260bbf532e"), 4, 0.080000000000000002 },
+                    { new Guid("500f8057-d4bb-4839-9e15-bd260bbf532e"), 5, 0.17000000000000001 },
+                    { new Guid("500f8057-d4bb-4839-9e15-bd260bbf532e"), 6, 0.089999999999999997 },
+                    { new Guid("500f8057-d4bb-4839-9e15-bd260bbf532e"), 7, 0.10000000000000001 },
+                    { new Guid("8919b7b3-86b2-4a83-8495-7eba2a58c358"), 1, 0.0030000000000000001 },
+                    { new Guid("8919b7b3-86b2-4a83-8495-7eba2a58c358"), 2, 0.0070000000000000001 },
+                    { new Guid("8919b7b3-86b2-4a83-8495-7eba2a58c358"), 3, 0.0089999999999999993 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -591,6 +650,11 @@ namespace PrintingHouse.Infrastructure.Migrations
                 name: "IX_Orders_ArticleId",
                 table: "Orders",
                 column: "ArticleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_MachineId",
+                table: "Orders",
+                column: "MachineId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -614,9 +678,6 @@ namespace PrintingHouse.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Machines");
-
-            migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
@@ -627,6 +688,9 @@ namespace PrintingHouse.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Articles");
+
+            migrationBuilder.DropTable(
+                name: "Machines");
 
             migrationBuilder.DropTable(
                 name: "Clients");

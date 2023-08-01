@@ -128,7 +128,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:PrintingHouse.Controllers.ArticleController.All(System.Nullable{System.Int32})">
+        <member name="M:PrintingHouse.Controllers.ArticleController.All(System.Nullable{System.Guid})">
             <summary>
             Show all articles or All articles of client
             </summary>
@@ -142,7 +142,7 @@
             <param name="articleId">Article identifier</param>
             <returns>Design file</returns>
         </member>
-        <member name="M:PrintingHouse.Controllers.ArticleController.Select(System.Int32,System.Nullable{System.Guid})">
+        <member name="M:PrintingHouse.Controllers.ArticleController.Select(System.Guid,System.Nullable{System.Guid})">
             <summary>
             Choose Material and Color model (get)
             </summary>

@@ -250,7 +250,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = new Guid("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "25805e82-310e-45e9-b8b1-c049f58fd8b7",
+                            ConcurrencyStamp = "c85e382a-1570-459a-b462-561378b05f21",
                             Email = "admin@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
@@ -259,7 +259,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@MAIL.COM",
                             NormalizedUserName = "ADMIN123",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPS90qZyXxM4OIWMZXHNjNWhk/qU/Pemc8ePM3u6fAd9dPOQZClpQ2ZsLzoOGggo9Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGwxjJIUYZui17WUdCkKbBIAoaFp2bIFpDjZjhbH1YaWKavhsIG3qwt7zFcGmZXWFw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "d2ecdcca-b1e6-4015-aaa1-17c22a17e6b3",
                             TwoFactorEnabled = false,
@@ -269,7 +269,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = new Guid("e7065dbb-0c70-48da-902c-9f6f2536c505"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f93fdc59-b908-4418-9d9c-9070c25f4fd1",
+                            ConcurrencyStamp = "179c04dd-0f59-4f8a-9035-e53784e20a5e",
                             Email = "merchant1@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Merchant",
@@ -278,7 +278,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MERCHANT1@MAIL.COM",
                             NormalizedUserName = "MERCHANT1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEG5VblBo4vkLZzHpPhbCvoZIA+2NJvoAAcyXnKzoUpBnaPszrgQDhOyYgPnZy4VebQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECtbHhY2qjFLgWaOWKEeTp6zXN24sKknWKV6UJzurNBUU6lgvWIPz0QDb0bAgelW4A==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "ff91b260-0ab1-48c3-b7dd-ecb740dfce74",
                             TwoFactorEnabled = false,
@@ -288,7 +288,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = new Guid("6afbf121-61d4-42ca-a9c1-5ac694442d83"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e329a91f-d860-4f25-aee8-de4cb366488a",
+                            ConcurrencyStamp = "ce2abfad-62e9-4bdc-9253-5c4de87e2a13",
                             Email = "empl1@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Empl",
@@ -297,7 +297,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "EMPL1@MAIL.COM",
                             NormalizedUserName = "EMPLOYEE1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAxtVlEhJ28YlnxBDNKqIy16I2EYVNURfYATku3kqoFM2DGcBsaV14v485ihFLGoDg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEA6JzgDCYAu7f5e3IKfMhF2fYBUH2Auhbdv416qVpujuv3yljYpUbWZ7LmXCaPGHBg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "455036d5-b858-4330-83bb-d9bbe1e7d7a0",
                             TwoFactorEnabled = false,
@@ -307,7 +307,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = new Guid("ab1c2588-4ee2-408f-a302-fbddfd8ec1b8"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "36d8cc97-dc9d-4cc6-87b5-a200584a14e3",
+                            ConcurrencyStamp = "240346e6-5157-4338-a8f3-37980e43c256",
                             Email = "printer1@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Printer",
@@ -316,7 +316,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "PRINTER1@MAIL.COM",
                             NormalizedUserName = "PRINTER1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHssjMeIBfcX9objBUESYAquXL1G78QdJz4sh8h70zALruwBlT7wPkDRAuMjANZ2qA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEM7v+SXRWnPch7ZtjBYHzlUNhZxE86kYxb4TrP3eFCxwOcGuCPHF9VOIYPJePXI3FQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "636d473a-af8e-4b21-b069-02f511f4be73",
                             TwoFactorEnabled = false,
@@ -337,8 +337,8 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasComment("Article custom number");
 
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uniqueidentifier")
                         .HasComment("Article owner id");
 
                     b.Property<int>("ColorModelId")
@@ -386,7 +386,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = new Guid("500f8057-d4bb-4839-9e15-bd260bbf532e"),
                             ArticleNumber = "101.1",
-                            ClientId = 101,
+                            ClientId = new Guid("ffbddf06-701d-49f2-8e4b-df760d13b2a6"),
                             ColorModelId = 2,
                             ImageName = "101.1_1.jpg",
                             IsActive = true,
@@ -398,7 +398,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = new Guid("8919b7b3-86b2-4a83-8495-7eba2a58c358"),
                             ArticleNumber = "102.1",
-                            ClientId = 102,
+                            ClientId = new Guid("cb76cf2f-c998-459a-83aa-46035256deea"),
                             ColorModelId = 1,
                             ImageName = "102.1_1.webp",
                             IsActive = true,
@@ -410,7 +410,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"),
                             ArticleNumber = "101.2",
-                            ClientId = 101,
+                            ClientId = new Guid("ffbddf06-701d-49f2-8e4b-df760d13b2a6"),
                             ColorModelId = 2,
                             ImageName = "101.2_1.jpg",
                             IsActive = true,
@@ -513,12 +513,16 @@ namespace PrintingHouse.Infrastructure.Migrations
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Client", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("uniqueidentifier")
                         .HasComment("Client primary key");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<int>("ClientNumber")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientNumber"), 1L, 1);
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -562,7 +566,8 @@ namespace PrintingHouse.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 101,
+                            Id = new Guid("ffbddf06-701d-49f2-8e4b-df760d13b2a6"),
+                            ClientNumber = 0,
                             Email = "TestClient@email.com",
                             IsActive = true,
                             MerchantId = 2,
@@ -571,7 +576,8 @@ namespace PrintingHouse.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = 102,
+                            Id = new Guid("cb76cf2f-c998-459a-83aa-46035256deea"),
+                            ClientNumber = 0,
                             Email = "client@email.com",
                             IsActive = true,
                             MerchantId = 2,

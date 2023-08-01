@@ -168,7 +168,7 @@
             Article service
             </summary>
         </member>
-        <member name="M:PrintingHouse.Core.Services.ArticleService.GetAllAsync(System.Nullable{System.Int32})">
+        <member name="M:PrintingHouse.Core.Services.ArticleService.GetAllAsync(System.Nullable{System.Guid})">
             <summary>
             Get all articles or all articles of certain client by client id
             </summary>
@@ -276,7 +276,7 @@
             Article service interface for IoC
             </summary>
         </member>
-        <member name="M:PrintingHouse.Core.Services.Contracts.IArticleService.GetAllAsync(System.Nullable{System.Int32})">
+        <member name="M:PrintingHouse.Core.Services.Contracts.IArticleService.GetAllAsync(System.Nullable{System.Guid})">
             <summary>
             Get all articles or all articles of certain client by client id
             </summary>

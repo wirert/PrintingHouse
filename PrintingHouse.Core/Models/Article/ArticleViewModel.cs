@@ -33,7 +33,9 @@
 
         [Required]
         [Range(1, int.MaxValue)]
-        public int ClientId { get; set; }
+        public Guid ClientId { get; set; }
+
+        public int ClientNumber { get; set; }
 
         public string ClientName { get; set; } = null!;
 

@@ -21,6 +21,8 @@
         /// <returns>Boolean</returns>
         Task<bool> ExistByName(string name);
 
+        Task<bool> ExistsByIdAndNameAsync(Guid id, string name);
+
         /// <summary>
         /// Gets all active clients
         /// </summary>

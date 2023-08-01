@@ -19,7 +19,7 @@
         [Display(Name ="Color model")]
         public string? ColorModel { get; set; }
 
-        public int ClientId { get; set; }
+        public Guid ClientId { get; set; }
 
         [Display(Name = "Client name")]
         public string ClientName { get; set; } = null!;       

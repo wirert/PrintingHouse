@@ -53,7 +53,6 @@
         /// </summary>
         /// <param name="colorModelId">Color model identifier</param>
         /// <returns>List of color View model</returns>
-        /// <exception cref="ArgumentException">Throw exception if identifier is invalid</exception>
         public async Task<IList<AddArticleColorVeiwModel>> GetColorModelColorsAsync(int colorModelId)
         {
             var colors =  await repo.AllReadonly<ColorModel>(cm => cm.Id == colorModelId)
@@ -66,12 +65,7 @@
                     .ToList())
                 .FirstOrDefaultAsync();
 
-            if (colors == null)
-            {
-                throw new ArgumentException();
-            }
-
-            return colors;
+            return colors!;
         }
     }
 }

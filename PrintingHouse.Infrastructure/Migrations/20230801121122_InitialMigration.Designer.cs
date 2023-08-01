@@ -12,8 +12,8 @@ using PrintingHouse.Infrastructure.Data;
 namespace PrintingHouse.Infrastructure.Migrations
 {
     [DbContext(typeof(PrintingHouseDbContext))]
-    [Migration("20230721170958_OrderQuantityChangeToInt")]
-    partial class OrderQuantityChangeToInt
+    [Migration("20230801121122_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -252,7 +252,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = new Guid("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a125bef2-c25a-4f38-98a7-036489fcbeb7",
+                            ConcurrencyStamp = "c85e382a-1570-459a-b462-561378b05f21",
                             Email = "admin@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
@@ -261,7 +261,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@MAIL.COM",
                             NormalizedUserName = "ADMIN123",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOD2IOkRjwfk7wHLAXDNPXfu52wlKcakc4KuDXK57JmBtWbzqa5/Gsqch0HQ5ROBQw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGwxjJIUYZui17WUdCkKbBIAoaFp2bIFpDjZjhbH1YaWKavhsIG3qwt7zFcGmZXWFw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "d2ecdcca-b1e6-4015-aaa1-17c22a17e6b3",
                             TwoFactorEnabled = false,
@@ -271,7 +271,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = new Guid("e7065dbb-0c70-48da-902c-9f6f2536c505"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "09ecb0b4-d8c4-4238-89db-3e756296043c",
+                            ConcurrencyStamp = "179c04dd-0f59-4f8a-9035-e53784e20a5e",
                             Email = "merchant1@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Merchant",
@@ -280,7 +280,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MERCHANT1@MAIL.COM",
                             NormalizedUserName = "MERCHANT1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAaoMTpqvZn2M0vFc/7a9HW8VeGpn+PcPXcH0zOwOq92QjMkszdZ5SdzmfpRaSDLmw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECtbHhY2qjFLgWaOWKEeTp6zXN24sKknWKV6UJzurNBUU6lgvWIPz0QDb0bAgelW4A==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "ff91b260-0ab1-48c3-b7dd-ecb740dfce74",
                             TwoFactorEnabled = false,
@@ -290,7 +290,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = new Guid("6afbf121-61d4-42ca-a9c1-5ac694442d83"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f2f5d45a-055b-49f4-9269-5eadf1b6ae5a",
+                            ConcurrencyStamp = "ce2abfad-62e9-4bdc-9253-5c4de87e2a13",
                             Email = "empl1@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Empl",
@@ -299,11 +299,30 @@ namespace PrintingHouse.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "EMPL1@MAIL.COM",
                             NormalizedUserName = "EMPLOYEE1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEASd82nRQrzX1LhnnUxUO1rmVrNBJQ2dEts46QlVcQck0rNejJwyB0R/9m1imBHHdg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEA6JzgDCYAu7f5e3IKfMhF2fYBUH2Auhbdv416qVpujuv3yljYpUbWZ7LmXCaPGHBg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "455036d5-b858-4330-83bb-d9bbe1e7d7a0",
                             TwoFactorEnabled = false,
                             UserName = "Employee1"
+                        },
+                        new
+                        {
+                            Id = new Guid("ab1c2588-4ee2-408f-a302-fbddfd8ec1b8"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "240346e6-5157-4338-a8f3-37980e43c256",
+                            Email = "printer1@mail.com",
+                            EmailConfirmed = false,
+                            FirstName = "Printer",
+                            IsActive = false,
+                            LastName = "Georgiev",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "PRINTER1@MAIL.COM",
+                            NormalizedUserName = "PRINTER1",
+                            PasswordHash = "AQAAAAEAACcQAAAAEM7v+SXRWnPch7ZtjBYHzlUNhZxE86kYxb4TrP3eFCxwOcGuCPHF9VOIYPJePXI3FQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "636d473a-af8e-4b21-b069-02f511f4be73",
+                            TwoFactorEnabled = false,
+                            UserName = "Printer1"
                         });
                 });
 
@@ -320,8 +339,8 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasComment("Article custom number");
 
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uniqueidentifier")
                         .HasComment("Article owner id");
 
                     b.Property<int>("ColorModelId")
@@ -330,8 +349,8 @@ namespace PrintingHouse.Infrastructure.Migrations
 
                     b.Property<string>("ImageName")
                         .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
                         .HasComment("Name of design image");
 
                     b.Property<bool>("IsActive")
@@ -363,6 +382,44 @@ namespace PrintingHouse.Infrastructure.Migrations
                     b.ToTable("Articles");
 
                     b.HasComment("Particular client article ready for print.");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("500f8057-d4bb-4839-9e15-bd260bbf532e"),
+                            ArticleNumber = "101.1",
+                            ClientId = new Guid("ffbddf06-701d-49f2-8e4b-df760d13b2a6"),
+                            ColorModelId = 2,
+                            ImageName = "101.1_1.jpg",
+                            IsActive = true,
+                            Length = 4.5,
+                            MaterialId = 2,
+                            Name = "Vinil Article"
+                        },
+                        new
+                        {
+                            Id = new Guid("8919b7b3-86b2-4a83-8495-7eba2a58c358"),
+                            ArticleNumber = "102.1",
+                            ClientId = new Guid("cb76cf2f-c998-459a-83aa-46035256deea"),
+                            ColorModelId = 1,
+                            ImageName = "102.1_1.webp",
+                            IsActive = true,
+                            Length = 1.0,
+                            MaterialId = 1,
+                            Name = "Movie poster A2"
+                        },
+                        new
+                        {
+                            Id = new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"),
+                            ArticleNumber = "101.2",
+                            ClientId = new Guid("ffbddf06-701d-49f2-8e4b-df760d13b2a6"),
+                            ColorModelId = 2,
+                            ImageName = "101.2_1.jpg",
+                            IsActive = true,
+                            Length = 0.29999999999999999,
+                            MaterialId = 3,
+                            Name = "Salami Teleshki 0.3"
+                        });
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.ArticleColor", b =>
@@ -386,16 +443,88 @@ namespace PrintingHouse.Infrastructure.Migrations
                     b.ToTable("ArticleColors");
 
                     b.HasComment("Article color with required quantity");
+
+                    b.HasData(
+                        new
+                        {
+                            ArticleId = new Guid("500f8057-d4bb-4839-9e15-bd260bbf532e"),
+                            ColorId = 4,
+                            ColorQuantity = 0.080000000000000002
+                        },
+                        new
+                        {
+                            ArticleId = new Guid("500f8057-d4bb-4839-9e15-bd260bbf532e"),
+                            ColorId = 5,
+                            ColorQuantity = 0.17000000000000001
+                        },
+                        new
+                        {
+                            ArticleId = new Guid("500f8057-d4bb-4839-9e15-bd260bbf532e"),
+                            ColorId = 6,
+                            ColorQuantity = 0.089999999999999997
+                        },
+                        new
+                        {
+                            ArticleId = new Guid("500f8057-d4bb-4839-9e15-bd260bbf532e"),
+                            ColorId = 7,
+                            ColorQuantity = 0.10000000000000001
+                        },
+                        new
+                        {
+                            ArticleId = new Guid("8919b7b3-86b2-4a83-8495-7eba2a58c358"),
+                            ColorId = 1,
+                            ColorQuantity = 0.0030000000000000001
+                        },
+                        new
+                        {
+                            ArticleId = new Guid("8919b7b3-86b2-4a83-8495-7eba2a58c358"),
+                            ColorId = 2,
+                            ColorQuantity = 0.0070000000000000001
+                        },
+                        new
+                        {
+                            ArticleId = new Guid("8919b7b3-86b2-4a83-8495-7eba2a58c358"),
+                            ColorId = 3,
+                            ColorQuantity = 0.0089999999999999993
+                        },
+                        new
+                        {
+                            ArticleId = new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"),
+                            ColorId = 4,
+                            ColorQuantity = 0.20000000000000001
+                        },
+                        new
+                        {
+                            ArticleId = new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"),
+                            ColorId = 5,
+                            ColorQuantity = 0.19
+                        },
+                        new
+                        {
+                            ArticleId = new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"),
+                            ColorId = 6,
+                            ColorQuantity = 0.089999999999999997
+                        },
+                        new
+                        {
+                            ArticleId = new Guid("0c4b3ad4-545e-4805-b34d-2b5572d000a7"),
+                            ColorId = 7,
+                            ColorQuantity = 0.10000000000000001
+                        });
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Client", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("uniqueidentifier")
                         .HasComment("Client primary key");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<int>("ClientNumber")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientNumber"), 1L, 1);
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -435,6 +564,28 @@ namespace PrintingHouse.Infrastructure.Migrations
                     b.ToTable("Clients");
 
                     b.HasComment("Printing house client");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("ffbddf06-701d-49f2-8e4b-df760d13b2a6"),
+                            ClientNumber = 0,
+                            Email = "TestClient@email.com",
+                            IsActive = true,
+                            MerchantId = 2,
+                            Name = "Test Client",
+                            PhoneNumber = "1234567890"
+                        },
+                        new
+                        {
+                            Id = new Guid("cb76cf2f-c998-459a-83aa-46035256deea"),
+                            ClientNumber = 0,
+                            Email = "client@email.com",
+                            IsActive = true,
+                            MerchantId = 2,
+                            Name = "Client 2",
+                            PhoneNumber = "+056568645"
+                        });
                 });
 
             modelBuilder.Entity("PrintingHouse.Infrastructure.Data.Entities.Color", b =>
@@ -477,7 +628,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = 1,
                             ColorModelId = 1,
-                            InStock = 104,
+                            InStock = 250,
                             Price = 50m,
                             Type = "Red"
                         },
@@ -485,7 +636,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = 2,
                             ColorModelId = 1,
-                            InStock = 92,
+                            InStock = 300,
                             Price = 48m,
                             Type = "Green"
                         },
@@ -493,7 +644,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = 3,
                             ColorModelId = 1,
-                            InStock = 67,
+                            InStock = 280,
                             Price = 57m,
                             Type = "Blue"
                         },
@@ -501,7 +652,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = 4,
                             ColorModelId = 2,
-                            InStock = 47,
+                            InStock = 180,
                             Price = 52m,
                             Type = "Cyan"
                         },
@@ -509,7 +660,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = 5,
                             ColorModelId = 2,
-                            InStock = 38,
+                            InStock = 200,
                             Price = 55m,
                             Type = "Magenta"
                         },
@@ -517,7 +668,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = 6,
                             ColorModelId = 2,
-                            InStock = 50,
+                            InStock = 200,
                             Price = 47m,
                             Type = "Yellow"
                         },
@@ -525,7 +676,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         {
                             Id = 7,
                             ColorModelId = 2,
-                            InStock = 60,
+                            InStock = 230,
                             Price = 40m,
                             Type = "Black"
                         });
@@ -606,6 +757,20 @@ namespace PrintingHouse.Infrastructure.Migrations
                             ApplicationUserId = new Guid("41e4eae1-eaac-4e34-bdf3-a6c19549dcdd"),
                             IsActive = true,
                             PositionId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ApplicationUserId = new Guid("e7065dbb-0c70-48da-902c-9f6f2536c505"),
+                            IsActive = true,
+                            PositionId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ApplicationUserId = new Guid("ab1c2588-4ee2-408f-a302-fbddfd8ec1b8"),
+                            IsActive = true,
+                            PositionId = 6
                         });
                 });
 
@@ -695,7 +860,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                             Id = 4,
                             ColorModelId = 2,
                             MaterialId = 3,
-                            MaterialPerPrint = 1.0,
+                            MaterialPerPrint = 500.0,
                             Name = "Machine 4",
                             PrintTime = new TimeSpan(0, 0, 40, 0, 0),
                             Status = 0
@@ -755,33 +920,33 @@ namespace PrintingHouse.Infrastructure.Migrations
                             Id = 1,
                             InStock = 10000,
                             IsActive = true,
-                            Lenght = 594.0,
+                            Lenght = 0.59399999999999997,
                             MeasureUnit = 1,
                             Price = 1m,
                             Type = "Plain paper A2",
-                            Width = 420.0
+                            Width = 0.41999999999999998
                         },
                         new
                         {
                             Id = 2,
                             InStock = 100,
                             IsActive = true,
-                            Lenght = 0.01,
+                            Lenght = 10.0,
                             MeasureUnit = 0,
                             Price = 1500.50m,
                             Type = "Vinil 2m",
-                            Width = 0.002
+                            Width = 2.0
                         },
                         new
                         {
                             Id = 3,
-                            InStock = 20,
+                            InStock = 100,
                             IsActive = true,
-                            Lenght = 1.0,
+                            Lenght = 1000.0,
                             MeasureUnit = 0,
                             Price = 850m,
                             Type = "Nylon 20cm",
-                            Width = 0.00020000000000000001
+                            Width = 0.20000000000000001
                         });
                 });
 
@@ -847,7 +1012,7 @@ namespace PrintingHouse.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasComment("Order expected print date");
 
-                    b.Property<TimeSpan>("ExpectedPrintTime")
+                    b.Property<TimeSpan>("ExpectedPrintDuration")
                         .HasColumnType("time")
                         .HasComment("Expected time needed for printing");
 
@@ -933,6 +1098,12 @@ namespace PrintingHouse.Infrastructure.Migrations
                             Id = 5,
                             IsActive = true,
                             Name = "Manager"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            IsActive = true,
+                            Name = "Printer"
                         });
                 });
 

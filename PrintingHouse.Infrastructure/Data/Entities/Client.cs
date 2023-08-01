@@ -12,13 +12,16 @@
     {
         public Client()
         {
+            Id = Guid.NewGuid();
             Articles = new HashSet<Article>();
             IsActive = true;
         }
 
         [Comment("Client primary key")]
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
+
+        public int ClientNumber { get; set; }
 
         [Comment("Client name")]
         [Required]

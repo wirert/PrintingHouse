@@ -12,7 +12,7 @@
         /// </summary>
         /// <param name="id">client id (nullable)</param>
         /// <returns>Enumeration of All article view model</returns>
-        Task<IEnumerable<AllArticleViewModel>> GetAllAsync(int? id);
+        Task<IEnumerable<AllArticleViewModel>> GetAllAsync(Guid? id);
 
         /// <summary>
         /// Creates new article
@@ -40,15 +40,14 @@
         /// </summary>
         /// <param name="id">Guid article id</param>
         /// <returns>Article view model</returns>
-        /// <exception cref="ArgumentNullException">Thrown when Article is null</exception>
-        Task<ArticleViewModel> GetByIdAsync(Guid id);
+        Task<ArticleViewModel?> GetByIdAsync(Guid id);
 
         /// <summary>
         /// Edit existing article
         /// </summary>
         /// <param name="model">Article view model with data changes</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException">thrown when Article is null or IsActive is false, or ClientId is different</exception>
+        /// <exception cref="ArgumentException">thrown when Article is null or IsActive is false, or ClientId is different</exception>
         Task EditAsync(ArticleViewModel model);
 
         /// <summary>

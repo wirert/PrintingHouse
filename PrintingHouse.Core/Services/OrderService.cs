@@ -143,7 +143,7 @@
                     {
                         case OrderStatus.Waiting:
                             break;
-                        case OrderStatus.Printing: 
+                        case OrderStatus.Printing:
                             var machineOrders = await repo.AllReadonly<Order>(o => o.MachineId == order.MachineId).ToArrayAsync();
 
                             if (machineOrders.Any(o => o.Status == OrderStatus.Printing))
@@ -216,7 +216,12 @@
                         case OrderStatus.Printing:
                             throw new ArgumentException("There is no enough consumables!");
                         default:
-                            order.Status = this.TakeMaterialsAndColorsIfAvailable(article, order.Quantity) ? status : OrderStatus.NoConsumable;
+                            if (this.TakeMaterialsAndColorsIfAvailable(article, order.Quantity) == false)
+                            {
+                                throw new ArgumentException("There is no enough consumables!");
+                            }
+
+                            order.Status = status;
                             break;
                     }
                     break;

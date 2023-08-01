@@ -35,7 +35,7 @@
         /// </summary>
         /// <param name="id">client id (nullable)</param>
         /// <returns>Enumeration of All article view model</returns>
-        public async Task<IEnumerable<AllArticleViewModel>> GetAllAsync(int? id)
+        public async Task<IEnumerable<AllArticleViewModel>> GetAllAsync(Guid? id)
         {
             Expression<Func<Article, bool>> searchTerms = a => a.IsActive;
 
@@ -51,6 +51,7 @@
                     ArticleNumber = a.ArticleNumber,
                     Name = a.Name,
                     ClientId = a.ClientId,
+                    
                     ClientName = a.Client.Name,
                     FileName = a.ImageName,
                     Material = a.MaterialColorModel.Material.Type,
@@ -67,8 +68,12 @@
         /// <param name="model">Article view model</param>
         public async Task CreateAsync(ArticleViewModel model)
         {
-            var clientArticlesCount = await repo.AllReadonly<Client>(c => c.Id == model.ClientId)
-                .Select(c => c.Articles.Count)
+            var client = await repo.AllReadonly<Client>(c => c.Id == model.ClientId)
+                .Select(c => new
+                {
+                    ArticlesCount = c.Articles.Count(a => a.IsActive),
+                    c.ClientNumber
+                })
                 .FirstAsync();
            
             var article = new Article()
@@ -78,7 +83,7 @@
                 MaterialId = model.MaterialId,
                 ColorModelId = model.ColorModelId,
                 Length = model.Length,
-                ArticleNumber = $"{model.ClientId}.{++clientArticlesCount}"
+                ArticleNumber = $"{client.ClientNumber}.{client.ArticlesCount + 1}"
             };
 
             var rnd = new Random();
@@ -158,10 +163,9 @@
         /// </summary>
         /// <param name="id">Guid article id</param>
         /// <returns>Article view model</returns>
-        /// <exception cref="ArgumentNullException">Thrown when Article is null</exception>
-        public async Task<ArticleViewModel> GetByIdAsync(Guid id)
+        public async Task<ArticleViewModel?> GetByIdAsync(Guid id)
         {
-            var article = await repo
+            return await repo
                 .AllReadonly<Article>(a => a.Id == id && a.IsActive)
                 .Select(a => new ArticleViewModel()
                 {
@@ -184,13 +188,6 @@
                         .ToList()
                 })
                 .FirstOrDefaultAsync();
-
-            if (article == null)
-            {
-                throw new ArgumentNullException(nameof(article));
-            }
-
-            return article;
         }
 
         /// <summary>
@@ -198,16 +195,14 @@
         /// </summary>
         /// <param name="model">Article view model with data changes</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException">thrown when Article is null or IsActive is false, or ClientId is different</exception>
+        /// <exception cref="ArgumentException">thrown when Article is null or IsActive is false, or ClientId is different</exception>
         public async Task EditAsync(ArticleViewModel model)
         {
             var article = await repo.GetByIdAsync<Article>(model.Id);
 
-            if (article == null ||
-                article.IsActive == false ||
-                article.ClientId != model.ClientId)
+            if (article!.ClientId != model.ClientId)
             {
-                throw new ArgumentNullException(nameof(article));
+                throw new ArgumentException("Can't change client!");
             }
 
             var articleColors = repo.All<ArticleColor>(ac => ac.ArticleId == article.Id);

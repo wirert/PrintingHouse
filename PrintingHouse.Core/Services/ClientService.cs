@@ -54,6 +54,15 @@
                 .AnyAsync();
         }
 
+        public async Task<bool> ExistsByIdAndNameAsync(Guid id, string name)
+        {
+            var client =  await repo
+                .AllReadonly<Client>(c => c.Id == id && c.Name == name && c.IsActive)
+                .FirstOrDefaultAsync();
+
+            return client != null;
+        }
+
         /// <summary>
         /// Gets all active clients
         /// </summary>
@@ -65,6 +74,7 @@
                 .Select(c => new AllClientViewModel()
                 {
                     Id = c.Id,
+
                     Name = c.Name,
                     PhoneNumber = c.PhoneNumber,
                     Email = c.Email,

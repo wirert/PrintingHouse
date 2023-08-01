@@ -15,7 +15,7 @@
     /// Article controller
     /// </summary>
     public class ArticleController : BaseController
-    {     
+    {
         private readonly IArticleService articleService;
         private readonly IColorModelService colorModelService;
         private readonly IMaterialService materialService;
@@ -54,7 +54,7 @@
         /// <param name="id">Clent Id (optional)</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> All(int? id = null)
+        public async Task<IActionResult> All(Guid? id = null)
         {
             try
             {
@@ -117,8 +117,14 @@
         /// <returns></returns>
         [HttpGet]
         [Authorize(Roles = $"{Admin}, {Merchant}")]
-        public async Task<IActionResult> Select(int clientId, Guid? articleId = null)
+        public async Task<IActionResult> Select(Guid clientId, Guid? articleId = null)
         {
+            if (articleId != null &&
+                await articleService.ExistByIdAsync(articleId) == false)
+            {
+                return BadRequest();
+            }
+
             var model = new ChooseArticleMaterialAndColorsViewModel();
 
             try
@@ -164,34 +170,18 @@
         [Authorize(Roles = $"{Admin}, {Merchant}")]
         public async Task<IActionResult> Select(ChooseArticleMaterialAndColorsViewModel materialColors)
         {
-            if (await materialColorService.ExistByIds(materialColors.MaterialId, materialColors.ColorModelId) == false)
+            if (!await materialColorService.ExistByIds(materialColors.MaterialId, materialColors.ColorModelId) ||
+                !await clientService.ExistsByIdAndNameAsync(materialColors.ClientId, materialColors.ClientName)
+                )
             {
-                ModelState.AddModelError(string.Empty, "Invalid material or color model.");
-            }
-
-            //validate client name
-
-            if (!ModelState.IsValid)
-            {
-                try
-                {
-                    materialColors = await articleService.FillSelectModelWithDataAsync(materialColors);
-
-                    return View(materialColors);
-                }
-                catch (Exception)
-                {
-                    TempData[ErrorMessage] = "Something went wrong trying to add article! Try again.";
-
-                    return RedirectToAction("All", "Client");
-                }
+                return BadRequest(ModelState);
             }
 
             if (materialColors.ArticleId != null)
             {
                 if (await articleService.ExistByIdAsync(materialColors.ArticleId) == false)
                 {
-                    return RedirectToAction("All", "Article");
+                    return BadRequest();
                 }
 
                 TempData["MaterialId"] = materialColors.MaterialId;
@@ -214,53 +204,34 @@
         {
             var material = await materialService.GetMaterialByIdAsync(materialColors.MaterialId);
 
-            if (material == null ||
-                await materialColorService.ExistByIds(materialColors.MaterialId, materialColors.ColorModelId) == false)
+            if (material == null
+                || !ModelState.IsValid
+                || !await materialColorService.ExistByIds(materialColors.MaterialId, materialColors.ColorModelId)
+                || !await clientService.ExistsByIdAndNameAsync(materialColors.ClientId, materialColors.ClientName)
+                )
             {
-                ModelState.AddModelError(string.Empty, "Material or color model is invalid!");
+                return BadRequest();
             }
 
-            if (!ModelState.IsValid)
+            var model = new ArticleViewModel()
             {
-                try
-                {
-                    materialColors = await articleService.FillSelectModelWithDataAsync(materialColors);
+                MaterialId = materialColors.MaterialId,
+                MaterialName = material!.Type,
+                MeasureUnit = (MeasureUnit)material.MeasureUnit!,
+                ColorModelId = materialColors.ColorModelId,
+                ClientId = materialColors.ClientId,
+                ClientName = materialColors.ClientName
+            };
 
-                    return RedirectToAction("Select", materialColors);
-                }
-                catch (Exception)
-                {
-                    TempData[ErrorMessage] = "Something went wrong trying to add article! Try again.";
-
-                    return RedirectToAction("All", "Client");
-                }
-            }
-            try
+            if (material.MeasureUnit == MeasureUnit.Piece)
             {
-                var model = new ArticleViewModel()
-                {
-                    MaterialId = materialColors.MaterialId,
-                    MaterialName = material!.Type,
-                    MeasureUnit = (MeasureUnit)material.MeasureUnit!,
-                    ColorModelId = materialColors.ColorModelId,
-                    ClientId = materialColors.ClientId,
-                    ClientName = materialColors.ClientName
-                };
-
-                if (material.MeasureUnit == MeasureUnit.Piece)
-                {
-                    model.Length = ModelConstants.Article_Piece_Length;
-                }
-
-                model.Colors = await colorModelService.GetColorModelColorsAsync(materialColors.ColorModelId);
-
-                return View(model);
+                model.Length = ModelConstants.Article_Piece_Length;
             }
-            catch (Exception)
-            {
-                TempData[ErrorMessage] = "Something went wrong trying to add article! Try again.";
-                return RedirectToAction("All", "Client");
-            }
+
+            model.Colors = await colorModelService.GetColorModelColorsAsync(materialColors.ColorModelId);
+
+            return View(model);
+
         }
 
         /// <summary>
@@ -272,13 +243,6 @@
         [Authorize(Roles = $"{Admin}, {Merchant}")]
         public async Task<IActionResult> Create(ArticleViewModel model)
         {
-            if (await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId) == false)
-            {
-                TempData[WarningMessage] = "Material and Color model should be accurate!";
-
-                return RedirectToAction("Select", model.ClientId);
-            }
-
             if (model.DesignFile == null || model.DesignFile.Length == 0)
             {
                 ModelState.AddModelError(nameof(model.DesignFile), "Upload a valid design file");
@@ -287,6 +251,13 @@
             if (!ModelState.IsValid)
             {
                 return View(model);
+            }
+
+            if (!await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId) ||
+                !await clientService.ExistsByIdAndNameAsync(model.ClientId, model.ClientName)
+                )
+            {
+                return BadRequest();
             }
 
             try
@@ -308,46 +279,43 @@
         /// </summary>
         /// <param name="id">Article identifier</param>
         /// <returns>View with Article view model</returns>
-        /// <exception cref="ArgumentException">Thrown if material with given id or MaterialColorModel with given material id and color model id did'n exist</exception>
         [HttpGet]
         [Authorize(Roles = $"{Admin}, {Merchant}")]
         public async Task<IActionResult> Edit(Guid id)
         {
-            try
+            var model = await articleService.GetByIdAsync(id);
+
+            if (model == null)
             {
-                var model = await articleService.GetByIdAsync(id);
+                return BadRequest(ModelState);
+            }
 
-                if (TempData.Peek("ColorModelId") != null)
+            if (TempData.Peek("ColorModelId") != null)
+            {
+                model.ColorModelId = (int)TempData["ColorModelId"]!;
+                model.MaterialId = (int)TempData["MaterialId"]!;
+
+                var material = await materialService.GetMaterialByIdAsync(model.MaterialId);
+
+                if (material == null ||
+                    !await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId)
+                    )
                 {
-                    model.ColorModelId = (int)TempData["ColorModelId"]!;
-                    model.MaterialId = (int)TempData["MaterialId"]!;
-
-                    var material = await materialService.GetMaterialByIdAsync(model.MaterialId);
-
-                    if (material == null ||
-                        await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId) == false)
-                    {
-                        throw new ArgumentException();
-                    }
-
-                    model.MaterialName = material.Type;
-                    model.MeasureUnit = (MeasureUnit)material.MeasureUnit!;
-
-                    if (model.MeasureUnit == MeasureUnit.Piece)
-                    {
-                        model.Length = ModelConstants.Article_Piece_Length;
-                    }
-
-                    model.Colors = await colorModelService.GetColorModelColorsAsync(model.ColorModelId);
+                    return BadRequest();
                 }
 
-                return View(model);
+                model.MaterialName = material.Type;
+                model.MeasureUnit = (MeasureUnit)material.MeasureUnit!;
+
+                if (model.MeasureUnit == MeasureUnit.Piece)
+                {
+                    model.Length = ModelConstants.Article_Piece_Length;
+                }
+
+                model.Colors = await colorModelService.GetColorModelColorsAsync(model.ColorModelId);
             }
-            catch (Exception)
-            {
-                TempData[ErrorMessage] = "Something went wrong trying to edit an article! Try again.";
-                return RedirectToAction("All", "Article");
-            }
+
+            return View(model);
         }
 
         /// <summary>
@@ -359,16 +327,17 @@
         [Authorize(Roles = $"{Admin}, {Merchant}")]
         public async Task<IActionResult> Edit(ArticleViewModel model)
         {
-            if (await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId) == false)
-            {
-                TempData[WarningMessage] = "Material and Color model should be accurate!";
-
-                return RedirectToAction("Select", model.ClientId);
-            }
-
             if (!ModelState.IsValid)
             {
                 return View(model);
+            }            
+
+            if (!await articleService.ExistByIdAsync(model.Id) ||
+                !await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId) ||
+                !await clientService.ExistsByIdAndNameAsync(model.ClientId, model.ClientName)
+                )
+            {
+                return BadRequest();
             }
 
             try
@@ -376,6 +345,10 @@
                 await articleService.EditAsync(model);
 
                 TempData[SuccessMessage] = $"Successfully edited article {model.Name}.";
+            }
+            catch(ArgumentException ae)
+            {
+                TempData[ErrorMessage] = ae.Message;
             }
             catch (Exception)
             {

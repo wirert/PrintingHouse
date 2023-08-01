@@ -11,12 +11,13 @@
         {
             builder.Property(a => a.IsActive).HasDefaultValue(true);
             builder.HasIndex(e => e.Name).IsUnique();
+            builder.Property(c => c.ClientNumber).ValueGeneratedOnAdd();
 
             builder.HasData(new List<Client>
             {
                 new Client()
                 {
-                    Id = 101,
+                    Id = Guid.Parse("ffbddf06-701d-49f2-8e4b-df760d13b2a6"),
                     Name = "Test Client",
                     Email = "TestClient@email.com",
                     PhoneNumber = "1234567890",
@@ -24,7 +25,7 @@
                 },
                 new Client()
                 {
-                    Id = 102,
+                    Id = Guid.Parse("cb76cf2f-c998-459a-83aa-46035256deea"),
                     Name = "Client 2",
                     Email = "client@email.com",
                     PhoneNumber = "+056568645",
