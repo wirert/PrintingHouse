@@ -2,6 +2,9 @@
 @{
     ViewBag.Title = "All clients";
 }
+<div class="form-group col-md-3">
+    <input id="entry" class="form-control" placeholder="--Client name--" type="text" onkeyup="quickSearch(this)">
+</div>
 <div class="table-responsive-sm">
     <table class="table table-hover">
         <thead>
@@ -15,10 +18,10 @@
                 <th scope="col"></th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="client-list">
             @foreach (var client in Model)
             {
-                <tr>
+                <tr class="client-row">
                     <td>
                         @if (User.IsInRole(Merchant) || User.IsInRole(Admin))
                         {
@@ -28,7 +31,7 @@
                             </form>
                         }
                     </td>
-                    <td>@client.Name</td>
+                    <td id="client-name">@client.Name</td>
                     <td>@client.Email</td>
                     <td>@client.PhoneNumber</td>
                     <td>@client.MerchantName</td>
@@ -39,7 +42,7 @@
                             {
                                 <form asp-asp-area="" asp-controller="Article" asp-action="All" method="get">
                                     <input name="id" type="hidden" value="@client.Id" />
-                                    
+
                                     <button class="btn btn-sm btn-info" type="submit">View articles</button>
                                 </form>
                             }
@@ -65,3 +68,25 @@
 {
     <a asp-asp-area="" asp-controller="Client" asp-action="Add" class="btn btn-dark">Add new client</a>
 }
+
+<script type="text/javascript">
+    function quickSearch(input) {
+        var input, filter, table, tr, td, i;
+        filter = input.value.toUpperCase();
+        table = document.getElementById("client-list");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+
+    }
+</script>
+
+

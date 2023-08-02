@@ -29,6 +29,7 @@
                 .Select(o => new OrderViewModel()
                 {
                     Id = o.Id,
+                    Number = o.Number,
                     ArticleNo = o.Article.ArticleNumber,
                     ArticleName = o.Article.Name,
                     ClientName = o.Article.Client.Name,
