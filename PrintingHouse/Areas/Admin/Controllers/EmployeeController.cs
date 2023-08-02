@@ -8,6 +8,7 @@
     using static Core.Constants.MessageConstants;
     using Core.Services.Contracts;
     using Infrastructure.Data.Entities.Account;
+    using PrintingHouse.Extensions;
 
     /// <summary>
     /// Employee controller in admin area
@@ -194,7 +195,7 @@
         /// <returns>Redirect to All employees action</returns>
         [HttpPost]
         public async Task<IActionResult> Edit(EditEmployeeViewModel model)
-        {
+        {           
             try
             {
                 var positions = await positionService.GetAllAsync();
@@ -209,6 +210,11 @@
                 if (user == null || user.IsActive == false)
                 {
                     ModelState.AddModelError(nameof(model.ApplicationUserId), "You should select a user!");
+                }
+
+                if (user != null && user.Id == Guid.Parse(User.Id()))
+                {
+                    ModelState.AddModelError(nameof(model.ApplicationUserId), "You can't change your own position!");
                 }
 
                 var role = await roleManager.FindByNameAsync(model.Role);
@@ -278,8 +284,12 @@
                     throw new ArgumentException("There is no such employee!");
                 }
 
-                var employeeUser = await userManager.FindByIdAsync(employee.ApplicationUserId.ToString());
+                if (employee.ApplicationUserId == Guid.Parse(User.Id()))
+                {
+                    throw new ArgumentException("You can't remove your own access level!");
+                }
 
+                var employeeUser = await userManager.FindByIdAsync(employee.ApplicationUserId.ToString());
                 var userRoles = await userManager.GetRolesAsync(employeeUser!);
                 var removeRolesResult = await userManager.RemoveFromRolesAsync(employeeUser!, userRoles);
 
@@ -287,7 +297,6 @@
                 {
                     throw new ArgumentException("Problem removing user access level!");
                 }
-
 
                 employeeUser.FirstName = null;
                 employeeUser.LastName = null;

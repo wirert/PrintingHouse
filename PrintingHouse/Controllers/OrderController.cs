@@ -7,7 +7,7 @@
     using Core.Models.Order;
     using Core.Services.Contracts;
     using static Core.Constants.MessageConstants;
-    using static Core.Constants.RoleNamesConstants;
+    using static Core.Constants.ApplicationConstants;
     using Infrastructure.Data.Entities.Enums;
 
     public class OrderController : BaseController
@@ -43,7 +43,7 @@
         }
 
         [HttpGet]
-        [Authorize(Roles = $"{Admin}, {Merchant}")]
+        [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}")]
         public async Task<IActionResult> Create(Guid articleId)
         {
             try
@@ -60,7 +60,7 @@
         }
 
         [HttpPost]
-        [Authorize(Roles = $"{Admin}, {Merchant}")]
+        [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}")]
         public async Task<IActionResult> Create(AddOrderViewModel model)
         {
             if (model.EndDate < DateTime.Now.Date) 
@@ -90,7 +90,7 @@
         }
 
         [HttpPost]
-        [Authorize(Roles = $"{Admin}, {Merchant}, {Printer}")]
+        [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}, {PrinterRoleName}")]
         public async Task<IActionResult> ChangeStatus(Guid id, OrderStatus status, string returnUrl)
         {
             try
@@ -99,7 +99,7 @@
                 {
                     case OrderStatus.Printing:
                     case OrderStatus.Completed:
-                        if (User.IsInRole(Printer) == false)
+                        if (User.IsInRole(PrinterRoleName) == false)
                         {
                             throw new StatusPermitionException();
                         }
@@ -107,8 +107,8 @@
                     case OrderStatus.Waiting:
                     case OrderStatus.NoConsumable:
                     case OrderStatus.Canceled:
-                        if (User.IsInRole(Admin) == false && 
-                            User.IsInRole(Merchant) == false)
+                        if (User.IsInRole(AdminRoleName) == false && 
+                            User.IsInRole(MerchantRoleName) == false)
                         {
                             throw new StatusPermitionException();
                         }

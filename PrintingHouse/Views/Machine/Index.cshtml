@@ -4,8 +4,6 @@
     TimeSpan currentTime = TimeSpan.FromHours(8d);
 }
 
-
-
 <div class="col-md-6 pt-2">
     <form method="get">
         <select asp-for="Id" class="form-control text-center"
@@ -21,7 +19,7 @@
 @section Scripts{    
     <partial name="_ValidationScriptsPartial" />
 
-    <script>
+    <script type="text/javascript">
         function loadOrders(obj) {
             var id = obj.value;
             $.ajax({

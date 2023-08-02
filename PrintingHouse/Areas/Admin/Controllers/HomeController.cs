@@ -2,8 +2,6 @@
 {
     using Microsoft.AspNetCore.Mvc;
 
-    using static Core.Constants.RoleNamesConstants;
-
     public class HomeController : BaseController
     {
         public IActionResult Index()

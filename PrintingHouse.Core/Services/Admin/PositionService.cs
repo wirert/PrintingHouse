@@ -1,6 +1,7 @@
 ﻿namespace PrintingHouse.Core.Services.Admin
 {
     using System.Collections.Generic;
+    using System.Net;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
@@ -39,7 +40,7 @@
             {
                 var position = new Position()
                 {
-                    Name = viewModel.Name
+                    Name = WebUtility.HtmlEncode(viewModel.Name)
                 };
 
                 await repo.AddAsync(position);

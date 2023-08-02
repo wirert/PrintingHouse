@@ -52,13 +52,8 @@
         public async Task DeleteAsync(int id)
         {
             var employee = await repo.GetByIdAsync<Employee>(id);
-
-            if (employee == null)
-            {
-                throw new ArgumentNullException(nameof(employee));
-            }
-
-            employee.IsActive = false;
+            
+            employee!.IsActive = false;
 
             await repo.SaveChangesAsync();
         }

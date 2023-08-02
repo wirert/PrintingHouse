@@ -8,6 +8,8 @@
     using Microsoft.AspNetCore.Mvc;
 
     using Core.Models.Account;
+    using Core.Constants;
+    using Extensions;
     using Infrastructure.Data.Entities.Account;
 
     public class AccountController : BaseController
@@ -63,9 +65,23 @@
                         
             if (result.Succeeded)
             {
-                await userManager.AddClaimAsync(user, new Claim("FullName", $"{user.FirstName} {user.LastName}"));
+               var addclaimResult = await userManager.AddClaimAsync(user, new Claim(ApplicationConstants.FullNameClaim, $"{user.FirstName} {user.LastName}"));
 
-                await signInManager.SignInAsync(user, isPersistent: false);
+                if (!addclaimResult.Succeeded)
+                {
+                    foreach (var error in addclaimResult.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+
+                        await userManager.DeleteAsync(user);
+
+                        return View(model);
+                    }
+                }
+
+               await signInManager.SignInAsync(user, isPersistent: false);
+
+                TempData[MessageConstants.SuccessMessage] = $"Welcome {User.FullName()}!";
 
                 return RedirectToAction("Index", "Home");
             }
@@ -119,6 +135,8 @@
 
                 if (result.Succeeded)
                 {
+                    TempData[MessageConstants.SuccessMessage] = $"Welcome {User.FullName()}!";
+
                     if (model.ReturnUrl != null)
                     {
                         return Redirect(model.ReturnUrl);

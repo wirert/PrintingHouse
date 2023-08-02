@@ -7,7 +7,7 @@
     using Core.Models.Article;
     using Core.Constants;
     using static Core.Constants.MessageConstants;
-    using static Core.Constants.RoleNamesConstants;
+    using static Core.Constants.ApplicationConstants;
     using Core.Services.Contracts;
     using Infrastructure.Data.Entities.Enums;
 
@@ -116,7 +116,7 @@
         /// <param name="articleId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Authorize(Roles = $"{Admin}, {Merchant}")]
+        [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}")]
         public async Task<IActionResult> Select(Guid clientId, Guid? articleId = null)
         {
             if (articleId != null &&
@@ -167,7 +167,7 @@
         /// <param name="materialColors">View model with selected material and color model</param>
         /// <returns>Redirect to Create or Edit article actions</returns>
         [HttpPost]
-        [Authorize(Roles = $"{Admin}, {Merchant}")]
+        [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}")]
         public async Task<IActionResult> Select(ChooseArticleMaterialAndColorsViewModel materialColors)
         {
             if (!await materialColorService.ExistByIds(materialColors.MaterialId, materialColors.ColorModelId) ||
@@ -199,7 +199,7 @@
         /// <param name="materialColors">View model with selected material and color model</param>
         /// <returns>View with View model</returns>
         [HttpGet]
-        [Authorize(Roles = $"{Admin}, {Merchant}")]
+        [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}")]
         public async Task<IActionResult> Create(ChooseArticleMaterialAndColorsViewModel materialColors)
         {
             var material = await materialService.GetMaterialByIdAsync(materialColors.MaterialId);
@@ -240,7 +240,7 @@
         /// <param name="model">View model with form data from the view</param>
         /// <returns>Redirects to All clients</returns>
         [HttpPost]
-        [Authorize(Roles = $"{Admin}, {Merchant}")]
+        [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}")]
         public async Task<IActionResult> Create(ArticleViewModel model)
         {
             if (model.DesignFile == null || model.DesignFile.Length == 0)
@@ -280,7 +280,7 @@
         /// <param name="id">Article identifier</param>
         /// <returns>View with Article view model</returns>
         [HttpGet]
-        [Authorize(Roles = $"{Admin}, {Merchant}")]
+        [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}")]
         public async Task<IActionResult> Edit(Guid id)
         {
             var model = await articleService.GetByIdAsync(id);
@@ -324,7 +324,7 @@
         /// <param name="model">Article view model with form data</param>
         /// <returns>Redirect to action All</returns>
         [HttpPost]
-        [Authorize(Roles = $"{Admin}, {Merchant}")]
+        [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}")]
         public async Task<IActionResult> Edit(ArticleViewModel model)
         {
             if (!ModelState.IsValid)
@@ -359,7 +359,7 @@
         }
 
         [HttpPost]
-        [Authorize(Roles = $"{Admin}, {Merchant}")]
+        [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try

@@ -38,6 +38,7 @@
                     Orders = m.OrdersQueue.Select(o => new OrderViewModel()
                     {
                         Id = o.Id,
+                        Number = o.Number,
                         ArticleName = o.Article.Name,
                         ArticleNo = o.Article.ArticleNumber,
                         ClientName = o.Article.Client.Name,

@@ -1,12 +1,7 @@
 ﻿namespace PrintingHouse.Controllers
 {
-    using System.Diagnostics;
-
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-
-    using PrintingHouse.Core.Models;
-    using static Core.Constants.RoleNamesConstants;
 
     public class HomeController : BaseController
     {

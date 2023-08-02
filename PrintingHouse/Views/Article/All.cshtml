@@ -12,7 +12,7 @@
             <th scope="col">Material</th>
             <th scope="col">Color model</th>
             <th scope="col">Design file</th>
-            @if (User.IsInRole(Admin) || User.IsInRole(Merchant))
+            @if (User.IsInRole(AdminRoleName) || User.IsInRole(MerchantRoleName))
             {
                 <th scope="col">Add order</th>
                 <th scope="col">Edit</th>
@@ -36,7 +36,7 @@
                         <button class="btn btn-success btn-sm" type="submit">Download file</button>
                     </form>
                 </td>
-                @if (User.IsInRole(Admin) || User.IsInRole(Merchant))
+                @if (User.IsInRole(AdminRoleName) || User.IsInRole(MerchantRoleName))
                 {
                     <td>
                         <form asp-controller="Order" asp-action="Create" method="get">

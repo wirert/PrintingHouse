@@ -4,7 +4,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     using static Core.Constants.MessageConstants;
-    using static Core.Constants.RoleNamesConstants;
+    using static Core.Constants.ApplicationConstants;
     using Core.Models.Client;
     using Core.Services.Contracts;
     using Extensions;
@@ -39,7 +39,7 @@
         /// </summary>
         /// <returns>View with form for client details</returns>
         [HttpGet]
-        [Authorize(Roles = Merchant)]
+        [Authorize(Roles = MerchantRoleName)]
         public IActionResult Add()
         {
             var model = new AddClientViewModel();
@@ -52,7 +52,7 @@
         /// </summary>
         /// <returns>Redirect to all clients page</returns>
         [HttpPost]
-        [Authorize(Roles = Merchant)]
+        [Authorize(Roles = MerchantRoleName)]
         public async Task<IActionResult> Add(AddClientViewModel model)
         {
             if (!ModelState.IsValid)

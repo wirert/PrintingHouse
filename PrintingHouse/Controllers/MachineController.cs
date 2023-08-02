@@ -6,7 +6,7 @@
 
     using Core.Services.Contracts;
     using static Core.Constants.MessageConstants;
-    using static Core.Constants.RoleNamesConstants;
+    using static Core.Constants.ApplicationConstants;
     using Infrastructure.Data.Entities.Enums;
 
     public class MachineController : BaseController
@@ -54,7 +54,7 @@
         }
 
         [HttpPost]
-        [Authorize(Roles = $"{Admin}, {Merchant}")]
+        [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}")]
         public async Task<IActionResult> MoveInFront(Guid id, OrderStatus status)
         {
             try

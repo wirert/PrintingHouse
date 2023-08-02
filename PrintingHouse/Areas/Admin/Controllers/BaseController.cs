@@ -3,13 +3,13 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
-    using static Core.Constants.RoleNamesConstants;
+    using static Core.Constants.ApplicationConstants;
 
     /// <summary>
     /// Admin area base controller
     /// </summary>
-    [Area(nameof(Admin))]
-    [Authorize(Roles = Admin)]
+    [Area(nameof(AdminRoleName))]
+    [Authorize(Roles = AdminRoleName)]
     [AutoValidateAntiforgeryToken]
     public class BaseController : Controller
     {

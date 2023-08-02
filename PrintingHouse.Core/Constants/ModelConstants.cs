@@ -7,9 +7,16 @@
         /// </summary>
         public const int Article_Piece_Length = 1;
 
+        public const string DateTimeFormat = "G";
+
         /// <summary>
-        /// Constant for convertion from kilometers in meters
+        /// Application user error messages
         /// </summary>
-        public const int Kilometers_Meters = 1000;
+        public static class ApplicationUser
+        {
+            public const string UserNameErrorMessage = "Username must be between {2} and {1} symbols!";
+            public const string FirstNameErrorMessage = "First name must be between {2} and {1} symbols!";
+            public const string LastNameErrorMessage = "Last name must be between {2} and {1} symbols!";
+        }
     }
 }

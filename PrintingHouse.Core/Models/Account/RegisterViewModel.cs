@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using static Constants.ModelMessageConstants.ApplicationUser;
+    using static Constants.ModelConstants.ApplicationUser;
     using static Infrastructure.Constants.DataConstants.ApplicationUser;
 
     /// <summary>

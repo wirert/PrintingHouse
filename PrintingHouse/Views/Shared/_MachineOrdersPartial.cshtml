@@ -36,7 +36,7 @@
                             <span class="order-status">@order.Status</span>
                             <div class="d-flex flex-row align-items-center">
                                 <div class="ms-2">
-                                    <h6 class="mb-0">#@order.Id: @order.ArticleNo. @order.ArticleName</h6>
+                                    <h6 class="mb-0">#@order.Number: @order.ArticleNo. @order.ArticleName</h6>
                                     <div class="d-flex flex-row mt-1 text-black-50 machine-date-time">
                                         <div>
                                             <span>Start at:</span>
@@ -58,7 +58,7 @@
                                 </div>
                             </div>
                             <div class="d-inline-flex">
-                                @if (User.IsInRole(Printer))
+                                @if (User.IsInRole(PrinterRoleName))
                                 {
                                     if (order.Status != OrderStatus.Printing)
                                     {
@@ -79,8 +79,8 @@
                                         </form>
                                     }
                                 }
-                                @if (User.IsInRole(Admin) || User.IsInRole(Merchant))
-                                {                                    
+                                @if (User.IsInRole(AdminRoleName) || User.IsInRole(MerchantRoleName))
+                                {
                                     <form asp-controller="Machine" asp-action="MoveInFront" asp- method="post">
                                         <input name="id" type="hidden" value="@order.Id" />
                                         <input name="status" type="hidden" value="@order.Status" />
@@ -89,7 +89,7 @@
                                     </form>
                                     <form asp-controller="Order" asp-action="ChangeStatus" method="post">
                                         <input name="id" type="hidden" value="@order.Id" />
-                                       <input name="returnUrl" type="hidden", value="@returnUrl">
+                                        <input name="returnUrl" type="hidden" , value="@returnUrl">
                                         <input name="status" type="hidden" value="@OrderStatus.Canceled">
                                         <button class="btn btn-danger rounded-circle" title="Cancel order" type="submit"><i class="fas fa-eject"></i></button>
                                     </form>
@@ -105,11 +105,7 @@
     </div>
 </div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
-
-<script>
+<script language="javascript">
     var allTableCells = document.getElementsByClassName("order-status");
 
     for (var i = 0, max = allTableCells.length; i < max; i++) {
@@ -139,3 +135,4 @@
         }
     }
 </script>
+
