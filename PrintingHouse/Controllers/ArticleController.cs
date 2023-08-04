@@ -5,11 +5,9 @@
     using Microsoft.AspNetCore.Mvc.Rendering;
 
     using Core.Models.Article;
-    using Core.Constants;
     using static Core.Constants.MessageConstants;
     using static Core.Constants.ApplicationConstants;
     using Core.Services.Contracts;
-    using Infrastructure.Data.Entities.Enums;
 
     /// <summary>
     /// Article controller
@@ -109,11 +107,16 @@
 
                 return File(data, "application/octet-stream", fileName);
             }
+            catch (ArgumentNullException ane)
+            {
+                logger.LogInformation(ane, ane.Message);
+                return NotFound();
+            }
             catch (Exception e)
             {
                 logger.LogError(e, e.Message);
 
-                return NotFound("Error downloading file.");
+                return RedirectToAction("Error", "Home");
             }
         }
 
@@ -129,18 +132,7 @@
         {
             try
             {
-                if (articleId != null &&
-                await articleService.ExistByIdAsync(articleId) == false)
-                {
-                    return BadRequest();
-                }
-
-                var model = new ChooseArticleMaterialAndColorsViewModel();
-
-                model.ClientId = clientId;
-                model.ArticleId = articleId;
-
-                model = await articleService.FillSelectModelWithDataAsync(model);
+               var model = await articleService.GetSelectVeiwModelWithDataAsync(clientId, articleId);
 
                 ViewData["MaterialsData"] = new SelectList(model.Materials.OrderBy(s => s.Id), "Id", "Type");
                 ViewData["ColorModelsData"] = new SelectList(model.ColorModels.OrderBy(s => s.Id), "Id", "Name");
@@ -309,8 +301,9 @@
                 logger.LogInformation(ae, ae.Message);
                 return BadRequest();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger.LogError(e, e.Message);
                 TempData[ErrorMessage] = "Something went wrong trying to add article! Try again.";
             }
 
@@ -325,35 +318,17 @@
         [HttpGet]
         [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}")]
         public async Task<IActionResult> Edit(Guid id)
-        {
+        {            
+            bool haveNewMaterialId = int.TryParse(TempData["MaterialId"]?.ToString(), out int materialId);
+            bool haveNewColorModelId = int.TryParse(TempData["ColorModelId"]?.ToString(), out int colorModelId);
+           
             try
             {
-                var model = await articleService.GetByIdAsync(id);
+                var model = new ArticleViewModel();
 
-                if (TempData.Peek("ColorModelId") != null)
-                {
-                    model.ColorModelId = (int)TempData["ColorModelId"]!;
-                    model.MaterialId = (int)TempData["MaterialId"]!;
-
-                    var material = await materialService.GetMaterialByIdAsync(model.MaterialId);
-
-                    if (material == null ||
-                        !await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId)
-                        )
-                    {
-                        return BadRequest();
-                    }
-
-                    model.MaterialName = material.Type;
-                    model.MeasureUnit = (MeasureUnit)material.MeasureUnit!;
-
-                    if (model.MeasureUnit == MeasureUnit.Piece)
-                    {
-                        model.Length = ModelConstants.Article_Piece_Length;
-                    }
-
-                    model.Colors = await colorModelService.GetColorModelColorsAsync(model.ColorModelId);
-                }
+                model = haveNewMaterialId && haveNewColorModelId
+                    ? await articleService.GetEditViewModelWithData(materialId, colorModelId, id)
+                    : await articleService.GetEditViewModelWithData(null, null, id);
 
                 return View(model);
             }
@@ -362,13 +337,11 @@
                 logger.LogInformation(ae, ae.Message);
                 return BadRequest();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
-                throw;
+                logger.LogError(e, e.Message);
+                return RedirectToAction("Error", "Home");
             }
-            
-           
         }
 
         /// <summary>
@@ -385,14 +358,6 @@
                 return View(model);
             }
 
-            if (!await articleService.ExistByIdAsync(model.Id) ||
-                !await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId) ||
-                !await clientService.ExistsByIdAndNameAsync(model.ClientId, model.ClientName)
-                )
-            {
-                return BadRequest();
-            }
-
             try
             {
                 await articleService.EditAsync(model);
@@ -401,16 +366,23 @@
             }
             catch (ArgumentException ae)
             {
+                logger.LogError(ae, ae.Message);
                 TempData[ErrorMessage] = ae.Message;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger.LogError (e, e.Message);
                 TempData[ErrorMessage] = "Something went wrong trying to edit an article! Try again.";
             }
 
             return RedirectToAction("All", "Article");
         }
 
+        /// <summary>
+        /// Soft delete an article
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}")]
         public async Task<IActionResult> Delete(Guid id)
@@ -421,8 +393,9 @@
 
                 TempData[SuccessMessage] = "Article successfully deleted";
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger.LogError(e, e.Message);
                 TempData[ErrorMessage] = "Unable to delete article! Try again later";
             }
 

@@ -80,6 +80,7 @@
         /// Creates new article
         /// </summary>
         /// <param name="model">Article view model</param>
+        /// <exception cref="ArgumentException"></exception>
         public async Task CreateAsync(ArticleViewModel model)
         {
             var client = await repo.AllReadonly<Client>(c => c.Id == model.ClientId)
@@ -133,18 +134,32 @@
 
         /// <summary>
         /// Fill data for select material and color model view model
-        /// </summary>
-        /// <param name="model">Choose article material and color model view model</param>
+        /// </summary>        
+        /// <param name="clientId"></param>
+        /// <param name="articleId"></param>
         /// <returns>Choose article material and color model view model</returns>
-        /// <exception cref="Exception">Thrown when clinet is null or client isActive is false</exception>
-        public async Task<ChooseArticleMaterialAndColorsViewModel> FillSelectModelWithDataAsync(ChooseArticleMaterialAndColorsViewModel model)
+        /// <exception cref="ArgumentException"></exception>
+        public async Task<ChooseArticleMaterialAndColorsViewModel> GetSelectVeiwModelWithDataAsync(Guid clientId, Guid? articleId)
         {
-            var client = await repo.GetByIdAsync<Client>(model.ClientId);
+            if (articleId != null &&
+                await ExistByIdAsync(articleId) == false)
+            {
+                throw new ArgumentException("Article id is altered.");
+            }
+
+            var client = await repo.GetByIdAsync<Client>(clientId);
 
             if (client == null || client.IsActive == false)
             {
-                throw new ArgumentNullException(nameof(client));
+                throw new ArgumentException("Client id is altered");
             }
+
+            var model = new ChooseArticleMaterialAndColorsViewModel()
+            {
+                ArticleId = articleId,
+                ClientId = clientId,
+                ClientName = client.Name                
+            };
 
             model.Materials = await repo.AllReadonly<Material>(m => m.IsActive)
                 .Select(m => new MaterialSelectViewModel()
@@ -166,8 +181,6 @@
                 Name = "--Select Color model--"
             });
 
-            model.ClientName = client.Name;
-
             return model;
         }
 
@@ -182,59 +195,24 @@
 
             return article != null && article.IsActive;
         }
-
-        /// <summary>
-        /// Get article by id and whether it is active
-        /// </summary>
-        /// <param name="id">Guid article id</param>
-        /// <returns>Article view model</returns>
-        /// <exception cref="ArgumentException"></exception>
-        public async Task<ArticleViewModel> GetByIdAsync(Guid id)
-        {
-            var model = await repo
-                        .AllReadonly<Article>(a => a.Id == id && a.IsActive)
-                        .Select(a => new ArticleViewModel()
-                        {
-                            Id = a.Id,
-                            Name = a.Name,
-                            ClientId = a.ClientId,
-                            ClientName = a.Client.Name,
-                            ColorModelId = a.ColorModelId,
-                            MaterialId = a.MaterialId,
-                            MaterialName = a.MaterialColorModel.Material.Type,
-                            MeasureUnit = a.MaterialColorModel.Material.MeasureUnit,
-                            Length = a.Length,
-                            Colors = a.ArticleColors
-                                .Select(ac => new AddArticleColorVeiwModel()
-                                {
-                                    ColorName = ac.Color.Type,
-                                    ColorId = ac.Color.Id,
-                                    ColorQuantity = ac.ColorQuantity
-                                })
-                                .ToList()
-                        })
-                        .FirstOrDefaultAsync();
-            if (model == null)
-            {
-                throw new ArgumentException("Article id is not valid");
-            }
-
-            return model;
-        }
-
+       
         /// <summary>
         /// Edit existing article
         /// </summary>
         /// <param name="model">Article view model with data changes</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentException">thrown when Article is null or IsActive is false, or ClientId is different</exception>
+        /// <exception cref="ArgumentException"></exception>
         public async Task EditAsync(ArticleViewModel model)
-        {
+        {     
             var article = await repo.GetByIdAsync<Article>(model.Id);
 
-            if (article!.ClientId != model.ClientId)
-            {
-                throw new ArgumentException("Can't change client!");
+            if (article == null ||
+                article.ClientId != model.ClientId ||
+               !await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId) ||
+               !await clientService.ExistsByIdAndNameAsync(model.ClientId, model.ClientName)
+               )
+            {           
+                throw new ArgumentException("Arguments are altered!");
             }
 
             var articleColors = repo.All<ArticleColor>(ac => ac.ArticleId == article.Id);
@@ -289,13 +267,14 @@
         /// </summary>
         /// <param name="id">Article id</param>
         /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task DeleteByIdAsync(Guid id)
         {
             var article = await repo.GetByIdAsync<Article>(id);
 
             if (article == null)
             {
-                throw new ArgumentNullException(nameof(article));
+                throw new ArgumentNullException(nameof(article), "Article id is altered");
             }
 
             article.IsActive = false;
@@ -308,13 +287,29 @@
         /// </summary>
         /// <param name="id">Article identifier</param>
         /// <returns>Design name</returns>
+        /// <exception cref="ArgumentException"></exception>
         public async Task<string> GetFileNameByIdAsync(Guid id)
         {
-            return await repo.AllReadonly<Article>(a => a.Id == id && a.IsActive)
+            var imageName = await repo.AllReadonly<Article>(a => a.Id == id && a.IsActive)
                  .Select(a => a.ImageName)
-                 .SingleAsync();
+                 .SingleOrDefaultAsync();
+            if (imageName == null)
+            {
+                throw new ArgumentNullException(nameof(imageName), $"Article with id {id} is not found");
+            }
+
+            return imageName;
         }
 
+        /// <summary>
+        /// Creates view model for creating a new article and fill it with needed data
+        /// </summary>
+        /// <param name="materialId"></param>
+        /// <param name="colorModelId"></param>
+        /// <param name="clientId"></param>
+        /// <param name="clientName"></param>
+        /// <returns>Article view model</returns>
+        /// <exception cref="ArgumentException"></exception>
         public async Task<ArticleViewModel> GetCreateViewModelWithData(int materialId, int colorModelId, Guid clientId, string? clientName)
         {
             var material = await materialService.GetMaterialByIdAsync(materialId);
@@ -345,6 +340,69 @@
 
             model.Colors = await colorModelService.GetColorModelColorsAsync(colorModelId);
 
+
+            return model;
+        }
+
+        /// <summary>
+        /// Finds an article from db and create view model for update
+        /// </summary>
+        /// <param name="materialId"></param>
+        /// <param name="colorModelId"></param>
+        /// <param name="articleId"></param>
+        /// <returns>Article view model</returns>
+        /// <exception cref="ArgumentException"></exception>
+        public async Task<ArticleViewModel> GetEditViewModelWithData(int? materialId, int? colorModelId, Guid articleId)
+        {
+            var model = await repo
+                        .AllReadonly<Article>(a => a.Id == articleId && a.IsActive)
+                        .Select(a => new ArticleViewModel()
+                        {
+                            Id = a.Id,
+                            Name = a.Name,
+                            ClientId = a.ClientId,
+                            ClientName = a.Client.Name,
+                            ColorModelId = a.ColorModelId,
+                            MaterialId = a.MaterialId,
+                            MaterialName = a.MaterialColorModel.Material.Type,
+                            MeasureUnit = a.MaterialColorModel.Material.MeasureUnit,
+                            Length = a.Length,
+                            Colors = a.ArticleColors
+                                .Select(ac => new AddArticleColorVeiwModel()
+                                {
+                                    ColorName = ac.Color.Type,
+                                    ColorId = ac.Color.Id,
+                                    ColorQuantity = ac.ColorQuantity
+                                })
+                                .ToList()
+                        })
+                        .FirstOrDefaultAsync();
+            if (model == null)
+            {
+                throw new ArgumentException("Article id is not valid");
+            }
+
+            if (materialId != null || colorModelId != null)
+            {
+                var material = await materialService.GetMaterialByIdAsync(model.MaterialId);
+
+                if (material == null ||
+                    !await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId)
+                    )
+                {
+                    throw new ArgumentException("Input data (materialId or colorModelId is altered");
+                }
+
+                model.MaterialName = material.Type;
+                model.MeasureUnit = (MeasureUnit)material.MeasureUnit!;
+
+                if (model.MeasureUnit == MeasureUnit.Piece)
+                {
+                    model.Length = ModelConstants.Article_Piece_Length;
+                }
+
+                model.Colors = await colorModelService.GetColorModelColorsAsync(model.ColorModelId);                
+            }
 
             return model;
         }

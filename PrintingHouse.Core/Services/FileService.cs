@@ -31,7 +31,7 @@
 
             if (result == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(BucketName), "File not found");
             }
 
             return result;
