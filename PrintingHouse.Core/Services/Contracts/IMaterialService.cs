@@ -12,6 +12,6 @@
         /// </summary>
         /// <param name="materialId">material identifier</param>
         /// <returns>material name or null</returns>
-        Task<MaterialSelectViewModel?> GetMaterialByIdAsync(int materialId);
+        Task<MaterialSelectViewModel> GetMaterialByIdAsync(int materialId);
     }
 }

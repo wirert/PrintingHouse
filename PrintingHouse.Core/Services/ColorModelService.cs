@@ -30,11 +30,11 @@
         /// <returns>Collection of Color model view model</returns>
         public async Task<ICollection<ColorModelSelectViewModel>> GetColorModelByMaterialIdAsync(string materialId)
         {
-            int matId;
+            bool isIntMaterialId = int.TryParse(materialId, out int matId);
             List<ColorModelSelectViewModel> colorModelList = new List<ColorModelSelectViewModel>();
-            if (!string.IsNullOrEmpty(materialId))
+
+            if (isIntMaterialId)
             {
-                matId = Convert.ToInt32(materialId);
                 colorModelList = await repo.AllReadonly<MaterialColorModel>(mc => mc.MaterialId == matId)
                     .Select(mc => mc.ColorModel)
                     .Select(cm => new ColorModelSelectViewModel()
@@ -42,7 +42,11 @@
                         Id = cm.Id,
                         Name = cm.Name,
                     })
-                    .ToListAsync();    
+                    .ToListAsync();
+            }
+            else
+            {
+                throw new ArgumentException("Not a number", nameof(materialId));
             }
 
             return colorModelList;

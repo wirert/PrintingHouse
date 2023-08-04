@@ -20,6 +20,8 @@
         /// <param name="model">Article view model</param>
         Task CreateAsync(ArticleViewModel model);
 
+        Task<ArticleViewModel> GetCreateViewModelWithData(int materialId, int ColorModelId, Guid clientId, string? clientName);
+
         /// <summary>
         /// Fill data for select material and color model view model
         /// </summary>
@@ -40,7 +42,7 @@
         /// </summary>
         /// <param name="id">Guid article id</param>
         /// <returns>Article view model</returns>
-        Task<ArticleViewModel?> GetByIdAsync(Guid id);
+        Task<ArticleViewModel> GetByIdAsync(Guid id);
 
         /// <summary>
         /// Edit existing article

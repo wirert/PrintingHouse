@@ -8,26 +8,40 @@
     using Microsoft.EntityFrameworkCore;
 
     using Contracts;
+    using Constants;
     using Models.Article;
     using Models.ColorModel;
     using Models.Material;
     using Infrastructure.Data.Common.Contracts;
     using Infrastructure.Data.Entities;
+    using Infrastructure.Data.Entities.Enums;
 
     /// <summary>
     /// Article service
     /// </summary>
     public class ArticleService : IArticleService
-    {    
+    {
         private readonly IRepository repo;
         private readonly IFileService fileService;
-       
+        private readonly IMaterialColorService materialColorService;
+        private readonly IMaterialService materialService;
+        private readonly IClientService clientService;
+        private readonly IColorModelService colorModelService;
+
         public ArticleService(
-            IRepository _repo,
-            IFileService _fileService)
+                        IRepository _repo,
+                        IFileService _fileService,
+                        IMaterialColorService _materialColorService,
+                        IMaterialService _materialService,
+                        IClientService _clientService,
+                        IColorModelService _colorModelService)
         {
             repo = _repo;
             fileService = _fileService;
+            materialColorService = _materialColorService;
+            materialService = _materialService;
+            clientService = _clientService;
+            colorModelService = _colorModelService;
         }
 
         /// <summary>
@@ -51,7 +65,7 @@
                     ArticleNumber = a.ArticleNumber,
                     Name = a.Name,
                     ClientId = a.ClientId,
-                    
+
                     ClientName = a.Client.Name,
                     FileName = a.ImageName,
                     Material = a.MaterialColorModel.Material.Type,
@@ -72,13 +86,24 @@
                 .Select(c => new
                 {
                     ArticlesCount = c.Articles.Count(a => a.IsActive),
-                    c.ClientNumber
+                    c.ClientNumber,
+                    c.Name
                 })
-                .FirstAsync();
-           
+                .FirstOrDefaultAsync();
+
+            if (client == null || model.ClientName != client.Name)
+            {
+                throw new ArgumentException("Client name or id is altered");
+            }
+
+            if (!await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId))
+            {
+                throw new ArgumentException("Material Id or ColorModel Id is altered");
+            }
+
             var article = new Article()
             {
-                Name = WebUtility.HtmlEncode(model.Name),                
+                Name = WebUtility.HtmlEncode(model.Name),
                 ClientId = model.ClientId,
                 MaterialId = model.MaterialId,
                 ColorModelId = model.ColorModelId,
@@ -163,31 +188,38 @@
         /// </summary>
         /// <param name="id">Guid article id</param>
         /// <returns>Article view model</returns>
-        public async Task<ArticleViewModel?> GetByIdAsync(Guid id)
+        /// <exception cref="ArgumentException"></exception>
+        public async Task<ArticleViewModel> GetByIdAsync(Guid id)
         {
-            return await repo
-                .AllReadonly<Article>(a => a.Id == id && a.IsActive)
-                .Select(a => new ArticleViewModel()
-                {
-                    Id = a.Id,
-                    Name = a.Name,
-                    ClientId = a.ClientId,                    
-                    ClientName = a.Client.Name,
-                    ColorModelId = a.ColorModelId,
-                    MaterialId = a.MaterialId,
-                    MaterialName = a.MaterialColorModel.Material.Type,
-                    MeasureUnit = a.MaterialColorModel.Material.MeasureUnit,
-                    Length = a.Length,
-                    Colors = a.ArticleColors
-                        .Select(ac => new AddArticleColorVeiwModel()
+            var model = await repo
+                        .AllReadonly<Article>(a => a.Id == id && a.IsActive)
+                        .Select(a => new ArticleViewModel()
                         {
-                            ColorName = ac.Color.Type,
-                            ColorId = ac.Color.Id,
-                            ColorQuantity = ac.ColorQuantity
+                            Id = a.Id,
+                            Name = a.Name,
+                            ClientId = a.ClientId,
+                            ClientName = a.Client.Name,
+                            ColorModelId = a.ColorModelId,
+                            MaterialId = a.MaterialId,
+                            MaterialName = a.MaterialColorModel.Material.Type,
+                            MeasureUnit = a.MaterialColorModel.Material.MeasureUnit,
+                            Length = a.Length,
+                            Colors = a.ArticleColors
+                                .Select(ac => new AddArticleColorVeiwModel()
+                                {
+                                    ColorName = ac.Color.Type,
+                                    ColorId = ac.Color.Id,
+                                    ColorQuantity = ac.ColorQuantity
+                                })
+                                .ToList()
                         })
-                        .ToList()
-                })
-                .FirstOrDefaultAsync();
+                        .FirstOrDefaultAsync();
+            if (model == null)
+            {
+                throw new ArgumentException("Article id is not valid");
+            }
+
+            return model;
         }
 
         /// <summary>
@@ -278,9 +310,43 @@
         /// <returns>Design name</returns>
         public async Task<string> GetFileNameByIdAsync(Guid id)
         {
-           return await repo.AllReadonly<Article>(a => a.Id == id && a.IsActive)
-                .Select(a => a.ImageName)
-                .SingleAsync();           
+            return await repo.AllReadonly<Article>(a => a.Id == id && a.IsActive)
+                 .Select(a => a.ImageName)
+                 .SingleAsync();
+        }
+
+        public async Task<ArticleViewModel> GetCreateViewModelWithData(int materialId, int colorModelId, Guid clientId, string? clientName)
+        {
+            var material = await materialService.GetMaterialByIdAsync(materialId);
+
+            if (material == null
+                || clientName == null
+                || !await materialColorService.ExistByIds(materialId, colorModelId)
+                || !await clientService.ExistsByIdAndNameAsync(clientId, clientName)
+                )
+            {
+                throw new ArgumentException("Input data is altered.");
+            }
+
+            var model = new ArticleViewModel()
+            {
+                MaterialId = materialId,
+                MaterialName = material!.Type,
+                MeasureUnit = (MeasureUnit)material.MeasureUnit!,
+                ColorModelId = colorModelId,
+                ClientId = clientId,
+                ClientName = clientName
+            };
+
+            if (material.MeasureUnit == MeasureUnit.Piece)
+            {
+                model.Length = ModelConstants.Article_Piece_Length;
+            }
+
+            model.Colors = await colorModelService.GetColorModelColorsAsync(colorModelId);
+
+
+            return model;
         }
     }
 }

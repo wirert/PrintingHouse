@@ -24,9 +24,9 @@
         /// </summary>
         /// <param name="materialId">material identifier</param>
         /// <returns>material name or null</returns>
-        public async Task<MaterialSelectViewModel?> GetMaterialByIdAsync(int materialId)
+        public async Task<MaterialSelectViewModel> GetMaterialByIdAsync(int materialId)
         {
-            return await repo.AllReadonly<Material>(m => m.Id == materialId && m.IsActive)
+            var material = await repo.AllReadonly<Material>(m => m.Id == materialId && m.IsActive)
                 .Select(m => new MaterialSelectViewModel()
                 {
                     Id = materialId,
@@ -34,6 +34,12 @@
                     MeasureUnit = m.MeasureUnit
                 })
                 .FirstOrDefaultAsync();
+            if (material == null)
+            {
+                throw new ArgumentException("Material Id is not valid");
+            }
+
+            return material;
         }
     }
 }

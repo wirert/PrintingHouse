@@ -1,10 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
-using Minio;
-using Minio.AspNetCore;
-using Minio.AspNetCore.HealthChecks;
-
+using Microsoft.Extensions.Logging.Configuration;
 using PrintingHouse.Extensions;
 using PrintingHouse.Infrastructure.Data;
 using PrintingHouse.Infrastructure.Data.Entities.Account;
@@ -12,22 +8,24 @@ using PrintingHouse.ModelBinders;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<PrintingHouseDbContext>(options =>
-    options.UseSqlServer(connectionString!));
+
+
+builder.Services.AddApplicationDbContext(builder.Configuration);
+builder.Services.AddMinIO(builder.Configuration);
+builder.Services.AddApplicationServices();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
-{
-    options.SignIn.RequireConfirmedAccount = builder.Configuration.GetValue<bool>("Identity:RequireConfirmedAccount");
-    options.SignIn.RequireConfirmedPhoneNumber = builder.Configuration.GetValue<bool>("Identity:RequireConfirmedPhoneNumber");
-    options.SignIn.RequireConfirmedEmail = builder.Configuration.GetValue<bool>("Identity:RequireConfirmedEmail");
+    {
+        options.SignIn.RequireConfirmedAccount = builder.Configuration.GetValue<bool>("Identity:RequireConfirmedAccount");
+        options.SignIn.RequireConfirmedPhoneNumber = builder.Configuration.GetValue<bool>("Identity:RequireConfirmedPhoneNumber");
+        options.SignIn.RequireConfirmedEmail = builder.Configuration.GetValue<bool>("Identity:RequireConfirmedEmail");
 
-    options.Password.RequireNonAlphanumeric = builder.Configuration.GetValue<bool>("Identity:RequireNonAlphanumeric");
-    options.Password.RequireLowercase = builder.Configuration.GetValue<bool>("Identity:RequireLowercase");
-    options.Password.RequireUppercase = builder.Configuration.GetValue<bool>("Identity:RequireUppercase");
+        options.Password.RequireNonAlphanumeric = builder.Configuration.GetValue<bool>("Identity:RequireNonAlphanumeric");
+        options.Password.RequireLowercase = builder.Configuration.GetValue<bool>("Identity:RequireLowercase");
+        options.Password.RequireUppercase = builder.Configuration.GetValue<bool>("Identity:RequireUppercase");
 
-    options.Lockout.MaxFailedAccessAttempts = builder.Configuration.GetValue<int>("Identity:MaxFailedAccessAttempts");
-})
+        options.Lockout.MaxFailedAccessAttempts = builder.Configuration.GetValue<int>("Identity:MaxFailedAccessAttempts");
+    })
     .AddRoles<IdentityRole<Guid>>()
     .AddEntityFrameworkStores<PrintingHouseDbContext>();
 
@@ -46,24 +44,6 @@ builder.Services.AddAntiforgery(options =>
     options.SuppressXFrameOptionsHeader = false;
 });
 
-builder.Services.AddApplicationServices();
-builder.Services.AddMinio(options =>
-{
-    options.Endpoint = builder.Configuration.GetValue<string>("MinIo:Endpoint")!;
-    options.AccessKey = builder.Configuration.GetValue<string>("MinIo:AccessKey")!;
-    options.SecretKey = builder.Configuration.GetValue<string>("MinIo:SecretKey")!;
-
-    options.ConfigureClient(client => 
-    {
-        client.WithEndpoint(options.Endpoint)
-            .WithCredentials(options.AccessKey, options.SecretKey)
-            .WithSSL(false)
-            .Build();
-    }); 
-});
-
-//builder.Services.AddHealthChecks().AddMinio(sp => sp.GetRequiredService<MinioClient>());
-
 builder.Services.ConfigureApplicationCookie(cfg =>
 {
     cfg.Cookie.SameSite = SameSiteMode.Strict;
@@ -72,11 +52,16 @@ builder.Services.ConfigureApplicationCookie(cfg =>
     cfg.AccessDeniedPath = "/Home/Error";
 });
 
+builder.Services.AddLogging(cfg =>
+{
+    cfg.AddConsole();
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();    
+    app.UseDeveloperExceptionPage();
 }
 else
 {
@@ -104,10 +89,10 @@ app.UseEndpoints(endpoints =>
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}"
         );
-    
+
     endpoints.MapRazorPages();
 });
 
 app.SeedRoles().Wait();
 
-app.Run();
+await app.RunAsync();

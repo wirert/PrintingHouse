@@ -22,6 +22,7 @@
         private readonly IClientService clientService;
         private readonly IFileService fileService;
         private readonly IMaterialColorService materialColorService;
+        private readonly ILogger logger;
 
         public ArticleController(
                 IArticleService _articleService,
@@ -29,7 +30,8 @@
                 IMaterialService _materialService,
                 IClientService _clientService,
                 IFileService _fileService,
-                IMaterialColorService _materialColorService)
+                IMaterialColorService _materialColorService,
+                ILogger<ArticleController> _logger)
         {
             articleService = _articleService;
             colorModelService = _colorModelService;
@@ -37,6 +39,7 @@
             clientService = _clientService;
             fileService = _fileService;
             materialColorService = _materialColorService;
+            logger = _logger;
         }
 
         /// <summary>
@@ -62,7 +65,9 @@
 
                 if (models.Any() == false)
                 {
-                    return NotFound("There is no active articles");
+                    TempData[WarningMessage] = "There are no articles";
+
+                    return RedirectToAction("All", "Client");
                 }
 
                 if (id.HasValue)
@@ -76,8 +81,9 @@
 
                 return View(models);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger.LogError(e, e.Message);
                 TempData[ErrorMessage] = "Problem retrieving articles.";
 
                 return RedirectToAction("All", "Client");
@@ -103,8 +109,10 @@
 
                 return File(data, "application/octet-stream", fileName);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger.LogError(e, e.Message);
+
                 return NotFound("Error downloading file.");
             }
         }
@@ -119,16 +127,16 @@
         [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}")]
         public async Task<IActionResult> Select(Guid clientId, Guid? articleId = null)
         {
-            if (articleId != null &&
-                await articleService.ExistByIdAsync(articleId) == false)
-            {
-                return BadRequest();
-            }
-
-            var model = new ChooseArticleMaterialAndColorsViewModel();
-
             try
             {
+                if (articleId != null &&
+                await articleService.ExistByIdAsync(articleId) == false)
+                {
+                    return BadRequest();
+                }
+
+                var model = new ChooseArticleMaterialAndColorsViewModel();
+
                 model.ClientId = clientId;
                 model.ArticleId = articleId;
 
@@ -139,8 +147,15 @@
 
                 return View(model);
             }
-            catch (Exception)
+            catch (ArgumentNullException ane)
             {
+                logger.LogInformation(ane, ane.Message);
+
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
                 TempData[ErrorMessage] = "Something went wrong trying to add article! Try again.";
 
                 return RedirectToAction("All", "Client");
@@ -156,9 +171,24 @@
         [HttpPost]
         public async Task<JsonResult> GetColorModelByMaterialId(string materialId)
         {
-            var colorModelList = await colorModelService.GetColorModelByMaterialIdAsync(materialId);
+            try
+            {
+                var colorModelList = await colorModelService.GetColorModelByMaterialIdAsync(materialId);
 
-            return Json(colorModelList);
+                return Json(colorModelList);
+            }
+            catch (ArgumentException ae)
+            {
+                logger.LogInformation(ae, ae.Message);
+
+                return Json(new { Error = ae.Message });
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
+                return Json(new { Error = "Error getting color model for this material." });
+            }
         }
 
         /// <summary>
@@ -170,68 +200,83 @@
         [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}")]
         public async Task<IActionResult> Select(ChooseArticleMaterialAndColorsViewModel materialColors)
         {
-            if (!await materialColorService.ExistByIds(materialColors.MaterialId, materialColors.ColorModelId) ||
-                !await clientService.ExistsByIdAndNameAsync(materialColors.ClientId, materialColors.ClientName)
-                )
+            try
             {
-                return BadRequest(ModelState);
-            }
-
-            if (materialColors.ArticleId != null)
-            {
-                if (await articleService.ExistByIdAsync(materialColors.ArticleId) == false)
+                if (!await materialColorService.ExistByIds(materialColors.MaterialId, materialColors.ColorModelId) ||
+                    !await clientService.ExistsByIdAndNameAsync(materialColors.ClientId, materialColors.ClientName)
+                   )
                 {
-                    return BadRequest();
+                    logger.LogInformation("Arguments are altered.");
+                    return BadRequest(ModelState);
                 }
 
                 TempData["MaterialId"] = materialColors.MaterialId;
                 TempData["ColorModelId"] = materialColors.ColorModelId;
 
-                return RedirectToAction("Edit", new { id = materialColors.ArticleId });
-            }
+                if (materialColors.ArticleId != null)
+                {
+                    if (await articleService.ExistByIdAsync(materialColors.ArticleId) == false)
+                    {
+                        return BadRequest();
+                    }
+                    return RedirectToAction("Edit", new { id = materialColors.ArticleId });
+                }
 
-            return RedirectToAction("Create", materialColors);
+                TempData["ClientId"] = materialColors.ClientId;
+                TempData["ClientName"] = materialColors.ClientName;
+
+                return RedirectToAction("Create");
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                throw;
+            }
         }
 
         /// <summary>
         /// Create new Article (get)
         /// </summary>
-        /// <param name="materialColors">View model with selected material and color model</param>
         /// <returns>View with View model</returns>
         [HttpGet]
         [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}")]
-        public async Task<IActionResult> Create(ChooseArticleMaterialAndColorsViewModel materialColors)
+        public async Task<IActionResult> Create()
         {
-            var material = await materialService.GetMaterialByIdAsync(materialColors.MaterialId);
+            bool haveMaterialId = int.TryParse(TempData["MaterialId"]?.ToString(), out int materialId);
+            bool haveColorModelId = int.TryParse(TempData["ColorModelId"]?.ToString(), out int colorModelId);
+            bool haveClientId = Guid.TryParse(TempData["ClientId"]?.ToString(), out Guid clientId);
+            var clientName = TempData["ClientName"]?.ToString();
 
-            if (material == null
-                || !ModelState.IsValid
-                || !await materialColorService.ExistByIds(materialColors.MaterialId, materialColors.ColorModelId)
-                || !await clientService.ExistsByIdAndNameAsync(materialColors.ClientId, materialColors.ClientName)
-                )
+            if (haveMaterialId == false || haveColorModelId == false )
             {
+                if (!haveClientId)
+                {
+                    logger.LogInformation("Client Id is not a valid Guid");
+                    TempData[WarningMessage] = "First choose material and color model!";
+                    return RedirectToAction("Select", new { clientId });
+                }
+
+                TempData[WarningMessage] = "To Create Article, first choose owner!";
+
+                return RedirectToAction("All", "Client");
+            }
+
+            try
+            {
+               var model = await articleService.GetCreateViewModelWithData(materialId, colorModelId, clientId, clientName);
+
+                return View(model);
+            }
+            catch (ArgumentException ae)
+            {
+                logger.LogInformation(ae, ae.Message);
                 return BadRequest();
             }
-
-            var model = new ArticleViewModel()
+            catch (Exception e)
             {
-                MaterialId = materialColors.MaterialId,
-                MaterialName = material!.Type,
-                MeasureUnit = (MeasureUnit)material.MeasureUnit!,
-                ColorModelId = materialColors.ColorModelId,
-                ClientId = materialColors.ClientId,
-                ClientName = materialColors.ClientName
-            };
-
-            if (material.MeasureUnit == MeasureUnit.Piece)
-            {
-                model.Length = ModelConstants.Article_Piece_Length;
+                logger.LogError(e, e.Message);
+                throw;
             }
-
-            model.Colors = await colorModelService.GetColorModelColorsAsync(materialColors.ColorModelId);
-
-            return View(model);
-
         }
 
         /// <summary>
@@ -253,18 +298,16 @@
                 return View(model);
             }
 
-            if (!await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId) ||
-                !await clientService.ExistsByIdAndNameAsync(model.ClientId, model.ClientName)
-                )
-            {
-                return BadRequest();
-            }
-
             try
             {
                 await articleService.CreateAsync(model);
 
                 TempData[SuccessMessage] = $"Successfully added article {model.Name}";
+            }
+            catch (ArgumentException ae)
+            {
+                logger.LogInformation(ae, ae.Message);
+                return BadRequest();
             }
             catch (Exception)
             {
@@ -283,39 +326,49 @@
         [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}")]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var model = await articleService.GetByIdAsync(id);
-
-            if (model == null)
+            try
             {
-                return BadRequest(ModelState);
-            }
+                var model = await articleService.GetByIdAsync(id);
 
-            if (TempData.Peek("ColorModelId") != null)
-            {
-                model.ColorModelId = (int)TempData["ColorModelId"]!;
-                model.MaterialId = (int)TempData["MaterialId"]!;
-
-                var material = await materialService.GetMaterialByIdAsync(model.MaterialId);
-
-                if (material == null ||
-                    !await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId)
-                    )
+                if (TempData.Peek("ColorModelId") != null)
                 {
-                    return BadRequest();
+                    model.ColorModelId = (int)TempData["ColorModelId"]!;
+                    model.MaterialId = (int)TempData["MaterialId"]!;
+
+                    var material = await materialService.GetMaterialByIdAsync(model.MaterialId);
+
+                    if (material == null ||
+                        !await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId)
+                        )
+                    {
+                        return BadRequest();
+                    }
+
+                    model.MaterialName = material.Type;
+                    model.MeasureUnit = (MeasureUnit)material.MeasureUnit!;
+
+                    if (model.MeasureUnit == MeasureUnit.Piece)
+                    {
+                        model.Length = ModelConstants.Article_Piece_Length;
+                    }
+
+                    model.Colors = await colorModelService.GetColorModelColorsAsync(model.ColorModelId);
                 }
 
-                model.MaterialName = material.Type;
-                model.MeasureUnit = (MeasureUnit)material.MeasureUnit!;
-
-                if (model.MeasureUnit == MeasureUnit.Piece)
-                {
-                    model.Length = ModelConstants.Article_Piece_Length;
-                }
-
-                model.Colors = await colorModelService.GetColorModelColorsAsync(model.ColorModelId);
+                return View(model);
             }
+            catch (ArgumentException ae)
+            {
+                logger.LogInformation(ae, ae.Message);
+                return BadRequest();
+            }
+            catch (Exception)
+            {
 
-            return View(model);
+                throw;
+            }
+            
+           
         }
 
         /// <summary>
@@ -330,7 +383,7 @@
             if (!ModelState.IsValid)
             {
                 return View(model);
-            }            
+            }
 
             if (!await articleService.ExistByIdAsync(model.Id) ||
                 !await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId) ||
@@ -346,7 +399,7 @@
 
                 TempData[SuccessMessage] = $"Successfully edited article {model.Name}.";
             }
-            catch(ArgumentException ae)
+            catch (ArgumentException ae)
             {
                 TempData[ErrorMessage] = ae.Message;
             }
