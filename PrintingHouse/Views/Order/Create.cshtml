@@ -4,7 +4,7 @@
     <h1 class="mb-4">Add new order</h1>
     <h2>Article: @Model.ArticleName</h2>
     <section>
-        <form id="account" method="post">
+        <form method="post">
             <input type="hidden" asp-for="@Model.ArticleId" />
             <input type="hidden" asp-for="@Model.ArticleName" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>

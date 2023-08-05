@@ -1,16 +1,42 @@
 ﻿namespace PrintingHouse.Core.Services.Contracts
 {
-    using PrintingHouse.Core.Models.Order;
-    using PrintingHouse.Infrastructure.Data.Entities.Enums;
+    using Exceptions;
+    using Models.Order;
+    using Infrastructure.Data.Entities.Enums;
 
     public interface IOrderService
     {
+        /// <summary>
+        /// Creates a View model for Create a new order for a article
+        /// </summary>
+        /// <param name="articleId">article identifier</param>
+        /// <returns>Add order view model</returns>
+        /// <exception cref="ArgumentException"></exception>
         Task<AddOrderViewModel> CreateAddModelByArticleIdAsync(Guid articleId);
 
+        /// <summary>
+        /// Creates new order
+        /// </summary>
+        /// <param name="model">View model</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="OrderMachineException"></exception>
         Task CreateOrder(AddOrderViewModel model);
 
+        /// <summary>
+        /// Gets all orders
+        /// </summary>
+        /// <returns>Enumeration of Order View model</returns>
         Task<IEnumerable<OrderViewModel>> GetAllOrdersAsync();
 
+        /// <summary>
+        /// Changes status of an order
+        /// </summary>
+        /// <param name="id">Order identifier</param>
+        /// <param name="status">The new Status of order</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="StatusException"></exception>
         Task ChangeStatusAsync(Guid id, OrderStatus status);
 
         /// <summary>

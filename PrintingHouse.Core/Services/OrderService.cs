@@ -13,6 +13,7 @@
     using Infrastructure.Data.Entities;
     using Infrastructure.Data.Entities.Enums;
     using Models.Order;
+    using PrintingHouse.Core.Exceptions;
 
     public class OrderService : IOrderService
     {
@@ -23,6 +24,10 @@
             repo = _repo;
         }
 
+        /// <summary>
+        /// Gets all orders
+        /// </summary>
+        /// <returns>Enumeration of Order View model</returns>
         public async Task<IEnumerable<OrderViewModel>> GetAllOrdersAsync()
         {
             var models = await repo.AllReadonly<Order>()
@@ -66,13 +71,19 @@
             return models;
         }
 
+        /// <summary>
+        /// Creates a View model for Create a new order for a article
+        /// </summary>
+        /// <param name="articleId">article identifier</param>
+        /// <returns>Add order view model</returns>
+        /// <exception cref="ArgumentException"></exception>
         public async Task<AddOrderViewModel> CreateAddModelByArticleIdAsync(Guid articleId)
         {
             var article = await repo.GetByIdAsync<Article>(articleId);
 
             if (article == null || article.IsActive == false)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Article id is altered");
             }
 
             return new AddOrderViewModel()
@@ -82,6 +93,13 @@
             };
         }
 
+        /// <summary>
+        /// Creates new order
+        /// </summary>
+        /// <param name="model">View model</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="OrderMachineException"></exception>
         public async Task CreateOrder(AddOrderViewModel model)
         {
             var sanitizer = new HtmlSanitizer();
@@ -94,7 +112,12 @@
                 .Include(a => a.MaterialColorModel)
                 .ThenInclude(mc => mc.Machines)
                 .ThenInclude(m => m.OrdersQueue)
-                .SingleAsync();
+                .SingleOrDefaultAsync();
+
+            if (article == null || article.Name != model.ArticleName)
+            {
+                throw new ArgumentException("Article Id or Name are altered");
+            }
 
             var order = new Order()
             {
@@ -116,7 +139,7 @@
 
             if (machine == null)
             {
-                throw new ArgumentException("No machine availabe!");
+                throw new OrderMachineException("No machine availabe!");
             }
 
             order.Machine = machine;
@@ -128,14 +151,18 @@
             await repo.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Changes status of an order
+        /// </summary>
+        /// <param name="id">Order identifier</param>
+        /// <param name="status">The new Status of order</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="StatusException"></exception>
         public async Task ChangeStatusAsync(Guid id, OrderStatus status)
         {
-            var order = await repo.GetByIdAsync<Order>(id);
-
-            if (order == null)
-            {
-                throw new ArgumentException("Error finding order");
-            }
+            var order = await repo.GetByIdAsync<Order>(id) 
+                ?? throw new ArgumentException("Order id is altered");
 
             switch (order.Status)
             {
@@ -149,23 +176,21 @@
 
                             if (machineOrders.Any(o => o.Status == OrderStatus.Printing))
                             {
-                                throw new ArgumentException("The machine is buzy! Wait to finish current print.");
+                                throw new StatusException("The machine is buzy! Wait to finish current print.");
                             }
-
                             break;
                         case OrderStatus.Canceled:
-
-                            var articleOrderToCancel = await repo.All<Article>(a => a.Id == order.ArticleId)
+                            var articleOfOrderToCancel = await repo.All<Article>(a => a.Id == order.ArticleId)
                                 .Include(a => a.MaterialColorModel)
                                 .ThenInclude(mc => mc.Material)
                                 .Include(a => a.ArticleColors)
                                 .ThenInclude(ac => ac.Color)
                                 .FirstAsync();
-                            var materialCount = this.CalculateNeededOrderMaterialUnits(articleOrderToCancel, order.Quantity);
+                            var materialCount = this.CalculateNeededOrderMaterialUnits(articleOfOrderToCancel, order.Quantity);
 
-                            articleOrderToCancel.MaterialColorModel.Material.InStock += materialCount;
+                            articleOfOrderToCancel.MaterialColorModel.Material.InStock += materialCount;
 
-                            foreach (ArticleColor color in articleOrderToCancel.ArticleColors)
+                            foreach (ArticleColor color in articleOfOrderToCancel.ArticleColors)
                             {
                                 int returnColorQuantiry = (int)Math.Ceiling(color.ColorQuantity * order.Quantity);
 
@@ -177,14 +202,14 @@
 
                             await repo.SaveChangesAsync();
 
-                            int materialId = articleOrderToCancel.MaterialId;
-                            int colorModelId = articleOrderToCancel.ColorModelId;
+                            int materialId = articleOfOrderToCancel.MaterialId;
+                            int colorModelId = articleOfOrderToCancel.ColorModelId;
 
                             await RearangeAllOrderOfParticularTypeAsync(materialId, colorModelId);
 
                             return;
                         default:
-                            throw new ArgumentException("Can't change to this status!");
+                            throw new StatusException("Can't change to this status!");
                     }
                     order.Status = status;
                     break;
@@ -199,7 +224,7 @@
                     switch (status)
                     {
                         case OrderStatus.Completed:
-                            throw new ArgumentException("This order is waiting for print!");
+                            throw new StatusException("This order is waiting for print!");
                         case OrderStatus.NoConsumable:
                             break;
                         case OrderStatus.Canceled:
@@ -215,11 +240,11 @@
 
                             return;
                         case OrderStatus.Printing:
-                            throw new ArgumentException("There is no enough consumables!");
+                            throw new StatusException("There is no enough consumables!");
                         default:
                             if (this.TakeMaterialsAndColorsIfAvailable(article, order.Quantity) == false)
                             {
-                                throw new ArgumentException("There is no enough consumables!");
+                                throw new StatusException("There is no enough consumables!");
                             }
 
                             order.Status = status;
@@ -236,12 +261,12 @@
                         case OrderStatus.Printing:
                             break;
                         default:
-                            throw new ArgumentException("This order is printing!");
+                            throw new StatusException("This order is printing!");
                     }
                     order.Status = status;
                     break;
                 default:
-                    throw new ArgumentException("Can't change the status of this order!");
+                    throw new StatusException("Can't change the status of this order!");
             }
 
             await repo.SaveChangesAsync();
