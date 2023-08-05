@@ -16,7 +16,6 @@
     {
         private readonly IArticleService articleService;
         private readonly IColorModelService colorModelService;
-        private readonly IMaterialService materialService;
         private readonly IClientService clientService;
         private readonly IFileService fileService;
         private readonly IMaterialColorService materialColorService;
@@ -25,7 +24,6 @@
         public ArticleController(
                 IArticleService _articleService,
                 IColorModelService _colorModelService,
-                IMaterialService _materialService,
                 IClientService _clientService,
                 IFileService _fileService,
                 IMaterialColorService _materialColorService,
@@ -33,7 +31,6 @@
         {
             articleService = _articleService;
             colorModelService = _colorModelService;
-            materialService = _materialService;
             clientService = _clientService;
             fileService = _fileService;
             materialColorService = _materialColorService;
@@ -70,11 +67,11 @@
 
                 if (id.HasValue)
                 {
-                    ViewBag.Title = $"All articles of Client {models.First().ClientName}";
+                    ViewData["Title"] = $"All articles of Client {models.First().ClientName}";
                 }
                 else
                 {
-                    ViewBag.Title = "All articles";
+                    ViewData["Title"] = "All articles";
                 }
 
                 return View(models);

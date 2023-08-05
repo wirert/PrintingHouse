@@ -94,6 +94,11 @@
             return RedirectToAction("All");
         }
 
+        /// <summary>
+        /// Deletes client
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}")]
         public async Task<IActionResult> Delete(Guid id)

@@ -1,7 +1,8 @@
 ﻿namespace PrintingHouse.Core.Services.Contracts
 {
     using AdminModels.Employee;
-    using PrintingHouse.Core.AdminModels.ApplicationUser;
+    using AdminModels.ApplicationUser;
+    using Exceptions;
 
     /// <summary>
     /// Employee service interface for IoC
@@ -12,6 +13,8 @@
         /// Create new employee
         /// </summary>
         /// <param name="model">Add employee view model with form data</param>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
         Task AddAsync(AddEmployeeViewModel model);        
 
         /// <summary>
@@ -28,23 +31,24 @@
         Task<EditEmployeeViewModel?> GetByIdAsync(int id);
 
         /// <summary>
-        /// Change working position of na employee
+        /// Change working position of an employee
         /// </summary>
         /// <param name="model">Edit employee view model</param>
-        Task ChnagePositionAsync(EditEmployeeViewModel model);
+        /// <param name="currentUserId"></param>
+        /// <exception cref="EmployeeSelfChangeException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
+        Task EditAsync(EditEmployeeViewModel model, Guid currentUserId);
 
         /// <summary>
-        /// Soft delete employee
+        /// Soft delete employee and user
         /// </summary>
         /// <param name="id">employee identifier</param>
-        Task DeleteAsync(int id);
-
-        /// <summary>
-        /// Get employee Id by application user id. May Throw exception from FirstAsync() method
-        /// </summary>
-        /// <param name="userId">user id (guid)</param>
-        /// <returns>employee id</returns>
-        Task<int> GetIdByUserIdAsync(Guid userId);
+        /// <param name="currentUserId">Current ApplicatonUser Id</param>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="EmployeeSelfChangeException"></exception>
+        /// <exception cref="Exception"></exception>
+        Task DeleteAsync(int id, Guid currentUserId);       
 
         /// <summary>
         /// Get all registered application users who are not employees yet

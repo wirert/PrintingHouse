@@ -6,9 +6,10 @@
 
     using Core.AdminModels.Employee;
     using static Core.Constants.MessageConstants;
+    using Core.Exceptions;
     using Core.Services.Contracts;
+    using Extensions;
     using Infrastructure.Data.Entities.Account;
-    using PrintingHouse.Extensions;
 
     /// <summary>
     /// Employee controller in admin area
@@ -19,17 +20,20 @@
         private readonly RoleManager<IdentityRole<Guid>> roleManager;
         private readonly IEmployeeService employeeService;
         private readonly IPositionService positionService;
+        private readonly ILogger<EmployeeController> logger;
 
         public EmployeeController(
             UserManager<ApplicationUser> _userManager,
             RoleManager<IdentityRole<Guid>> _roleManager,
             IEmployeeService _employeeService,
-            IPositionService _positionService)
+            IPositionService _positionService,
+            ILogger<EmployeeController> _logger)
         {
             userManager = _userManager;
             roleManager = _roleManager;
             employeeService = _employeeService;
             positionService = _positionService;
+            logger = _logger;
         }
 
         /// <summary>
@@ -63,8 +67,9 @@
 
                 return View(model);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger.LogError(e, e.Message);
                 TempData[ErrorMessage] = "Unexpected error! Try again later.";
 
                 return RedirectToAction("All", "Employee");
@@ -81,31 +86,11 @@
         {
             try
             {
-                var positions = await positionService.GetAllAsync();
-
-                if (positions.All(p => p.Id != model.PositionId))
-                {
-                    ModelState.AddModelError(nameof(model.PositionId), "You should select a position!");
-                }
-
-                var user = await userManager.FindByIdAsync(model.ApplicationUserId.ToString());
-
-                if (user == null || user.IsActive == false)
-                {
-                    ModelState.AddModelError(nameof(model.ApplicationUserId), "You should select a user!");
-                }
-
-                var role = await roleManager.FindByNameAsync(model.Role);
-
-                if (role == null)
-                {
-                    ModelState.AddModelError(nameof(model.Role), "You should select a role!");
-                }
-
                 if (!ModelState.IsValid)
                 {
                     var users = await employeeService.GetAllNewEmployees();
                     var roles = await roleManager.Roles.Select(r => r.Name).ToArrayAsync();
+                    var positions = await positionService.GetAllAsync();
 
                     model.Users = users;
                     model.Positions = positions;
@@ -114,21 +99,22 @@
                     return View(model);
                 }
 
-                var result = await userManager.AddToRoleAsync(user!, model.Role);
-
-                if (!result.Succeeded)
-                {
-                    throw new Exception();
-                }
-
                 await employeeService.AddAsync(model);
 
                 TempData[SuccessMessage] = "Employee was added successfully!";
 
                 return RedirectToAction("All");
             }
-            catch (Exception)
+            catch (ArgumentException ae)
             {
+                logger.LogWarning(ae, ae.Message);
+
+                return NotFound();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+
                 ModelState.AddModelError(string.Empty, "Unexpected error occurred while trying to add employee!");
 
                 return RedirectToAction("All", "Employee");
@@ -153,7 +139,7 @@
         /// <returns>View with model</returns>
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
-        {            
+        {
             try
             {
                 var model = await employeeService.GetByIdAsync(id);
@@ -180,8 +166,9 @@
 
                 return View(model);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger.LogError(e, e.Message);
                 TempData[ErrorMessage] = "Something went wrong! Try again.";
 
                 return RedirectToAction("All");
@@ -195,76 +182,37 @@
         /// <returns>Redirect to All employees action</returns>
         [HttpPost]
         public async Task<IActionResult> Edit(EditEmployeeViewModel model)
-        {           
+        {
             try
             {
-                var positions = await positionService.GetAllAsync();
-
-                if (positions.All(p => p.Id != model.PositionId))
-                {
-                    ModelState.AddModelError(nameof(model.PositionId), "You should select a position!");
-                }
-
-                var user = await userManager.FindByIdAsync(model.ApplicationUserId.ToString());
-
-                if (user == null || user.IsActive == false)
-                {
-                    ModelState.AddModelError(nameof(model.ApplicationUserId), "You should select a user!");
-                }
-
-                if (user != null && user.Id == User.Id())
-                {
-                    ModelState.AddModelError(nameof(model.ApplicationUserId), "You can't change your own position!");
-                }
-
-                var role = await roleManager.FindByNameAsync(model.Role);
-
-                if (role == null)
-                {
-                    ModelState.AddModelError(nameof(model.Role), "You should select a role!");
-                }
-
                 if (!ModelState.IsValid)
                 {
-                    var roles = await roleManager.Roles.Select(r => r.Name).ToArrayAsync();
-
-                    model.Positions = positions;
-                    model.Roles = roles;
+                    model.Positions = await positionService.GetAllAsync();
+                    model.Roles = await roleManager.Roles.Select(r => r.Name).ToArrayAsync();
 
                     return View(model);
                 }
 
-                var userRoles = await userManager.GetRolesAsync(user!);
-
-                if (userRoles.Any())
-                {
-                    var removeRolesResult = await userManager.RemoveFromRolesAsync(user!, userRoles);
-
-                    if (!removeRolesResult.Succeeded)
-                    {
-                        throw new Exception();
-                    }
-                }
-
-                var addRoleResult = await userManager.AddToRoleAsync(user!, model.Role);
-
-                if (!addRoleResult.Succeeded)
-                {
-                    throw new Exception();
-                }
-
-                await employeeService.ChnagePositionAsync(model);
+                await employeeService.EditAsync(model, User.Id());
 
                 TempData[SuccessMessage] = "Position was changed successfully!";
-
-                return RedirectToAction("All", "Employee");
             }
-            catch (Exception)
+            catch (EmployeeSelfChangeException esce)
             {
-                TempData[ErrorMessage] = "Unexpected error occurred while trying to change position!";
-
-                return RedirectToAction("All", "Employee");
+                TempData[WarningMessage] = esce.Message;
             }
+            catch (ArgumentException ae)
+            {
+                logger.LogInformation(ae, ae.Message);
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                TempData[ErrorMessage] = "Unexpected error occurred while trying to change position!";
+            }
+
+            return RedirectToAction("All", "Employee");
         }
 
         /// <summary>
@@ -277,49 +225,22 @@
         {
             try
             {
-                var employee = await employeeService.GetByIdAsync(id);
-
-                if (employee == null)
-                {
-                    throw new ArgumentException("There is no such employee!");
-                }
-
-                if (employee.ApplicationUserId == User.Id())
-                {
-                    throw new ArgumentException("You can't remove your own access level!");
-                }
-
-                var employeeUser = await userManager.FindByIdAsync(employee.ApplicationUserId.ToString());
-                var userRoles = await userManager.GetRolesAsync(employeeUser!);
-                var removeRolesResult = await userManager.RemoveFromRolesAsync(employeeUser!, userRoles);
-
-                if (!removeRolesResult.Succeeded)
-                {
-                    throw new ArgumentException("Problem removing user access level!");
-                }
-
-                employeeUser.FirstName = null;
-                employeeUser.LastName = null;
-                employeeUser.PhoneNumber = null;
-                employeeUser.IsActive = false;
-
-                var result = await userManager.SetEmailAsync(employeeUser, null);
-
-                if (!result.Succeeded)
-                {
-                    throw new ArgumentException($"Failed to delete user from the system. Try again later!");
-                }
-
-                await employeeService.DeleteAsync(id);
+                await employeeService.DeleteAsync(id, User.Id());
 
                 TempData[SuccessMessage] = $"Employee was successfully dismissed and his/her account closed.";
             }
+            catch (EmployeeSelfChangeException esce)
+            {
+                TempData[WarningMessage] = esce.Message;
+            }
             catch (ArgumentException ae)
             {
+                logger.LogWarning(ae, ae.Message);
                 TempData[ErrorMessage] = ae.Message;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger.LogError(e, e.Message);
                 TempData[ErrorMessage] = "Unexpected error occurred while trying to delete employee from the system!";
             }
 

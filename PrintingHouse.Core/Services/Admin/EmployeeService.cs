@@ -12,6 +12,8 @@
     using Infrastructure.Data.Common.Contracts;
     using Infrastructure.Data.Entities;
     using Infrastructure.Data.Entities.Account;
+    using System.Text;
+    using PrintingHouse.Core.Exceptions;
 
     /// <summary>
     /// Employee service
@@ -20,21 +22,33 @@
     {
         private readonly IRepository repo;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<IdentityRole<Guid>> roleManager;
+        private readonly IPositionService positionService;
 
         public EmployeeService(
                     IRepository _repo,
-                    UserManager<ApplicationUser> _userManager)
+                    UserManager<ApplicationUser> _userManager,
+                    RoleManager<IdentityRole<Guid>> _roleManager,
+                    IPositionService _positionService)
         {
             repo = _repo;
             userManager = _userManager;
+            roleManager = _roleManager;
+            positionService = _positionService;
         }
 
         /// <summary>
         /// Create new employee
         /// </summary>
         /// <param name="model">Add employee view model with form data</param>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task AddAsync(AddEmployeeViewModel model)
         {
+            ApplicationUser user = await CheckEmployeeParametersAndReturnAppUserAsync(model.PositionId, model.Role, model.ApplicationUserId);
+
+            await AddUserToRoleAsync(user, model.Role);
+
             var employee = new Employee()
             {
                 ApplicationUserId = model.ApplicationUserId,
@@ -46,12 +60,59 @@
         }
 
         /// <summary>
-        /// Soft delete employee
+        /// Soft delete employee and user
         /// </summary>
         /// <param name="id">employee identifier</param>
-        public async Task DeleteAsync(int id)
+        /// <param name="currentUserId">Current ApplicatonUser Id</param>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="EmployeeSelfChangeException"></exception>
+        /// <exception cref="Exception"></exception>
+        public async Task DeleteAsync(int id, Guid currentUserId)
         {
             var employee = await repo.GetByIdAsync<Employee>(id);
+
+            if (employee == null)
+            {
+                throw new ArgumentException("Employee id is altered");
+            }
+
+            if (employee.ApplicationUserId == currentUserId)
+            {
+                throw new EmployeeSelfChangeException("You can't remove your own access level!");
+            }
+
+            var employeeUser = await userManager.FindByIdAsync(employee.ApplicationUserId.ToString());
+            var userRoles = await userManager.GetRolesAsync(employeeUser!);
+            var removeRolesResult = await userManager.RemoveFromRolesAsync(employeeUser!, userRoles);
+
+            if (!removeRolesResult.Succeeded)
+            {
+                var sb = new StringBuilder();
+                foreach (var error in removeRolesResult.Errors)
+                {
+                    sb.AppendLine(error.Code + " " + error.Description);
+                }
+
+                throw new Exception(sb.ToString());                
+            }
+
+            employeeUser.FirstName = null;
+            employeeUser.LastName = null;
+            employeeUser.PhoneNumber = null;
+            employeeUser.IsActive = false;
+
+            var result = await userManager.SetEmailAsync(employeeUser, null);
+
+            if (!result.Succeeded)
+            {
+                var sb = new StringBuilder();
+                foreach (var error in result.Errors)
+                {
+                    sb.AppendLine(error.Code + " " + error.Description);
+                }
+
+                throw new Exception(sb.ToString());
+            }
             
             employee!.IsActive = false;
 
@@ -59,12 +120,44 @@
         }
 
         /// <summary>
-        /// Change working position of na employee
+        /// Change working position of an employee
         /// </summary>
         /// <param name="model">Edit employee view model</param>
-        public async Task ChnagePositionAsync(EditEmployeeViewModel model)
+        /// <param name="currentUserId"></param>
+        /// <exception cref="EmployeeSelfChangeException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
+        public async Task EditAsync(EditEmployeeViewModel model, Guid currentUserId)
         {
-            var employee = await repo.GetByIdAsync<Employee>(model.Id) ?? throw new ArgumentNullException($"Employee {model.Id} not exist");
+            var user = await CheckEmployeeParametersAndReturnAppUserAsync(model.PositionId, model.Role, model.ApplicationUserId);
+
+            if (user != null && user.Id == currentUserId)
+            {
+               throw new EmployeeSelfChangeException("You can't change your own position!");
+            }
+
+            var userRoles = await userManager.GetRolesAsync(user!);
+
+            if (userRoles.Any())
+            {
+                var removeRolesResult = await userManager.RemoveFromRolesAsync(user!, userRoles);
+
+                if (!removeRolesResult.Succeeded)
+                {
+                    var sb = new StringBuilder();
+                    foreach (var error in removeRolesResult.Errors)
+                    {
+                        sb.AppendLine(error.Code + " " + error.Description);
+                    }
+
+                    throw new Exception(sb.ToString());
+                }
+            }
+
+            await AddUserToRoleAsync(user!, model.Role);
+
+            var employee = await repo.GetByIdAsync<Employee>(model.Id) 
+                ?? throw new ArgumentException($"Employee {model.Id} not exist");
             
             if (employee.PositionId == model.PositionId)
             {
@@ -115,21 +208,7 @@
                 PositionId = employee.PositionId
             };
 
-        }
-
-        /// <summary>
-        /// Get employee Id by application user id. May Throw exception from FirstAsync() method
-        /// </summary>
-        /// <param name="userId">user id (guid)</param>
-        /// <returns>employee id</returns>
-        public async Task<int> GetIdByUserIdAsync(Guid userId)
-        {
-            var employee = await repo
-                .All<Employee>(e => e.IsActive && e.ApplicationUserId == userId)
-                .FirstAsync();
-
-            return employee.Id;
-        }
+        }       
 
         /// <summary>
         /// Get all registered application users who are not employees yet
@@ -150,5 +229,48 @@
                     })
                     .ToListAsync();
         }
+               
+        private async Task<ApplicationUser> CheckEmployeeParametersAndReturnAppUserAsync(int positionId, string roleName, Guid userId)
+        {
+            var positions = await positionService.GetAllAsync();
+
+            if (positions.All(p => p.Id != positionId))
+            {
+                throw new ArgumentException("Position is altered");
+            }
+
+            var role = await roleManager.FindByNameAsync(roleName);
+
+            if (role == null)
+            {
+                throw new ArgumentException("Role is altered");
+            }
+
+            var user = await userManager.FindByIdAsync(userId.ToString());
+
+            if (user == null || user.IsActive == false)
+            {
+                throw new ArgumentException("User id is altered");
+            }
+
+            return user;
+        }
+
+        private async Task AddUserToRoleAsync(ApplicationUser user, string role)
+        {
+            var result = await userManager.AddToRoleAsync(user, role);
+
+            if (!result.Succeeded)
+            {
+                var sb = new StringBuilder();
+                foreach (var error in result.Errors)
+                {
+                    sb.AppendLine(error.Code + " " + error.Description);
+                }
+
+                throw new Exception(sb.ToString());
+            }
+        }
+
     }
 }

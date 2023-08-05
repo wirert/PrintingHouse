@@ -115,13 +115,6 @@
             <param name="id">employee id</param>
             <returns>Edit employee view model or null</returns>
         </member>
-        <member name="M:PrintingHouse.Core.Services.Admin.EmployeeService.GetIdByUserIdAsync(System.Guid)">
-            <summary>
-            Get employee Id by application user id. May Throw exception from FirstAsync() method
-            </summary>
-            <param name="userId">user id (guid)</param>
-            <returns>employee id</returns>
-        </member>
         <member name="M:PrintingHouse.Core.Services.Admin.EmployeeService.GetAllNewEmployees">
             <summary>
             Get all registered application users who are not employees yet
@@ -246,6 +239,15 @@
             <param name="userId">current user id</param>
             <returns></returns>
             <exception cref="T:PrintingHouse.Core.Exceptions.ClientNameExistsException"></exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.ClientService.DeleteAsync(System.Guid)">
+            <summary>
+            Soft delete Client with his articles
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+            <exception cref="T:PrintingHouse.Core.Exceptions.DeleteClientException"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.ClientService.GetAllAsync">
             <summary>
@@ -373,6 +375,15 @@
             </summary>
             <returns>Enumeration of All client view model</returns>
         </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IClientService.DeleteAsync(System.Guid)">
+            <summary>
+            Soft delete Client with his articles
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+            <exception cref="T:PrintingHouse.Core.Exceptions.DeleteClientException"></exception>
+        </member>
         <member name="T:PrintingHouse.Core.Services.Contracts.IColorModelService">
             <summary>
             Color model service interface for IoC
@@ -428,13 +439,6 @@
             Soft delete employee
             </summary>
             <param name="id">employee identifier</param>
-        </member>
-        <member name="M:PrintingHouse.Core.Services.Contracts.IEmployeeService.GetIdByUserIdAsync(System.Guid)">
-            <summary>
-            Get employee Id by application user id. May Throw exception from FirstAsync() method
-            </summary>
-            <param name="userId">user id (guid)</param>
-            <returns>employee id</returns>
         </member>
         <member name="M:PrintingHouse.Core.Services.Contracts.IEmployeeService.GetAllNewEmployees">
             <summary>

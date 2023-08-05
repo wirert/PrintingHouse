@@ -19,7 +19,8 @@
 
         public string? OldPositionName { get; set; }
 
-        public string? Role { get; set; }
+        [Required]
+        public string Role { get; set; } = null!;
 
         public IEnumerable<PositionViewModel> Positions { get; set; } = Enumerable.Empty<PositionViewModel>();
 

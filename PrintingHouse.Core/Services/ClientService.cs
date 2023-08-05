@@ -61,12 +61,13 @@
                 };
             }
 
-            var merchantId = await employeeService.GetIdByUserIdAsync(userId);
+            var merchantId = await repo.AllReadonly<Employee>(e => e.ApplicationUserId == userId)
+                                    .Select(e => e.Id)
+                                    .SingleAsync();
 
             client.MerchantId = merchantId;
             client.PhoneNumber = WebUtility.HtmlEncode(model.PhoneNumber);
             client.Email = WebUtility.HtmlEncode(model.Email);
-            client.MerchantId = model.MerchantId;
             if (isNewClient)
             {
                 await repo.AddAsync(client);
@@ -111,6 +112,12 @@
             await repo.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Check whether Client with given id and name exists
+        /// </summary>
+        /// <param name="id">client id</param>
+        /// <param name="name">client name</param>
+        /// <returns>Boolean</returns>
         public async Task<bool> ExistsByIdAndNameAsync(Guid id, string name)
         {
             var client = await repo

@@ -15,8 +15,14 @@
         /// <param name="userId">current user id</param>
         /// <returns></returns>
         /// <exception cref="ClientNameExistsException"></exception>
-        Task AddNewAsync(AddClientViewModel model, Guid userId);               
+        Task AddNewAsync(AddClientViewModel model, Guid userId);
 
+        /// <summary>
+        /// Check whether Client with given id and name exists
+        /// </summary>
+        /// <param name="id">client id</param>
+        /// <param name="name">client name</param>
+        /// <returns>Boolean</returns>
         Task<bool> ExistsByIdAndNameAsync(Guid id, string name);
 
         /// <summary>
