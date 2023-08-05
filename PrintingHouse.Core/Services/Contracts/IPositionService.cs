@@ -17,6 +17,7 @@
         /// Create new position or restore if non active
         /// </summary>
         /// <param name="viewModel">Add position view model</param>
+        /// <exception cref="ArgumentException"></exception>
         Task AddNewAsync(AddPositionViewModel viewModel);
 
         /// <summary>
@@ -24,7 +25,8 @@
         /// </summary>
         /// <param name="positionId">Positon id</param>
         /// <returns></returns>
-        /// <exception cref="InvalidOperationException">Thrown if there are workers on this position</exception>
+        /// <exception cref="InvalidOperationException">Throw if there are workers on this position</exception>
+        /// <exception cref="ArgumentException"></exception>
         Task DeleteAsync(int positionId);
     }
 }

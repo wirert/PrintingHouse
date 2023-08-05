@@ -27,18 +27,23 @@
         /// Create new position or restore if non active
         /// </summary>
         /// <param name="viewModel">Add position view model</param>
+        /// <exception cref="ArgumentException"></exception>
         public async Task AddNewAsync(AddPositionViewModel viewModel)
         {
-            var deletedPositon = await repo.All<Position>(p => p.IsActive == false)
-                .FirstOrDefaultAsync(p => p.Name == viewModel.Name);
+            var position = await repo.All<Position>(p => p.Name == viewModel.Name).FirstOrDefaultAsync();
 
-            if (deletedPositon != null)
+            if (position != null)
             {
-                deletedPositon.IsActive = true;
+                if (position.IsActive)
+                {
+                    throw new ArgumentException($"Position {viewModel.Name} already exist!");
+                }
+
+                position.IsActive = true;
             }
             else
             {
-                var position = new Position()
+                position = new Position()
                 {
                     Name = WebUtility.HtmlEncode(viewModel.Name)
                 };
@@ -55,12 +60,17 @@
         /// <param name="positionId">Positon id</param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">Throw if there are workers on this position</exception>
+        /// <exception cref="ArgumentException"></exception>
         public async Task DeleteAsync(int positionId)
-        {
+        {    
             var position = await repo
                              .All<Position>(p => p.Id == positionId && p.IsActive)
                              .Include(p => p.Employees)
-                             .FirstAsync();
+                             .FirstOrDefaultAsync();
+            if (position == null)
+            {
+                throw new ArgumentException("There is no such position!");
+            }
 
             if (position.Employees.Count(e => e.IsActive) > 0)
             {
