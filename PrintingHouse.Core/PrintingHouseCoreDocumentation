@@ -521,6 +521,39 @@
             <param name="materialId">material identifier</param>
             <returns>material name or null</returns>
         </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IOrderService.CreateAddModelByArticleIdAsync(System.Guid)">
+            <summary>
+            Creates a View model for Create a new order for a article
+            </summary>
+            <param name="articleId">article identifier</param>
+            <returns>Add order view model</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IOrderService.CreateOrder(PrintingHouse.Core.Models.Order.AddOrderViewModel)">
+            <summary>
+            Creates new order
+            </summary>
+            <param name="model">View model</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+            <exception cref="T:PrintingHouse.Core.Exceptions.OrderMachineException"></exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IOrderService.GetAllOrdersAsync">
+            <summary>
+            Gets all orders
+            </summary>
+            <returns>Enumeration of Order View model</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IOrderService.ChangeStatusAsync(System.Guid,PrintingHouse.Infrastructure.Data.Entities.Enums.OrderStatus)">
+            <summary>
+            Changes status of an order
+            </summary>
+            <param name="id">Order identifier</param>
+            <param name="status">The new Status of order</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+            <exception cref="T:PrintingHouse.Core.Exceptions.StatusException"></exception>
+        </member>
         <member name="M:PrintingHouse.Core.Services.Contracts.IOrderService.RearangeAllOrderOfParticularTypeAsync(System.Int32,System.Int32,System.Nullable{System.Guid})">
             <summary>
             Changes expected print time and expected print date of all orders with given material and color model.
@@ -625,6 +658,39 @@
             </summary>
             <param name="materialId">material identifier</param>
             <returns>material name or null</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.OrderService.GetAllOrdersAsync">
+            <summary>
+            Gets all orders
+            </summary>
+            <returns>Enumeration of Order View model</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.OrderService.CreateAddModelByArticleIdAsync(System.Guid)">
+            <summary>
+            Creates a View model for Create a new order for a article
+            </summary>
+            <param name="articleId">article identifier</param>
+            <returns>Add order view model</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.OrderService.CreateOrder(PrintingHouse.Core.Models.Order.AddOrderViewModel)">
+            <summary>
+            Creates new order
+            </summary>
+            <param name="model">View model</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+            <exception cref="T:PrintingHouse.Core.Exceptions.OrderMachineException"></exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.OrderService.ChangeStatusAsync(System.Guid,PrintingHouse.Infrastructure.Data.Entities.Enums.OrderStatus)">
+            <summary>
+            Changes status of an order
+            </summary>
+            <param name="id">Order identifier</param>
+            <param name="status">The new Status of order</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+            <exception cref="T:PrintingHouse.Core.Exceptions.StatusException"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.OrderService.RearangeAllOrderOfParticularTypeAsync(System.Int32,System.Int32,System.Nullable{System.Guid})">
             <summary>

@@ -212,7 +212,7 @@
                     ModelState.AddModelError(nameof(model.ApplicationUserId), "You should select a user!");
                 }
 
-                if (user != null && user.Id == Guid.Parse(User.Id()))
+                if (user != null && user.Id == User.Id())
                 {
                     ModelState.AddModelError(nameof(model.ApplicationUserId), "You can't change your own position!");
                 }
@@ -284,7 +284,7 @@
                     throw new ArgumentException("There is no such employee!");
                 }
 
-                if (employee.ApplicationUserId == Guid.Parse(User.Id()))
+                if (employee.ApplicationUserId == User.Id())
                 {
                     throw new ArgumentException("You can't remove your own access level!");
                 }

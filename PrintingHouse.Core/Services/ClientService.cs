@@ -10,6 +10,8 @@
     using Models.Client;
     using Infrastructure.Data.Common.Contracts;
     using Infrastructure.Data.Entities;
+    using PrintingHouse.Core.Services.Admin;
+    using PrintingHouse.Core.Exceptions;
 
     /// <summary>
     /// Client service
@@ -17,46 +19,63 @@
     public class ClientService : IClientService
     {
         private readonly IRepository repo;
+        private readonly IEmployeeService employeeService;
 
-        public ClientService(IRepository _repo)
+        public ClientService(
+            IRepository _repo,
+            IEmployeeService _employeeService)
         {
             repo = _repo;
+            employeeService = _employeeService;
         }
 
         /// <summary>
-        /// Create new client
+        /// Create new client or restore and update deleted
         /// </summary>
-        /// <param name="model">Add client view model with data from form</param>
+        /// <param name="model">Add client view model with data from form</param>        
+        /// <param name="userId">current user id</param>
         /// <returns></returns>
-        public async Task AddNewAsync(AddClientViewModel model)
+        /// <exception cref="ClientNameExistsException"></exception>
+        public async Task AddNewAsync(AddClientViewModel model, Guid userId)
         {
-            var client = new Client()
+            var client = await repo.All<Client>(c => c.Name == model.Name)
+                .FirstOrDefaultAsync();
+
+            bool isNewClient = false;
+            if (client != null)
             {
-                Name = WebUtility.HtmlEncode(model.Name),
-                PhoneNumber = WebUtility.HtmlEncode(model.PhoneNumber),
-                Email = WebUtility.HtmlEncode(model.Email),
-                MerchantId = model.MerchantId
-            };
+                if (client.IsActive)
+                {
+                    throw new ClientNameExistsException();
+                }
 
-            await repo.AddAsync(client);
+                client.IsActive = true;
+            }
+            else
+            {
+                isNewClient = true;
+                client = new Client()
+                {
+                    Name = WebUtility.HtmlEncode(model.Name)
+                };
+            }
+
+            var merchantId = await employeeService.GetIdByUserIdAsync(userId);
+
+            client.MerchantId = merchantId;
+            client.PhoneNumber = WebUtility.HtmlEncode(model.PhoneNumber);
+            client.Email = WebUtility.HtmlEncode(model.Email);
+            client.MerchantId = model.MerchantId;
+            if (isNewClient)
+            {
+                await repo.AddAsync(client);
+            }
             await repo.SaveChangesAsync();
-        } 
-
-        /// <summary>
-        /// Whether client exist by given name
-        /// </summary>
-        /// <param name="name">Client name</param>
-        /// <returns>Boolean</returns>
-        public async Task<bool> ExistByName(string name)
-        {
-            return await repo
-                .AllReadonly<Client>(c => c.Name == name && c.IsActive)
-                .AnyAsync();
         }
 
         public async Task<bool> ExistsByIdAndNameAsync(Guid id, string name)
         {
-            var client =  await repo
+            var client = await repo
                 .AllReadonly<Client>(c => c.Id == id && c.Name == name && c.IsActive)
                 .FirstOrDefaultAsync();
 
@@ -82,6 +101,6 @@
                     Articles = c.Articles.Count(a => a.IsActive)
                 })
                 .ToArrayAsync();
-        }        
+        }
     }
 }

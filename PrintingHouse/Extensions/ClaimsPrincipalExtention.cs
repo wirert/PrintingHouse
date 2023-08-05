@@ -6,9 +6,9 @@
 
     public static class ClaimsPrincipalExtention
     {
-        public static string Id(this ClaimsPrincipal user)
+        public static Guid Id(this ClaimsPrincipal user)
         {
-            return user.FindFirstValue(ClaimTypes.NameIdentifier);
+            return Guid.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
         }
 
         public static string FullName(this ClaimsPrincipal user)

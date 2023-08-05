@@ -5,6 +5,7 @@
 
     using static Core.Constants.MessageConstants;
     using static Core.Constants.ApplicationConstants;
+    using Core.Exceptions;
     using Core.Models.Client;
     using Core.Services.Contracts;
     using Extensions;
@@ -15,23 +16,35 @@
     public class ClientController : BaseController
     {
         private readonly IClientService clientService;
-        private readonly IEmployeeService employeeService;
+        private readonly ILogger logger;
 
-        public ClientController(IClientService _clientService,
-                        IEmployeeService _employeeService)
+        public ClientController(
+                        IClientService _clientService,
+                        ILogger<ClientController> _logger)
         {
             clientService = _clientService;
-            employeeService = _employeeService;
-
+            logger = _logger;
         }
 
         /// <summary>
-        /// Redirect to All clients
+        /// Permanent redirects  to All clients
         /// </summary>
         /// <returns></returns>
         public IActionResult Index()
         {
-            return RedirectToAction("All");
+            return RedirectPermanent("All");
+        }
+
+        /// <summary>
+        /// Show all active clients
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> All()
+        {
+            var clients = await clientService.GetAllAsync();
+
+            return View(clients);
         }
 
         /// <summary>
@@ -60,43 +73,25 @@
                 return View(model);
             }
 
-            if (await clientService.ExistByName(model.Name))
-            {
-                TempData[WarningMessage] = "There is already a client with that name!";
-
-                return RedirectToAction("All");
-            }
-
             try
             {
-                var userId = Guid.Parse(User.Id());
+                Guid userId = User.Id();
 
-                var merchantId = await employeeService.GetIdByUserIdAsync(userId);
-
-                model.MerchantId = merchantId;
-
-                await clientService.AddNewAsync(model);
+                await clientService.AddNewAsync(model, userId);
 
                 TempData[SuccessMessage] = $"Successfully added client {model.Name}.";
             }
-            catch (Exception)
+            catch (ClientNameExistsException cnee)
             {
+                TempData[WarningMessage] = cnee.Message;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
                 TempData[ErrorMessage] = "Unexpected error occurred while adding new client! Try again later.";
             }
 
             return RedirectToAction("All");
-        }
-
-        /// <summary>
-        /// Show all active clients
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<IActionResult> All()
-        {
-            var clients = await clientService.GetAllAsync();
-
-            return View(clients);
         }
     }
 }

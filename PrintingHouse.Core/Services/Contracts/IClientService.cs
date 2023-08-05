@@ -1,6 +1,7 @@
 ﻿namespace PrintingHouse.Core.Services.Contracts
 {
-    using PrintingHouse.Core.Models.Client;
+    using Exceptions;
+    using Models.Client;
 
     /// <summary>
     /// Client service interface for IoC
@@ -8,18 +9,13 @@
     public interface IClientService
     {
         /// <summary>
-        /// Create new client
+        /// Create new client or restore and update deleted
         /// </summary>
-        /// <param name="model">Add client view model with data from form</param>
+        /// <param name="model">Add client view model with data from form</param>        
+        /// <param name="userId">current user id</param>
         /// <returns></returns>
-        Task AddNewAsync(AddClientViewModel model);
-
-        /// <summary>
-        /// Whether client exist by given name
-        /// </summary>
-        /// <param name="name">Client name</param>
-        /// <returns>Boolean</returns>
-        Task<bool> ExistByName(string name);
+        /// <exception cref="ClientNameExistsException"></exception>
+        Task AddNewAsync(AddClientViewModel model, Guid userId);               
 
         Task<bool> ExistsByIdAndNameAsync(Guid id, string name);
 
