@@ -6,7 +6,7 @@
     {
         public IActionResult Index()
         {
-            return RedirectToAction("All", "Employee");
+            return RedirectToActionPermanent("All", "Employee");
         }
     }
 }

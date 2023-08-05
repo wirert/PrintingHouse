@@ -1,14 +1,11 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging.Configuration;
+
 using PrintingHouse.Extensions;
 using PrintingHouse.Infrastructure.Data;
 using PrintingHouse.Infrastructure.Data.Entities.Account;
 using PrintingHouse.ModelBinders;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
 
 builder.Services.AddApplicationDbContext(builder.Configuration);
 builder.Services.AddMinIO(builder.Configuration);

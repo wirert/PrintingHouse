@@ -89,18 +89,28 @@
             Create new employee
             </summary>
             <param name="model">Add employee view model with form data</param>
+            <exception cref="T:System.ArgumentException"></exception>
+            <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:PrintingHouse.Core.Services.Admin.EmployeeService.DeleteAsync(System.Int32)">
+        <member name="M:PrintingHouse.Core.Services.Admin.EmployeeService.DeleteAsync(System.Int32,System.Guid)">
             <summary>
-            Soft delete employee
+            Soft delete employee and user
             </summary>
             <param name="id">employee identifier</param>
+            <param name="currentUserId">Current ApplicatonUser Id</param>
+            <exception cref="T:System.ArgumentException"></exception>
+            <exception cref="T:PrintingHouse.Core.Exceptions.EmployeeSelfChangeException"></exception>
+            <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:PrintingHouse.Core.Services.Admin.EmployeeService.ChnagePositionAsync(PrintingHouse.Core.AdminModels.Employee.EditEmployeeViewModel)">
+        <member name="M:PrintingHouse.Core.Services.Admin.EmployeeService.EditAsync(PrintingHouse.Core.AdminModels.Employee.EditEmployeeViewModel,System.Guid)">
             <summary>
-            Change working position of na employee
+            Change working position of an employee
             </summary>
             <param name="model">Edit employee view model</param>
+            <param name="currentUserId"></param>
+            <exception cref="T:PrintingHouse.Core.Exceptions.EmployeeSelfChangeException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
+            <exception cref="T:System.Exception"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.Admin.EmployeeService.GetAllAsync">
             <summary>
@@ -249,6 +259,14 @@
             <exception cref="T:System.ArgumentException"></exception>
             <exception cref="T:PrintingHouse.Core.Exceptions.DeleteClientException"></exception>
         </member>
+        <member name="M:PrintingHouse.Core.Services.ClientService.ExistsByIdAndNameAsync(System.Guid,System.String)">
+            <summary>
+            Check whether Client with given id and name exists
+            </summary>
+            <param name="id">client id</param>
+            <param name="name">client name</param>
+            <returns>Boolean</returns>
+        </member>
         <member name="M:PrintingHouse.Core.Services.ClientService.GetAllAsync">
             <summary>
             Gets all active clients
@@ -369,6 +387,14 @@
             <returns></returns>
             <exception cref="T:PrintingHouse.Core.Exceptions.ClientNameExistsException"></exception>
         </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IClientService.ExistsByIdAndNameAsync(System.Guid,System.String)">
+            <summary>
+            Check whether Client with given id and name exists
+            </summary>
+            <param name="id">client id</param>
+            <param name="name">client name</param>
+            <returns>Boolean</returns>
+        </member>
         <member name="M:PrintingHouse.Core.Services.Contracts.IClientService.GetAllAsync">
             <summary>
             Gets all active clients
@@ -414,6 +440,8 @@
             Create new employee
             </summary>
             <param name="model">Add employee view model with form data</param>
+            <exception cref="T:System.ArgumentException"></exception>
+            <exception cref="T:System.Exception"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.Contracts.IEmployeeService.GetAllAsync">
             <summary>
@@ -428,17 +456,25 @@
             <param name="id">employee id</param>
             <returns>Edit employee view model or null</returns>
         </member>
-        <member name="M:PrintingHouse.Core.Services.Contracts.IEmployeeService.ChnagePositionAsync(PrintingHouse.Core.AdminModels.Employee.EditEmployeeViewModel)">
+        <member name="M:PrintingHouse.Core.Services.Contracts.IEmployeeService.EditAsync(PrintingHouse.Core.AdminModels.Employee.EditEmployeeViewModel,System.Guid)">
             <summary>
-            Change working position of na employee
+            Change working position of an employee
             </summary>
             <param name="model">Edit employee view model</param>
+            <param name="currentUserId"></param>
+            <exception cref="T:PrintingHouse.Core.Exceptions.EmployeeSelfChangeException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
+            <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:PrintingHouse.Core.Services.Contracts.IEmployeeService.DeleteAsync(System.Int32)">
+        <member name="M:PrintingHouse.Core.Services.Contracts.IEmployeeService.DeleteAsync(System.Int32,System.Guid)">
             <summary>
-            Soft delete employee
+            Soft delete employee and user
             </summary>
             <param name="id">employee identifier</param>
+            <param name="currentUserId">Current ApplicatonUser Id</param>
+            <exception cref="T:System.ArgumentException"></exception>
+            <exception cref="T:PrintingHouse.Core.Exceptions.EmployeeSelfChangeException"></exception>
+            <exception cref="T:System.Exception"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.Contracts.IEmployeeService.GetAllNewEmployees">
             <summary>

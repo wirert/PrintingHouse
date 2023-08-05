@@ -8,7 +8,7 @@
     /// <summary>
     /// Admin area base controller
     /// </summary>
-    [Area(nameof(AdminRoleName))]
+    [Area("Admin")]
     [Authorize(Roles = AdminRoleName)]
     [AutoValidateAntiforgeryToken]
     public class BaseController : Controller

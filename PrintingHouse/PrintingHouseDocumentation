@@ -233,6 +233,13 @@
             </summary>
             <returns>Redirect to all clients page</returns>
         </member>
+        <member name="M:PrintingHouse.Controllers.ClientController.Delete(System.Guid)">
+            <summary>
+            Deletes client
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="T:PrintingHouse.Controllers.OrderController">
             <summary>
             Order controller
