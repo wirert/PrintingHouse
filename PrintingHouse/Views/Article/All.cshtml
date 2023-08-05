@@ -6,11 +6,11 @@
 <table class="table table-hover">
     <thead>
         <tr>
-            <th scope="col">Article No.</th>
-            <th scope="col">Name</th>
-            <th scope="col">Client name</th>
-            <th scope="col">Material</th>
-            <th scope="col">Color model</th>
+            <th class="sorter_th" scope="col">Article No.</th>
+            <th class="sorter_th" scope="col">Name</th>
+            <th class="sorter_th" scope="col">Client name</th>
+            <th class="sorter_th" scope="col">Material</th>
+            <th class="sorter_th" scope="col">Color model</th>
             <th scope="col">Design file</th>
             @if (User.IsInRole(AdminRoleName) || User.IsInRole(MerchantRoleName))
             {
@@ -20,7 +20,7 @@
             }
         </tr>
     </thead>
-    <tbody>
+    <tbody >
         @foreach (var article in Model)
         {
             <tr>
@@ -62,3 +62,6 @@
     </tbody>
 </table>
 
+@section Scripts {
+    <script>table_sort();</script>
+}

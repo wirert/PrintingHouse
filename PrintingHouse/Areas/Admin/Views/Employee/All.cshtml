@@ -4,8 +4,10 @@
 }
 
 <h1>@ViewBag.Title</h1>
-
-<table class="table table-hover">
+<div class="form-group col-md-3">
+    <input id="entry" class="form-control" placeholder="--Employee name--" type="text" onkeyup="quickSearch(this)">
+</div>
+<table class="table table-hover table-responsive">
     <thead>
         <tr>
             <th scope="col">Employee number</th>
@@ -16,7 +18,7 @@
             <th scope="col">Dismiss</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="quick-find-employee">
         @foreach (var employee in Model)
         {
             <tr>
@@ -44,3 +46,25 @@
 </table>
 
 <a asp-asp-area="Admin" asp-controller="Employee" asp-action="Add" class="btn btn-dark">Add new employee</a>
+
+@section Scripts
+    {
+    <script type="text/javascript">
+        function quickSearch(input) {
+            var input, filter, table, tr, td, i;
+            filter = input.value.toUpperCase();
+            table = document.getElementById("quick-find-employee");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1];
+                if (td) {
+                    if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+}

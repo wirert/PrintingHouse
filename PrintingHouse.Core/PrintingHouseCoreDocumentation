@@ -141,6 +141,7 @@
             Create new position or restore if non active
             </summary>
             <param name="viewModel">Add position view model</param>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.Admin.PositionService.DeleteAsync(System.Int32)">
             <summary>
@@ -149,6 +150,7 @@
             <param name="positionId">Positon id</param>
             <returns></returns>
             <exception cref="T:System.InvalidOperationException">Throw if there are workers on this position</exception>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.Admin.PositionService.GetAllAsync">
             <summary>
@@ -611,6 +613,7 @@
             Create new position or restore if non active
             </summary>
             <param name="viewModel">Add position view model</param>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.Contracts.IPositionService.DeleteAsync(System.Int32)">
             <summary>
@@ -618,7 +621,8 @@
             </summary>
             <param name="positionId">Positon id</param>
             <returns></returns>
-            <exception cref="T:System.InvalidOperationException">Thrown if there are workers on this position</exception>
+            <exception cref="T:System.InvalidOperationException">Throw if there are workers on this position</exception>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="T:PrintingHouse.Core.Services.FileService">
             <summary>

@@ -1,8 +1,9 @@
 ﻿namespace PrintingHouse.Areas.Admin.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using PrintingHouse.Core.AdminModels.Position;
-    using PrintingHouse.Core.Services.Contracts;
+
+    using Core.AdminModels.Position;
+    using Core.Services.Contracts;
     using static Core.Constants.MessageConstants;
 
     /// <summary>
