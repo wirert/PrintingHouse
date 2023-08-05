@@ -238,19 +238,14 @@
             Client service
             </summary>
         </member>
-        <member name="M:PrintingHouse.Core.Services.ClientService.AddNewAsync(PrintingHouse.Core.Models.Client.AddClientViewModel)">
+        <member name="M:PrintingHouse.Core.Services.ClientService.AddNewAsync(PrintingHouse.Core.Models.Client.AddClientViewModel,System.Guid)">
             <summary>
-            Create new client
+            Create new client or restore and update deleted
             </summary>
-            <param name="model">Add client view model with data from form</param>
+            <param name="model">Add client view model with data from form</param>        
+            <param name="userId">current user id</param>
             <returns></returns>
-        </member>
-        <member name="M:PrintingHouse.Core.Services.ClientService.ExistByName(System.String)">
-            <summary>
-            Whether client exist by given name
-            </summary>
-            <param name="name">Client name</param>
-            <returns>Boolean</returns>
+            <exception cref="T:PrintingHouse.Core.Exceptions.ClientNameExistsException"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.ClientService.GetAllAsync">
             <summary>
@@ -363,19 +358,14 @@
             Client service interface for IoC
             </summary>
         </member>
-        <member name="M:PrintingHouse.Core.Services.Contracts.IClientService.AddNewAsync(PrintingHouse.Core.Models.Client.AddClientViewModel)">
+        <member name="M:PrintingHouse.Core.Services.Contracts.IClientService.AddNewAsync(PrintingHouse.Core.Models.Client.AddClientViewModel,System.Guid)">
             <summary>
-            Create new client
+            Create new client or restore and update deleted
             </summary>
-            <param name="model">Add client view model with data from form</param>
+            <param name="model">Add client view model with data from form</param>        
+            <param name="userId">current user id</param>
             <returns></returns>
-        </member>
-        <member name="M:PrintingHouse.Core.Services.Contracts.IClientService.ExistByName(System.String)">
-            <summary>
-            Whether client exist by given name
-            </summary>
-            <param name="name">Client name</param>
-            <returns>Boolean</returns>
+            <exception cref="T:PrintingHouse.Core.Exceptions.ClientNameExistsException"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.Contracts.IClientService.GetAllAsync">
             <summary>

@@ -93,5 +93,33 @@
 
             return RedirectToAction("All");
         }
+
+        [HttpPost]
+        [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            try
+            {
+                await clientService.DeleteAsync(id);
+
+                TempData[SuccessMessage] = "Successfully deleted client and his articles";
+            }
+            catch (DeleteClientException dce)
+            {
+                TempData[WarningMessage] = dce.Message;
+            }
+            catch (ArgumentException ae)
+            {
+                logger.LogInformation(ae.Message);
+                return NotFound();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                TempData[ErrorMessage] = "Problem deleting client! Try again";
+            }
+
+            return RedirectToAction("All");
+        }
     }
 }

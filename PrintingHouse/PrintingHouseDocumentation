@@ -211,7 +211,13 @@
         </member>
         <member name="M:PrintingHouse.Controllers.ClientController.Index">
             <summary>
-            Redirect to All clients
+            Permanent redirects  to All clients
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PrintingHouse.Controllers.ClientController.All">
+            <summary>
+            Show all active clients
             </summary>
             <returns></returns>
         </member>
@@ -227,10 +233,44 @@
             </summary>
             <returns>Redirect to all clients page</returns>
         </member>
-        <member name="M:PrintingHouse.Controllers.ClientController.All">
+        <member name="T:PrintingHouse.Controllers.OrderController">
             <summary>
-            Show all active clients
+            Order controller
             </summary>
+        </member>
+        <member name="M:PrintingHouse.Controllers.OrderController.Index">
+            <summary>
+            Redirects to 'All' action
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PrintingHouse.Controllers.OrderController.All">
+            <summary>
+            Takes all orders and pass it to the view
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PrintingHouse.Controllers.OrderController.Create(System.Guid)">
+            <summary>
+            Creates a view model and pass it to the view
+            </summary>
+            <param name="articleId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PrintingHouse.Controllers.OrderController.Create(PrintingHouse.Core.Models.Order.AddOrderViewModel)">
+            <summary>
+            Creates a new order
+            </summary>
+            <param name="model">View model with data</param>
+            <returns></returns>
+        </member>
+        <member name="M:PrintingHouse.Controllers.OrderController.ChangeStatus(System.Guid,PrintingHouse.Infrastructure.Data.Entities.Enums.OrderStatus,System.String)">
+            <summary>
+            Changes status of given order
+            </summary>
+            <param name="id">Order id</param>
+            <param name="status">New status</param>
+            <param name="returnUrl"></param>
             <returns></returns>
         </member>
         <member name="T:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtension">

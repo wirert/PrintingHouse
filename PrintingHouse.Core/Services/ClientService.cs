@@ -10,6 +10,7 @@
     using Models.Client;
     using Infrastructure.Data.Common.Contracts;
     using Infrastructure.Data.Entities;
+    using Infrastructure.Data.Entities.Enums;
     using PrintingHouse.Core.Services.Admin;
     using PrintingHouse.Core.Exceptions;
 
@@ -70,6 +71,43 @@
             {
                 await repo.AddAsync(client);
             }
+            await repo.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Soft delete Client with his articles
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="DeleteClientException"></exception>
+        public async Task DeleteAsync(Guid id)
+        {
+            var client = await repo.All<Client>(c => c.Id == id)
+                .Include(c => c.Articles)
+                .FirstOrDefaultAsync();
+
+            if (client == null || client.IsActive == false) 
+            {
+                throw new ArgumentException("Client id is altered");
+            }
+
+            var anyActiveClientOrders = await repo.AllReadonly<Order>(o => o.Article.ClientId == id)
+                                    .Where(o => o.Status != OrderStatus.Completed &&
+                                                o.Status != OrderStatus.Canceled)
+                                    .AnyAsync();
+            if (anyActiveClientOrders)
+            {
+                throw new DeleteClientException();
+            }
+
+            foreach (var article in client.Articles) 
+            {
+                article.IsActive = false;
+            }
+
+            client.IsActive = false;
+
             await repo.SaveChangesAsync();
         }
 

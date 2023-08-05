@@ -25,5 +25,14 @@
         /// <returns>Enumeration of All client view model</returns>
         Task<IEnumerable<AllClientViewModel>> GetAllAsync();
 
+        /// <summary>
+        /// Soft delete Client with his articles
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="DeleteClientException"></exception>
+        Task DeleteAsync(Guid id);
+
     }
 }
