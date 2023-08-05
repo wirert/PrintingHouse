@@ -13,12 +13,16 @@
     {
         private readonly IMachineService machineService;
         private readonly IOrderService orderService;
+        private readonly ILogger logger;
 
-        public MachineController(IMachineService _machineService,
-            IOrderService _orderService)
+        public MachineController(
+            IMachineService _machineService,
+            IOrderService _orderService,
+            ILogger<MachineController> _logger)
         {
             machineService = _machineService;
             orderService = _orderService;
+            logger = _logger;
         }
 
         public async Task<IActionResult> Index()
@@ -31,8 +35,9 @@
 
                 return View();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger.LogError(e, e.Message);
                 TempData[WarningMessage] = "Error loading machines";
 
                 return RedirectToAction("All", "Order");
@@ -47,9 +52,15 @@
 
                 return PartialView("_MachineOrdersPartial", model);
             }
-            catch (Exception)
+            catch (ArgumentException ae)
             {
-                return BadRequest("No order found");
+                logger.LogInformation(ae, ae.Message);
+                return NotFound();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                return RedirectToAction("Error", "Home");
             }
         }
 
@@ -61,15 +72,21 @@
             {
                 if (status != OrderStatus.Waiting && status != OrderStatus.NoConsumable)
                 {
-                    throw new Exception();
+                    throw new ArgumentException("Status of order is different of 'Waiting' or 'NoConsumable'");
                 }
 
                 await machineService.MoveOrderInFrontAsync(id);
 
                 TempData[SuccessMessage] = "The order is moved in front of athors";
             }
-            catch (Exception)
+            catch (ArgumentException ae)
             {
+                logger.LogInformation(ae, ae.Message);
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
                 TempData[ErrorMessage] = "Unable to change possition of this order";
             }
 

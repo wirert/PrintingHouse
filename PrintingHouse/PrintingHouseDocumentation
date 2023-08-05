@@ -165,11 +165,10 @@
             <param name="materialColors">View model with selected material and color model</param>
             <returns>Redirect to Create or Edit article actions</returns>
         </member>
-        <member name="M:PrintingHouse.Controllers.ArticleController.Create(PrintingHouse.Core.Models.Article.ChooseArticleMaterialAndColorsViewModel)">
+        <member name="M:PrintingHouse.Controllers.ArticleController.Create">
             <summary>
             Create new Article (get)
             </summary>
-            <param name="materialColors">View model with selected material and color model</param>
             <returns>View with View model</returns>
         </member>
         <member name="M:PrintingHouse.Controllers.ArticleController.Create(PrintingHouse.Core.Models.Article.ArticleViewModel)">
@@ -192,6 +191,13 @@
             </summary>
             <param name="model">Article view model with form data</param>
             <returns>Redirect to action All</returns>
+        </member>
+        <member name="M:PrintingHouse.Controllers.ArticleController.Delete(System.Guid)">
+            <summary>
+            Soft delete an article
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
         </member>
         <member name="T:PrintingHouse.Controllers.BaseController">
             <summary>
@@ -237,6 +243,22 @@
             Register required services in the IoC container
             </summary>
             <param name="services"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtension.AddApplicationDbContext(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Add SQL Server with connection string from configuration file
+            </summary>
+            <param name="services"></param>
+            <param name="configuration"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtension.AddMinIO(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Register and configure MinIO object storage
+            </summary>
+            <param name="services"></param>
+            <param name="configuration"></param>
             <returns></returns>
         </member>
     </members>

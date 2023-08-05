@@ -28,6 +28,7 @@
         /// </summary>
         /// <param name="materialId">material identifier</param>
         /// <returns>Collection of Color model view model</returns>
+        /// <exception cref="ArgumentException"></exception>
         public async Task<ICollection<ColorModelSelectViewModel>> GetColorModelByMaterialIdAsync(string materialId)
         {
             bool isIntMaterialId = int.TryParse(materialId, out int matId);

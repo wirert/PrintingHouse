@@ -247,6 +247,15 @@
             await repo.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Changes expected print time and expected print date of all orders with given material and color model.
+        /// Respectivly may change machine (if there are more than one with same parameters.
+        /// If passed an order id, it sets it in front of the queue of machines
+        /// </summary>
+        /// <param name="materialId"></param>
+        /// <param name="colorModelId"></param>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
         public async Task RearangeAllOrderOfParticularTypeAsync(int materialId, int colorModelId, Guid? orderId = null)
         {
             var orders = await repo

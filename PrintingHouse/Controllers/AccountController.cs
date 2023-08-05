@@ -81,7 +81,7 @@
 
                await signInManager.SignInAsync(user, isPersistent: false);
 
-                TempData[MessageConstants.SuccessMessage] = $"Welcome {User.FullName()}!";
+                TempData[MessageConstants.SuccessMessage] = $"Welcome {user.FirstName} {user.LastName}!";
 
                 return RedirectToAction("Index", "Home");
             }
@@ -135,7 +135,7 @@
 
                 if (result.Succeeded)
                 {
-                    TempData[MessageConstants.SuccessMessage] = $"Welcome {User.FullName()}!";
+                    TempData[MessageConstants.SuccessMessage] = $"Welcome back {user.FirstName} {user.LastName}!";
 
                     if (model.ReturnUrl != null)
                     {

@@ -33,7 +33,7 @@
                     <form asp-controller="Article" asp-action="Download" method="get">
                         <input name="articleId" type="hidden" value="@article.Id" />
                         <input name="fileName" type="hidden" value="@article.FileName" />
-                        <button class="btn btn-success btn-sm" type="submit">Download file</button>
+                        <button class="btn btn-success btn-sm" title="Download file" type="submit"><i class="fa-solid fa-download"></i></button>
                     </form>
                 </td>
                 @if (User.IsInRole(AdminRoleName) || User.IsInRole(MerchantRoleName))

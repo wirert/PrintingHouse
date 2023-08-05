@@ -20,6 +20,7 @@
         /// </summary>
         /// <param name="materialId">material identifier</param>
         /// <returns>Collection of Color model view model</returns>
+        /// <exception cref="ArgumentException"></exception>
         Task<ICollection<ColorModelSelectViewModel>> GetColorModelByMaterialIdAsync(string materialId);        
     }
 }

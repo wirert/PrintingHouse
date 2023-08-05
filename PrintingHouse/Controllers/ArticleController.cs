@@ -139,9 +139,9 @@
 
                 return View(model);
             }
-            catch (ArgumentNullException ane)
+            catch (ArgumentException ae)
             {
-                logger.LogInformation(ane, ane.Message);
+                logger.LogInformation(ae, ae.Message);
 
                 return BadRequest();
             }

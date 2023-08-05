@@ -23,6 +23,12 @@
             orderService = _orderService;
         }
 
+        /// <summary>
+        /// Gets orders for a particular machine
+        /// </summary>
+        /// <param name="machineId">machine identifier</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public async Task<MachineOrderViewModel> GetMachineOrdersAsync(int machineId)
         {
             var result =  await repo
@@ -57,16 +63,20 @@
                     .OrderBy(o => o.Status)
                     .ToList(),
                 })
-                .FirstAsync();
+                .FirstOrDefaultAsync();
 
-            if (result.Orders.Any() == false)
+            if (result == null)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Machine id is altered");
             }
 
             return result;
         }
 
+        /// <summary>
+        /// Gets all machines for select
+        /// </summary>
+        /// <returns>Machine select view model</returns>
         public async Task<IEnumerable<MachineSelectViewModel>> GetMachinesIdsAsync()
         {
             var machines =  await repo
@@ -87,17 +97,28 @@
             return machines;
         }
 
+        /// <summary>
+        /// Make order first in queue for printing
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public async Task MoveOrderInFrontAsync(Guid orderId)
         {
-           var obj =  await repo.AllReadonly<Order>(o => o.Id == orderId)
+           var order =  await repo.AllReadonly<Order>(o => o.Id == orderId)
                 .Select(o => new
                 {
                     o.Article.MaterialId,
                     o.Article.ColorModelId
                 })
-                .FirstAsync();
+                .FirstOrDefaultAsync();
 
-            await orderService.RearangeAllOrderOfParticularTypeAsync(obj.MaterialId, obj.ColorModelId, orderId);
+            if (order == null)
+            {
+                throw new ArgumentException("Order Id is altered");
+            }
+
+            await orderService.RearangeAllOrderOfParticularTypeAsync(order.MaterialId, order.ColorModelId, orderId);
         }
     }
 }

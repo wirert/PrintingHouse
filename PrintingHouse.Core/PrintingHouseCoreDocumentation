@@ -170,14 +170,16 @@
             Creates new article
             </summary>
             <param name="model">Article view model</param>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:PrintingHouse.Core.Services.ArticleService.FillSelectModelWithDataAsync(PrintingHouse.Core.Models.Article.ChooseArticleMaterialAndColorsViewModel)">
+        <member name="M:PrintingHouse.Core.Services.ArticleService.GetSelectVeiwModelWithDataAsync(System.Guid,System.Nullable{System.Guid})">
             <summary>
             Fill data for select material and color model view model
-            </summary>
-            <param name="model">Choose article material and color model view model</param>
+            </summary>        
+            <param name="clientId"></param>
+            <param name="articleId"></param>
             <returns>Choose article material and color model view model</returns>
-            <exception cref="T:System.Exception">Thrown when clinet is null or client isActive is false</exception>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.ArticleService.ExistByIdAsync(System.Nullable{System.Guid})">
             <summary>
@@ -186,20 +188,13 @@
             <param name="id">article id</param>
             <returns>Boolean</returns>
         </member>
-        <member name="M:PrintingHouse.Core.Services.ArticleService.GetByIdAsync(System.Guid)">
-            <summary>
-            Get article by id and whether it is active
-            </summary>
-            <param name="id">Guid article id</param>
-            <returns>Article view model</returns>
-        </member>
         <member name="M:PrintingHouse.Core.Services.ArticleService.EditAsync(PrintingHouse.Core.Models.Article.ArticleViewModel)">
             <summary>
             Edit existing article
             </summary>
             <param name="model">Article view model with data changes</param>
             <returns></returns>
-            <exception cref="T:System.ArgumentException">thrown when Article is null or IsActive is false, or ClientId is different</exception>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.ArticleService.DeleteByIdAsync(System.Guid)">
             <summary>
@@ -207,6 +202,7 @@
             </summary>
             <param name="id">Article id</param>
             <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.ArticleService.GetFileNameByIdAsync(System.Guid)">
             <summary>
@@ -214,6 +210,28 @@
             </summary>
             <param name="id">Article identifier</param>
             <returns>Design name</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.ArticleService.GetCreateViewModelWithData(System.Int32,System.Int32,System.Guid,System.String)">
+            <summary>
+            Creates view model for creating a new article and fill it with needed data
+            </summary>
+            <param name="materialId"></param>
+            <param name="colorModelId"></param>
+            <param name="clientId"></param>
+            <param name="clientName"></param>
+            <returns>Article view model</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.ArticleService.GetEditViewModelWithData(System.Nullable{System.Int32},System.Nullable{System.Int32},System.Guid)">
+            <summary>
+            Finds an article from db and create view model for update
+            </summary>
+            <param name="materialId"></param>
+            <param name="colorModelId"></param>
+            <param name="articleId"></param>
+            <returns>Article view model</returns>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="T:PrintingHouse.Core.Services.ClientService">
             <summary>
@@ -251,6 +269,7 @@
             </summary>
             <param name="materialId">material identifier</param>
             <returns>Collection of Color model view model</returns>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.ColorModelService.GetColorModelColorsAsync(System.Int32)">
             <summary>
@@ -276,14 +295,37 @@
             Creates new article
             </summary>
             <param name="model">Article view model</param>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:PrintingHouse.Core.Services.Contracts.IArticleService.FillSelectModelWithDataAsync(PrintingHouse.Core.Models.Article.ChooseArticleMaterialAndColorsViewModel)">
+        <member name="M:PrintingHouse.Core.Services.Contracts.IArticleService.GetCreateViewModelWithData(System.Int32,System.Int32,System.Guid,System.String)">
+            <summary>
+            Creates view model for creating a new article and fill it with needed data
+            </summary>
+            <param name="materialId"></param>
+            <param name="colorModelId"></param>
+            <param name="clientId"></param>
+            <param name="clientName"></param>
+            <returns>Article view model</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IArticleService.GetEditViewModelWithData(System.Nullable{System.Int32},System.Nullable{System.Int32},System.Guid)">
+            <summary>
+            Finds an article from db and create view model for update
+            </summary>
+            <param name="materialId"></param>
+            <param name="colorModelId"></param>
+            <param name="articleId"></param>
+            <returns>Article view model</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IArticleService.GetSelectVeiwModelWithDataAsync(System.Guid,System.Nullable{System.Guid})">
             <summary>
             Fill data for select material and color model view model
-            </summary>
-            <param name="model">Choose article material and color model view model</param>
+            </summary>        
+            <param name="clientId"></param>
+            <param name="articleId"></param>
             <returns>Choose article material and color model view model</returns>
-            <exception cref="T:System.Exception">Thrown when clinet is null or client isActive is false</exception>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.Contracts.IArticleService.ExistByIdAsync(System.Nullable{System.Guid})">
             <summary>
@@ -291,13 +333,6 @@
             </summary>
             <param name="id">article id</param>
             <returns>Boolean</returns>
-        </member>
-        <member name="M:PrintingHouse.Core.Services.Contracts.IArticleService.GetByIdAsync(System.Guid)">
-            <summary>
-            Get article by id and whether it is active
-            </summary>
-            <param name="id">Guid article id</param>
-            <returns>Article view model</returns>
         </member>
         <member name="M:PrintingHouse.Core.Services.Contracts.IArticleService.EditAsync(PrintingHouse.Core.Models.Article.ArticleViewModel)">
             <summary>
@@ -313,6 +348,7 @@
             </summary>
             <param name="id">Article id</param>
             <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.Contracts.IArticleService.GetFileNameByIdAsync(System.Guid)">
             <summary>
@@ -320,6 +356,7 @@
             </summary>
             <param name="id">Article identifier</param>
             <returns>Design name</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
         </member>
         <member name="T:PrintingHouse.Core.Services.Contracts.IClientService">
             <summary>
@@ -364,6 +401,7 @@
             </summary>
             <param name="materialId">material identifier</param>
             <returns>Collection of Color model view model</returns>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="T:PrintingHouse.Core.Services.Contracts.IEmployeeService">
             <summary>
@@ -436,6 +474,28 @@
             <param name="fileName">File name</param>
             <returns>Memory stream with file content</returns>
         </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IMachineService.GetMachinesIdsAsync">
+            <summary>
+            Gets all machines for select
+            </summary>
+            <returns>Machine select view model</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IMachineService.GetMachineOrdersAsync(System.Int32)">
+            <summary>
+            Gets orders for a particular machine
+            </summary>
+            <param name="machineId">machine identifier</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IMachineService.MoveOrderInFrontAsync(System.Guid)">
+            <summary>
+            Make order first in queue for printing
+            </summary>
+            <param name="orderId"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
         <member name="T:PrintingHouse.Core.Services.Contracts.IMaterialColorService">
             <summary>
             Material - Color model service interface for IoC
@@ -460,6 +520,17 @@
             </summary>
             <param name="materialId">material identifier</param>
             <returns>material name or null</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IOrderService.RearangeAllOrderOfParticularTypeAsync(System.Int32,System.Int32,System.Nullable{System.Guid})">
+            <summary>
+            Changes expected print time and expected print date of all orders with given material and color model.
+            Respectivly may change machine id (if there are more than one with same parameters).
+            If passed an order id, it sets it in front of the queue of machines
+            </summary>
+            <param name="materialId"></param>
+            <param name="colorModelId"></param>
+            <param name="orderId"></param>
+            <returns></returns>
         </member>
         <member name="T:PrintingHouse.Core.Services.Contracts.IPositionService">
             <summary>
@@ -508,6 +579,28 @@
             <param name="content">File content (IFormFile)</param>
             <returns></returns>
         </member>
+        <member name="M:PrintingHouse.Core.Services.MachineService.GetMachineOrdersAsync(System.Int32)">
+            <summary>
+            Gets orders for a particular machine
+            </summary>
+            <param name="machineId">machine identifier</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.MachineService.GetMachinesIdsAsync">
+            <summary>
+            Gets all machines for select
+            </summary>
+            <returns>Machine select view model</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.MachineService.MoveOrderInFrontAsync(System.Guid)">
+            <summary>
+            Make order first in queue for printing
+            </summary>
+            <param name="orderId"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
         <member name="T:PrintingHouse.Core.Services.MaterialColorService">
             <summary>
             Material - Color model service
@@ -532,6 +625,17 @@
             </summary>
             <param name="materialId">material identifier</param>
             <returns>material name or null</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.OrderService.RearangeAllOrderOfParticularTypeAsync(System.Int32,System.Int32,System.Nullable{System.Guid})">
+            <summary>
+            Changes expected print time and expected print date of all orders with given material and color model.
+            Respectivly may change machine (if there are more than one with same parameters.
+            If passed an order id, it sets it in front of the queue of machines
+            </summary>
+            <param name="materialId"></param>
+            <param name="colorModelId"></param>
+            <param name="orderId"></param>
+            <returns></returns>
         </member>
         <member name="M:PrintingHouse.Core.Services.OrderService.SetExpectedPrintDate(PrintingHouse.Infrastructure.Data.Entities.Order)">
             <summary>
