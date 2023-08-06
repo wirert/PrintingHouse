@@ -6,10 +6,12 @@
 
     using static Core.Constants.ApplicationConstants;
     using Infrastructure.Data.Entities.Account;
+    using PrintingHouse.Infrastructure.Data.Common.Contracts;
+    using PrintingHouse.Infrastructure.Data.Common;
 
     public static class ApplicationBuilderExtention
     {
-        public static async Task<IApplicationBuilder> SeedRoles(this IApplicationBuilder app)
+        public static async Task<IApplicationBuilder> SeedRolesAndMinIo(this IApplicationBuilder app)
         {
             using var scopedServices = app.ApplicationServices.CreateScope();
 
@@ -17,6 +19,7 @@
 
             var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+            
 
             if (!await roleManager.RoleExistsAsync(AdminRoleName))
             {
@@ -27,6 +30,29 @@
                 await userManager.AddClaimAsync(user, new Claim("FullName", $"{user.FirstName} {user.LastName}"));
 
                 await userManager.AddToRoleAsync(user, AdminRoleName);
+
+                var minIoRepo = services.GetRequiredService<MinIoRepository>();
+
+                using (FileStream fs = File.OpenRead(@"DesignPictures\Inquisition Scene 1816.jpg"))
+                {
+                    var file = new FormFile(fs, 0, fs.Length, "Inquisition Scene 1816.jpg", fs.Name);
+
+                   await minIoRepo.AddFileAsync(Guid.Parse("500f8057-d4bb-4839-9e15-bd260bbf532e"), "1.1_1.jpg", file);
+                }
+
+                using (FileStream fs = File.OpenRead(@"DesignPictures\movie-poster.webp"))
+                {
+                    var file = new FormFile(fs, 0, fs.Length, "movie-poster.webp", fs.Name);
+
+                    await minIoRepo.AddFileAsync(Guid.Parse("8919b7b3-86b2-4a83-8495-7eba2a58c358"), "2.1_1.webp", file);
+                }
+
+                using (FileStream fs = File.OpenRead(@"DesignPictures\teleshki_salam.jpg"))
+                {
+                    var file = new FormFile(fs, 0, fs.Length, "teleshki_salam.jpg", fs.Name);
+
+                    await minIoRepo.AddFileAsync(Guid.Parse("0c4b3ad4-545e-4805-b34d-2b5572d000a7"), "1.2_1.jpg", file);
+                }
             }
 
             if (!await roleManager.RoleExistsAsync(MerchantRoleName))

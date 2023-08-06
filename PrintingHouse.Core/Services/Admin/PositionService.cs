@@ -88,7 +88,8 @@
         /// <returns>Enumeration of Position view model</returns>
         public async Task<IEnumerable<PositionViewModel>> GetAllAsync()
         {
-            return await repo.AllReadonly<Position>(p => p.IsActive == true)
+            return await repo.AllReadonly<Position>()
+                .Where(p => p.IsActive == true)
                 .Select(p => new PositionViewModel()
                 {
                     Id = p.Id,

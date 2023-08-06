@@ -54,6 +54,8 @@ builder.Services.AddLogging(cfg =>
     cfg.AddConsole();
 });
 
+builder.Services.AddMemoryCache();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -90,6 +92,6 @@ app.UseEndpoints(endpoints =>
     endpoints.MapRazorPages();
 });
 
-app.SeedRoles().Wait();
+app.SeedRolesAndMinIo().Wait();
 
 await app.RunAsync();

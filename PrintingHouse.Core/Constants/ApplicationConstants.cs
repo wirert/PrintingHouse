@@ -15,6 +15,6 @@
         public const int ArticlesCacheExpirationMinutes = 10;
 
         public const string MachinesCacheKey = "MachinesCacheKey";
-        public const int MachinesCacheExpirationHours = 10;
+        public const int MachinesCacheExpirationHours = 8;
     }
 }

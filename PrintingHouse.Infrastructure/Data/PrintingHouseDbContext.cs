@@ -14,13 +14,9 @@
     /// </summary>
     public class PrintingHouseDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
-        //Only for testing!! Shoud be removed.
-        private readonly IEntityTypeConfiguration<Article> articleConfig;
-
-        public PrintingHouseDbContext(DbContextOptions<PrintingHouseDbContext> options, IEntityTypeConfiguration<Article> _articleConfig)
+        public PrintingHouseDbContext(DbContextOptions<PrintingHouseDbContext> options)
             : base(options)
-        {     
-            articleConfig = _articleConfig;
+        {
         }
 
         public virtual DbSet<Article> Articles { get; set; } = null!;
@@ -46,11 +42,8 @@
             builder.ApplyConfiguration(new ColorModelConfiguration());
             builder.ApplyConfiguration(new MaterialConfiguration());
             builder.ApplyConfiguration(new MaterialColorModelConfiguration());
-            builder.ApplyConfiguration(new MachineConfiguration());
-
-            //Added only for test data seeding in db
-            // !! Should be removed !!
-            builder.ApplyConfiguration(articleConfig);
+            builder.ApplyConfiguration(new MachineConfiguration());            
+            builder.ApplyConfiguration(new ArticleConfiguration());
             builder.ApplyConfiguration(new ArticleColorConfiguration());
 
 

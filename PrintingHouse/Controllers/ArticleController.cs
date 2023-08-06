@@ -56,6 +56,7 @@
         /// <param name="id">Clent Id (optional)</param>
         /// <returns></returns>
         [HttpGet]
+        [ResponseCache(Duration = 30)]
         public async Task<IActionResult> All(Guid? id = null)
         {
             try
