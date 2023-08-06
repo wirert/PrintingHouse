@@ -13,6 +13,7 @@
         /// </summary>
         /// <param name="colorModelId">Color model identifier</param>
         /// <returns>List of color View model</returns>
+        /// <exception cref="ArgumentException"></exception>
         Task<IList<AddArticleColorVeiwModel>> GetColorModelColorsAsync(int colorModelId);
 
         /// <summary>
