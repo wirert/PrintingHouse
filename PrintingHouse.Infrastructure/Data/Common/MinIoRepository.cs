@@ -78,8 +78,6 @@
 
            await minioClient.GetObjectAsync(args);
 
-            
-
             return result;
         }
     }

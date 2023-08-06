@@ -8,6 +8,7 @@
     using static Core.Constants.MessageConstants;
     using static Core.Constants.ApplicationConstants;
     using Core.Services.Contracts;
+    using Microsoft.Extensions.Caching.Memory;
 
     /// <summary>
     /// Article controller
@@ -20,6 +21,7 @@
         private readonly IFileService fileService;
         private readonly IMaterialColorService materialColorService;
         private readonly ILogger logger;
+        private readonly IMemoryCache cache;
 
         public ArticleController(
                 IArticleService _articleService,
@@ -27,7 +29,8 @@
                 IClientService _clientService,
                 IFileService _fileService,
                 IMaterialColorService _materialColorService,
-                ILogger<ArticleController> _logger)
+                ILogger<ArticleController> _logger,
+                IMemoryCache _cache)
         {
             articleService = _articleService;
             colorModelService = _colorModelService;
@@ -35,6 +38,7 @@
             fileService = _fileService;
             materialColorService = _materialColorService;
             logger = _logger;
+            cache = _cache;
         }
 
         /// <summary>
@@ -56,9 +60,25 @@
         {
             try
             {
-                var models = await articleService.GetAllAsync(id);
+                var articles = cache.Get<IEnumerable<AllArticleViewModel>>(ArticlesCacheKey);
 
-                if (models.Any() == false)
+                if (articles == null)
+                {
+                    articles = await articleService.GetAllAsync(null);
+
+                    var cacheOptions = new MemoryCacheEntryOptions()
+                        .SetAbsoluteExpiration(TimeSpan.FromMinutes(ArticlesCacheExpirationMinutes));
+
+                    cache.Set(ArticlesCacheKey, articles, cacheOptions);
+                }
+
+                if (id != null)
+                {
+                    articles = articles.Where(a => a.ClientId == id);
+                }
+
+
+                if (articles.Any() == false)
                 {
                     TempData[WarningMessage] = "There are no articles";
 
@@ -67,14 +87,14 @@
 
                 if (id.HasValue)
                 {
-                    ViewData["Title"] = $"All articles of Client {models.First().ClientName}";
+                    ViewData["Title"] = $"All articles of Client {articles.First().ClientName}";
                 }
                 else
                 {
                     ViewData["Title"] = "All articles";
                 }
 
-                return View(models);
+                return View(articles);
             }
             catch (Exception e)
             {
@@ -112,8 +132,8 @@
             catch (Exception e)
             {
                 logger.LogError(e, e.Message);
-
-                return RedirectToAction("Error", "Home");
+                TempData[ErrorMessage] = "Problem downloading file! Try again later";
+                return RedirectToAction("All");
             }
         }
 
@@ -291,6 +311,7 @@
             {
                 await articleService.CreateAsync(model);
 
+                cache.Remove(ArticlesCacheKey);
                 TempData[SuccessMessage] = $"Successfully added article {model.Name}";
             }
             catch (ArgumentException ae)
@@ -326,7 +347,7 @@
                 model = haveNewMaterialId && haveNewColorModelId
                     ? await articleService.GetEditViewModelWithData(materialId, colorModelId, id)
                     : await articleService.GetEditViewModelWithData(null, null, id);
-
+                
                 return View(model);
             }
             catch (ArgumentException ae)
@@ -359,7 +380,8 @@
             {
                 await articleService.EditAsync(model);
 
-                TempData[SuccessMessage] = $"Successfully edited article {model.Name}.";
+                cache.Remove(ArticlesCacheKey);
+                TempData[SuccessMessage] = $"Article {model.Name} successfully updated.";
             }
             catch (ArgumentException ae)
             {
@@ -387,7 +409,7 @@
             try
             {
                 await articleService.DeleteByIdAsync(id);
-
+                cache.Remove(ArticlesCacheKey);
                 TempData[SuccessMessage] = "Article successfully deleted";
             }
             catch (Exception e)

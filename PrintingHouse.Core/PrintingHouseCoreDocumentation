@@ -167,7 +167,7 @@
             <summary>
             Get all articles or all articles of certain client by client id
             </summary>
-            <param name="id">client id (nullable)</param>
+            <param name="clientId">client id (nullable)</param>
             <returns>Enumeration of All article view model</returns>
         </member>
         <member name="M:PrintingHouse.Core.Services.ArticleService.CreateAsync(PrintingHouse.Core.Models.Article.ArticleViewModel)">

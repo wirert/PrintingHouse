@@ -34,28 +34,29 @@
                         IMaterialColorService _materialColorService,
                         IMaterialService _materialService,
                         IClientService _clientService,
-                        IColorModelService _colorModelService)
+                        IColorModelService _colorModelService
+                        )
         {
             repo = _repo;
             fileService = _fileService;
             materialColorService = _materialColorService;
             materialService = _materialService;
             clientService = _clientService;
-            colorModelService = _colorModelService;
+            colorModelService = _colorModelService;            
         }
 
         /// <summary>
         /// Get all articles or all articles of certain client by client id
         /// </summary>
-        /// <param name="id">client id (nullable)</param>
+        /// <param name="clientId">client id (nullable)</param>
         /// <returns>Enumeration of All article view model</returns>
-        public async Task<IEnumerable<AllArticleViewModel>> GetAllAsync(Guid? id)
+        public async Task<IEnumerable<AllArticleViewModel>> GetAllAsync(Guid? clientId)
         {
             Expression<Func<Article, bool>> searchTerms = a => a.IsActive;
 
-            if (id.HasValue)
+            if (clientId.HasValue)
             {
-                searchTerms = (a) => a.IsActive && a.ClientId == id;
+                searchTerms = (a) => a.IsActive && a.ClientId == clientId;
             }
 
             var models = await repo.AllReadonly(searchTerms)

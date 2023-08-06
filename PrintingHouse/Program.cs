@@ -46,7 +46,7 @@ builder.Services.ConfigureApplicationCookie(cfg =>
     cfg.Cookie.SameSite = SameSiteMode.Strict;
     cfg.Cookie.HttpOnly = true;
     cfg.LoginPath = "/Account/Login";
-    cfg.AccessDeniedPath = "/Home/Error";
+    cfg.AccessDeniedPath = "/Home/Error/401";
 });
 
 builder.Services.AddLogging(cfg =>

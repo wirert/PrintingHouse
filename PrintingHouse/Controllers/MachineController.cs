@@ -8,28 +8,42 @@
     using static Core.Constants.MessageConstants;
     using static Core.Constants.ApplicationConstants;
     using Infrastructure.Data.Entities.Enums;
+    using Microsoft.Extensions.Caching.Memory;
+    using PrintingHouse.Core.Models.Machine;
 
     public class MachineController : BaseController
     {
         private readonly IMachineService machineService;
         private readonly IOrderService orderService;
         private readonly ILogger logger;
+        private readonly IMemoryCache cache;
 
         public MachineController(
             IMachineService _machineService,
             IOrderService _orderService,
-            ILogger<MachineController> _logger)
+            ILogger<MachineController> _logger,
+            IMemoryCache _cache)
         {
             machineService = _machineService;
             orderService = _orderService;
             logger = _logger;
+            cache = _cache;
         }
 
         public async Task<IActionResult> Index()
         {
             try
             {
-                var machines = await machineService.GetMachinesIdsAsync();
+                var machines = cache.Get<IEnumerable<MachineSelectViewModel>>(MachinesCacheKey);
+
+                if (machines == null)
+                {
+                    machines = await machineService.GetMachinesIdsAsync();
+
+                    var cacheOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromHours(MachinesCacheExpirationHours));
+
+                    cache.Set(MachinesCacheKey, machines, cacheOptions);
+                }
 
                 ViewBag.Machines = new SelectList(machines.OrderBy(m => m.Id), "Id", "Name");
 
