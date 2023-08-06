@@ -100,7 +100,7 @@
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="OrderMachineException"></exception>
-        public async Task CreateOrder(AddOrderViewModel model)
+        public async Task CreateOrderAsync(AddOrderViewModel model)
         {
             var sanitizer = new HtmlSanitizer();
 

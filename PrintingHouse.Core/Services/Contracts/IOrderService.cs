@@ -21,7 +21,7 @@
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="OrderMachineException"></exception>
-        Task CreateOrder(AddOrderViewModel model);
+        Task CreateOrderAsync(AddOrderViewModel model);
 
         /// <summary>
         /// Gets all orders

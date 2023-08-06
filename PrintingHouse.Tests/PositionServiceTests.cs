@@ -1,19 +1,18 @@
 namespace PrintingHouse.UnitTests
 {
     using Microsoft.EntityFrameworkCore;
-    using Moq;
-    using PrintingHouse.Core.AdminModels.Position;
-    using PrintingHouse.Core.Services.Admin;
-    using PrintingHouse.Core.Services.Contracts;
-    using PrintingHouse.Infrastructure.Data;
-    using PrintingHouse.Infrastructure.Data.Common;
-    using PrintingHouse.Infrastructure.Data.Common.Contracts;
-    using PrintingHouse.Infrastructure.Data.Entities;
+
+    using Core.AdminModels.Position;
+    using Core.Services.Admin;
+    using Core.Services.Contracts;
+    using Infrastructure.Data;
+    using Infrastructure.Data.Common;
+    using Infrastructure.Data.Common.Contracts;
+    using Infrastructure.Data.Entities;
 
     public class PositionServiceTests
     {
         private IRepository repo;
-        private Mock<IRepository> repoMock;
         private IPositionService positionService;
         private PrintingHouseDbContext dbContext;
 

@@ -106,7 +106,7 @@
 
             try
             {
-                await orderService.CreateOrder(model);
+                await orderService.CreateOrderAsync(model);
 
                 TempData[SuccessMessage] = "Order created successfully.";
 

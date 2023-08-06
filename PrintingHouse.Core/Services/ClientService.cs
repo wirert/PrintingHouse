@@ -11,7 +11,6 @@
     using Infrastructure.Data.Common.Contracts;
     using Infrastructure.Data.Entities;
     using Infrastructure.Data.Entities.Enums;
-    using PrintingHouse.Core.Services.Admin;
     using PrintingHouse.Core.Exceptions;
 
     /// <summary>
@@ -20,14 +19,10 @@
     public class ClientService : IClientService
     {
         private readonly IRepository repo;
-        private readonly IEmployeeService employeeService;
 
-        public ClientService(
-            IRepository _repo,
-            IEmployeeService _employeeService)
+        public ClientService(IRepository _repo)
         {
             repo = _repo;
-            employeeService = _employeeService;
         }
 
         /// <summary>

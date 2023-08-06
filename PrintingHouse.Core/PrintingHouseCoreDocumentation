@@ -561,7 +561,7 @@
             <returns>Add order view model</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:PrintingHouse.Core.Services.Contracts.IOrderService.CreateOrder(PrintingHouse.Core.Models.Order.AddOrderViewModel)">
+        <member name="M:PrintingHouse.Core.Services.Contracts.IOrderService.CreateOrderAsync(PrintingHouse.Core.Models.Order.AddOrderViewModel)">
             <summary>
             Creates new order
             </summary>
@@ -707,7 +707,7 @@
             <returns>Add order view model</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:PrintingHouse.Core.Services.OrderService.CreateOrder(PrintingHouse.Core.Models.Order.AddOrderViewModel)">
+        <member name="M:PrintingHouse.Core.Services.OrderService.CreateOrderAsync(PrintingHouse.Core.Models.Order.AddOrderViewModel)">
             <summary>
             Creates new order
             </summary>
