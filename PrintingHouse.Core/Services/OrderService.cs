@@ -349,29 +349,24 @@
         {
             var lastOrderInMachine = order.Machine!.OrdersQueue.LastOrDefault();
 
-            if (lastOrderInMachine == null
-                || DateTime.UtcNow.Hour >= 18
-                || lastOrderInMachine.ExpectedPrintDate < DateTime.UtcNow.Date
-                || lastOrderInMachine.ExpectedPrintDuration > TimeSpan.FromHours(10d))
+            if (lastOrderInMachine == null || 
+                lastOrderInMachine.ExpectedPrintDate < DateTime.UtcNow.Date
+               )
             {
                 order.ExpectedPrintDate = DateTime.UtcNow.Date;
 
-                if ((DateTime.UtcNow.TimeOfDay + order.ExpectedPrintDuration) > TimeSpan.FromHours(18d))
+                if (DateTime.UtcNow.Hour >= 18)
                 {
-                    order.ExpectedPrintDate = order.ExpectedPrintDate.AddDays(1d);
-
-                    if (order.ExpectedPrintDate.DayOfWeek == DayOfWeek.Saturday)
-                    {
-                        order.ExpectedPrintDate = order.ExpectedPrintDate.AddDays(2d);
-                    }
-                    else if (order.ExpectedPrintDate.DayOfWeek == DayOfWeek.Sunday)
-                    {
-                        order.ExpectedPrintDate = order.ExpectedPrintDate.AddDays(1d);
-                    }
+                    order.ExpectedPrintDate = SetDateAccordingWeekDay(order.ExpectedPrintDate.AddDays(1d));
                 }
+            }            
+            else if (lastOrderInMachine.ExpectedPrintDuration > TimeSpan.FromHours(10d))                    
+            {
+                var printDate = lastOrderInMachine.ExpectedPrintDate.AddDays(1d);
+                order.ExpectedPrintDate = SetDateAccordingWeekDay(printDate);
             }
             else
-            {
+            {    
                 var ordersForDay = order.Machine.OrdersQueue
                     .Where(o => o.ExpectedPrintDate == lastOrderInMachine.ExpectedPrintDate)
                     .ToList();
@@ -387,15 +382,26 @@
 
                 if (totalPrintTimeNeeded + order.ExpectedPrintDuration > TimeSpan.FromHours(10))
                 {
-                    order.ExpectedPrintDate = order.ExpectedPrintDate.AddDays(1d);
-
-                    if (order.ExpectedPrintDate.DayOfWeek == DayOfWeek.Saturday)
-                    {
-                        order.ExpectedPrintDate = order.ExpectedPrintDate.AddDays(2d);
-                    }
+                    order.ExpectedPrintDate = SetDateAccordingWeekDay(order.ExpectedPrintDate.AddDays(1d));
                 }
             }
         }
+
+        private DateTime SetDateAccordingWeekDay(DateTime dateTime)
+        {
+            switch (dateTime.DayOfWeek)
+            {
+                case DayOfWeek.Saturday:
+                    dateTime = dateTime.AddDays(2d);
+                    break;
+                case DayOfWeek.Sunday:
+                    dateTime = dateTime.AddDays(1d);
+                    break;
+            }
+
+            return dateTime;
+        }     
+
 
         /// <summary>
         /// Take needed quantity of material and colors if there is enough in stock
