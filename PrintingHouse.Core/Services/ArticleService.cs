@@ -383,15 +383,13 @@
                 throw new ArgumentException("Article id is not valid");
             }
 
-            if (materialId != null || colorModelId != null)
+            if (materialId != null && colorModelId != null)
             {
-                var material = await materialService.GetMaterialByIdAsync(model.MaterialId);
+                var material = await materialService.GetMaterialByIdAsync(materialId);
 
-                if (material == null ||
-                    !await materialColorService.ExistByIds(model.MaterialId, model.ColorModelId)
-                    )
+                if (!await materialColorService.ExistByIds(materialId, colorModelId))
                 {
-                    throw new ArgumentException("Input data (materialId or colorModelId is altered");
+                    throw new ArgumentException("Input data (materialId or colorModelId) is altered");
                 }
 
                 model.MaterialName = material.Type;
@@ -402,7 +400,7 @@
                     model.Length = ModelConstants.Article_Piece_Length;
                 }
 
-                model.Colors = await colorModelService.GetColorModelColorsAsync(model.ColorModelId);                
+                model.Colors = await colorModelService.GetColorModelColorsAsync(colorModelId ?? 0);                
             }
 
             return model;

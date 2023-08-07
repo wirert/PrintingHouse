@@ -1,24 +1,16 @@
 ﻿namespace PrintingHouse.UnitTests
 {
-    using Microsoft.EntityFrameworkCore;
-
-    using Core.Services;
-    using Core.Services.Contracts;
-    using Infrastructure.Data;
-    using Infrastructure.Data.Common;
-    using Infrastructure.Data.Common.Contracts;
-    using PrintingHouse.Core.Exceptions;
-    using PrintingHouse.Core.Models.Client;
-    using PrintingHouse.Infrastructure.Data.Entities;
-    using PrintingHouse.Core.Models.Order;
+    using Core.Exceptions;
+    using Core.Models.Client;
+    using Core.Models.Order;  
 
     [TestFixture]
     public class ClientServiceTests
     {
-        public IRepository repo;
-        public PrintingHouseDbContext dbContext;
-        public IClientService clientService;
-        public Guid userId; 
+        private IRepository repo;
+        private PrintingHouseDbContext dbContext;
+        private IClientService clientService;
+        private Guid userId; 
 
         [OneTimeSetUp]
         public void OneTimeSetUp()

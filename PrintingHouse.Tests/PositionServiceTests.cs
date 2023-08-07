@@ -1,14 +1,7 @@
 namespace PrintingHouse.UnitTests
 {
-    using Microsoft.EntityFrameworkCore;
-
     using Core.AdminModels.Position;
-    using Core.Services.Admin;
-    using Core.Services.Contracts;
-    using Infrastructure.Data;
-    using Infrastructure.Data.Common;
-    using Infrastructure.Data.Common.Contracts;
-    using Infrastructure.Data.Entities;
+    using Core.Services.Admin;    
 
     public class PositionServiceTests
     {
@@ -105,7 +98,7 @@ namespace PrintingHouse.UnitTests
 
             var position = await repo.GetByIdAsync<Position>(4);
 
-            Assert.That(position.Name, Is.EqualTo(newPosition.Name));
+            Assert.That(position!.Name, Is.EqualTo(newPosition.Name));
         }
     }
 }

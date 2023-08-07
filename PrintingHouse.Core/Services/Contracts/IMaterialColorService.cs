@@ -11,6 +11,6 @@
         /// <param name="materialId">Material id</param>
         /// <param name="colorId">ColorModel id</param>
         /// <returns>Boolean</returns>
-        Task<bool> ExistByIds(int materialId, int colorId);
+        Task<bool> ExistByIds(int? materialId, int? colorId);
     }
 }

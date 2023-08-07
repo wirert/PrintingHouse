@@ -11,7 +11,8 @@
         /// Get material name by identifier or null if not exist
         /// </summary>
         /// <param name="materialId">material identifier</param>
-        /// <returns>material name or null</returns>
-        Task<MaterialSelectViewModel> GetMaterialByIdAsync(int materialId);
+        /// <returns>material name</returns>
+        /// <exception cref="ArgumentException"></exception>
+        Task<MaterialSelectViewModel> GetMaterialByIdAsync(int? materialId);
     }
 }

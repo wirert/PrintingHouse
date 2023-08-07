@@ -26,9 +26,12 @@
         /// <param name="materialId">Material id</param>
         /// <param name="colorId">ColorModel id</param>
         /// <returns>Boolean</returns>
-        public async Task<bool> ExistByIds(int materialId, int colorId)
+        public async Task<bool> ExistByIds(int? materialId, int? colorId)
         {
-            var entity = await repo.AllReadonly<MaterialColorModel>(mc => mc.MaterialId == materialId && mc.ColorModelId == colorId).FirstOrDefaultAsync();
+            var entity = await repo
+                .AllReadonly<MaterialColorModel>(mc => mc.MaterialId == materialId && 
+                                                       mc.ColorModelId == colorId)
+                .FirstOrDefaultAsync();
 
             return entity != null;
         }

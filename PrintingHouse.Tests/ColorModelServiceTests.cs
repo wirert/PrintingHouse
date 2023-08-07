@@ -1,18 +1,11 @@
 ﻿namespace PrintingHouse.UnitTests
-{
-    using Microsoft.EntityFrameworkCore;
-    using PrintingHouse.Core.Services.Contracts;
-    using PrintingHouse.Core.Services;
-    using PrintingHouse.Infrastructure.Data.Common.Contracts;
-    using PrintingHouse.Infrastructure.Data.Common;
-    using PrintingHouse.Infrastructure.Data;
-
+{    
     [TestFixture]
     public class ColorModelServiceTests
     {
-        public IRepository repo;
-        public PrintingHouseDbContext dbContext;
-        public IColorModelService colorModelService;
+        private IRepository repo;
+        private PrintingHouseDbContext dbContext;
+        private IColorModelService colorModelService;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
