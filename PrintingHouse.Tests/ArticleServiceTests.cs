@@ -310,10 +310,11 @@
             Assert.IsTrue(editedArticle!.Name.Equals("Changed name"));
         }
 
-        [Test]
-        public void GetCreateViewModelWithDataThrowsIfMaterialIdInvalid()
-        {
-            var invalidMaterialId = -20;
+        [TestCase(-20)]
+        [TestCase(0)]
+        [TestCase(1200)]
+        public void GetCreateViewModelWithDataThrowsIfMaterialIdInvalid(int invalidMaterialId)
+        {           
             var colorModelId = 1;
             var validClientName = "Test Client";
 
@@ -323,23 +324,27 @@
                 "Input data is altered.");
         }
 
-        [Test]
-        public void GetCreateViewModelWithDataThrowsIfNoClientName()
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("   ")]
+        public void GetCreateViewModelWithDataThrowsIfNoClientName(string? invalidName)
         {
             var validMaterialId = 1;
             var colorModelId = 1;
-            string? invalidName = null;
 
             Assert.ThrowsAsync<ArgumentException>(async ()
                 => await articleService.GetCreateViewModelWithData(validMaterialId, colorModelId, validClientId, invalidName),
                  "Input data is altered.");
         }
 
-        [Test]
-        public void GetCreateViewModelWithDataThrowsIfNoValidMaterialColorModelFound()
+        [TestCase(1, 2)]
+        [TestCase(3, 1)]
+        [TestCase(1, 0)]
+        [TestCase(2, -20)]
+        public void GetCreateViewModelWithDataThrowsIfNoValidMaterialColorModelFound(int validMaterialId, int colorModelId)
         {
-            var validMaterialId = 1;
-            var colorModelId = 2;
+            
             var validClientName = "Test Client";
 
             Assert.ThrowsAsync<ArgumentException>(async ()
@@ -347,15 +352,15 @@
                 "Input data is altered.");
         }
 
-        [Test]
-        public void GetCreateViewModelWithDataThrowsIfClientIdAdnClientNameNotFromSameEntity()
+        [TestCase("Client 2")]
+        [TestCase("Invalid name")]
+        public void GetCreateViewModelWithDataThrowsIfClientIdAndClientNameNotFromSameEntity(string clientName)
         {
             var validMaterialId = 1;
             var colorModelId = 1;
-            var anotherClientName = "Client 2";
 
             Assert.ThrowsAsync<ArgumentException>(async ()
-                => await articleService.GetCreateViewModelWithData(validMaterialId, colorModelId, validClientId, anotherClientName),
+                => await articleService.GetCreateViewModelWithData(validMaterialId, colorModelId, validClientId, clientName),
                 "Input data is altered.");
         }
 
@@ -384,11 +389,10 @@
                 "Article id is not valid");
         }
 
-        
-        [TestCase(1)]
+        [TestCase(0)]
+        [TestCase(-10)]
         public void GetEditViewModelWithDataThrowsIfNoValidMaterialId(int invalidMaterialId)
         {
-            
             var colorModelId = 2;
 
             Assert.ThrowsAsync<ArgumentException>(async ()
@@ -398,6 +402,8 @@
 
         [TestCase(1, -1)]
         [TestCase(1, 2)]        
+        [TestCase(1, 0)]        
+        [TestCase(3, 1)]        
         public void GetEditViewModelWithDataThrowsIfNoValidMaterialColorModelFoundWhenMaterialIdAndColorModelIdAreNotNull(int materialId, int invalidColorModelId)
         {
             Assert.ThrowsAsync<ArgumentException>(async ()
@@ -407,6 +413,7 @@
 
         [TestCase(1, 1)]
         [TestCase(2, 2)]
+        [TestCase(3, 2)]
         [TestCase(1, null)]
         [TestCase(null, 2)]
         [TestCase(null, null)]

@@ -7,7 +7,6 @@
     using Configurations;
     using Entities;
     using Entities.Account;
-    using PrintingHouse.Infrastructure.Data.Common.Contracts;
 
     /// <summary>
     /// Application database context
@@ -45,6 +44,7 @@
             builder.ApplyConfiguration(new MachineConfiguration());            
             builder.ApplyConfiguration(new ArticleConfiguration());
             builder.ApplyConfiguration(new ArticleColorConfiguration());
+            builder.ApplyConfiguration(new OrderConfiguration());
 
 
             builder.Entity<Article>().Property(a => a.IsActive).HasDefaultValue(true);

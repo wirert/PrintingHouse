@@ -52,6 +52,7 @@
                     OrderTime = o.OrderTime,
                     Status = o.Status
                 })
+                .OrderBy(o => o.OrderTime)
                 .ToListAsync();
 
             foreach (var model in models)

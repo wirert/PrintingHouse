@@ -316,7 +316,7 @@
             var material = await materialService.GetMaterialByIdAsync(materialId);
 
             if (material == null
-                || clientName == null
+                || string.IsNullOrWhiteSpace(clientName)
                 || !await materialColorService.ExistByIds(materialId, colorModelId)
                 || !await clientService.ExistsByIdAndNameAsync(clientId, clientName)
                 )
