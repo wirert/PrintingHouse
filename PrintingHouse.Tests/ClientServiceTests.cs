@@ -2,7 +2,7 @@
 {
     using Core.Exceptions;
     using Core.Models.Client;
-    using Core.Models.Order;  
+    using Core.Models.Order;
 
     [TestFixture]
     public class ClientServiceTests
@@ -10,7 +10,7 @@
         private IRepository repo;
         private PrintingHouseDbContext dbContext;
         private IClientService clientService;
-        private Guid userId; 
+        private Guid userId;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -21,12 +21,10 @@
             dbContext = new PrintingHouseDbContext(contextOptions);
             repo = new Repository(dbContext);
             clientService = new ClientService(repo);
-
-            
         }
 
         [SetUp]
-        public void SetUp() 
+        public void SetUp()
         {
             userId = Guid.Parse("e7065dbb-0c70-48da-902c-9f6f2536c505");
 
@@ -52,7 +50,7 @@
 
             var clientsCount = await repo.AllReadonly<Client>().CountAsync();
 
-            Assert.That(clientsCount, Is.EqualTo(3));
+            Assert.That(clientsCount, Is.EqualTo(4));
         }
 
         [Test]
@@ -82,13 +80,15 @@
         [Test]
         public async Task DeleteThrowsIfIdNotExistOrAlreadyDeleted()
         {
-            var clientId = userId;
+            var clientId = Guid.Parse("46b7d975-1579-4dad-bdc6-f9dbd0232eab");
+
+            var client = await repo.GetByIdAsync<Client>(clientId);
+            client!.IsActive = false;
+            await repo.SaveChangesAsync();
 
             Assert.ThrowsAsync<ArgumentException>(async () => await clientService.DeleteAsync(clientId));
 
-            clientId = Guid.Parse("ffbddf06-701d-49f2-8e4b-df760d13b2a6");
-
-            await clientService.DeleteAsync(clientId);
+            clientId = Guid.NewGuid();
 
             Assert.ThrowsAsync<ArgumentException>(async () => await clientService.DeleteAsync(clientId));
 
@@ -111,6 +111,35 @@
         }
 
         [Test]
+        public async Task DeleteTest()
+        {
+            var clientId = Guid.Parse("46b7d975-1579-4dad-bdc6-f9dbd0232eab");
+            var article = new Article()
+            {
+                Id = Guid.Parse("dac79be6-cffa-4d6b-b34d-0fc05c188f6f"),
+                Name = "Test Delete",
+                ClientId = clientId,
+                MaterialId = 2,
+                ColorModelId = 2,
+                Length = 4.5,
+                ArticleNumber = "",
+                ImageName = ""
+            };
+            await repo.AddAsync(article);
+            await repo.SaveChangesAsync();
+            await clientService.DeleteAsync(clientId);
+            await repo.SaveChangesAsync();
+            var deletedClient = await repo.GetByIdAsync<Client>(clientId);
+
+            Assert.NotNull(deletedClient);
+            Assert.IsTrue(deletedClient.IsActive == false);
+
+            var deletedArticle = await repo.GetByIdAsync<Article>(article.Id);
+
+            Assert.IsFalse(deletedArticle!.IsActive);
+        }
+
+        [Test]
         public async Task ExistsByIdAndNameTest()
         {
             var validClientId = Guid.Parse("ffbddf06-701d-49f2-8e4b-df760d13b2a6");
@@ -129,7 +158,7 @@
         {
             var allClients = await clientService.GetAllAsync();
 
-            Assert.That(allClients.Count(), Is.EqualTo(2));
+            Assert.That(allClients.Count(), Is.EqualTo(3));
         }
     }
 }

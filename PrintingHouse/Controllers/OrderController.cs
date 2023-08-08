@@ -149,7 +149,7 @@
                     case OrderStatus.Completed:
                         if (User.IsInRole(PrinterRoleName) == false)
                         {
-                            throw new StatusPermitionException();
+                            throw new StatusPermitionException("Not a Printer");
                         }
                         break;
                     case OrderStatus.Waiting:
@@ -158,11 +158,11 @@
                         if (User.IsInRole(AdminRoleName) == false &&
                             User.IsInRole(MerchantRoleName) == false)
                         {
-                            throw new StatusPermitionException();
+                            throw new StatusPermitionException("Not administrator or merchant");
                         }
                         break;
                     default:
-                        throw new StatusPermitionException();
+                        throw new StatusPermitionException("Not valid status name");
                 }
 
                 await orderService.ChangeStatusAsync(id, status);

@@ -9,11 +9,11 @@
     using Ganss.Xss;
 
     using Contracts;
+    using Core.Exceptions;
     using Infrastructure.Data.Common.Contracts;
     using Infrastructure.Data.Entities;
     using Infrastructure.Data.Entities.Enums;
     using Models.Order;
-    using PrintingHouse.Core.Exceptions;
 
     public class OrderService : IOrderService
     {
@@ -162,7 +162,7 @@
         /// <exception cref="StatusException"></exception>
         public async Task ChangeStatusAsync(Guid id, OrderStatus status)
         {
-            var order = await repo.GetByIdAsync<Order>(id) 
+            var order = await repo.GetByIdAsync<Order>(id)
                 ?? throw new ArgumentException("Order id is altered");
 
             switch (order.Status)
@@ -173,9 +173,10 @@
                         case OrderStatus.Waiting:
                             break;
                         case OrderStatus.Printing:
-                            var machineOrders = await repo.AllReadonly<Order>(o => o.MachineId == order.MachineId).ToArrayAsync();
-
-                            if (machineOrders.Any(o => o.Status == OrderStatus.Printing))
+                            var isPrinting = await repo.AllReadonly<Order>(o => o.MachineId == order.MachineId)
+                                .Where(o => o.Status == OrderStatus.Printing)
+                                .AnyAsync();
+                            if (isPrinting)
                             {
                                 throw new StatusException("The machine is buzy! Wait to finish current print.");
                             }
@@ -206,10 +207,10 @@
                             int materialId = articleOfOrderToCancel.MaterialId;
                             int colorModelId = articleOfOrderToCancel.ColorModelId;
 
-                            await RearangeAllOrderOfParticularTypeAsync(materialId, colorModelId);
-
+                            await RearangeAllOrderOfParticularTypeAsync(materialId, colorModelId, null);
                             return;
-                        default:
+                        case OrderStatus.NoConsumable:
+                        case OrderStatus.Completed:
                             throw new StatusException("Can't change to this status!");
                     }
                     order.Status = status;
@@ -237,12 +238,11 @@
                             int materialId = article.MaterialId;
                             int colorModelId = article.ColorModelId;
 
-                            await RearangeAllOrderOfParticularTypeAsync(materialId, colorModelId);
-
+                            await RearangeAllOrderOfParticularTypeAsync(materialId, colorModelId, null);
                             return;
                         case OrderStatus.Printing:
                             throw new StatusException("There is no enough consumables!");
-                        default:
+                        case OrderStatus.Waiting:
                             if (this.TakeMaterialsAndColorsIfAvailable(article, order.Quantity) == false)
                             {
                                 throw new StatusException("There is no enough consumables!");
@@ -261,12 +261,14 @@
                             break;
                         case OrderStatus.Printing:
                             break;
-                        default:
+                        case OrderStatus.Waiting:
+                        case OrderStatus.NoConsumable:
                             throw new StatusException("This order is printing!");
                     }
                     order.Status = status;
                     break;
-                default:
+                case OrderStatus.Completed:
+                case OrderStatus.Canceled:
                     throw new StatusException("Can't change the status of this order!");
             }
 
@@ -282,7 +284,7 @@
         /// <param name="colorModelId"></param>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        public async Task RearangeAllOrderOfParticularTypeAsync(int materialId, int colorModelId, Guid? orderId = null)
+        public async Task RearangeAllOrderOfParticularTypeAsync(int materialId, int colorModelId, Guid? orderId)
         {
             var orders = await repo
                 .All<Order>(o => o.Article.MaterialId == materialId
@@ -310,35 +312,38 @@
             if (orderId != null)
             {
                 var priorityOrder = orders.First(o => o.Id == orderId);
-                priorityOrder.Machine = machines
-                            .OrderBy(m => m.OrdersQueue.Sum(o => o.ExpectedPrintDuration.Ticks))
-                            .ThenBy(m => m.OrdersQueue.Count)
-                            .ThenBy(m => m.PrintTime)
-                            .First();
-                priorityOrder.MachineId = priorityOrder.Machine.Id;
-                priorityOrder.ExpectedPrintDuration = priorityOrder.Machine.PrintTime * priorityOrder.Quantity * priorityOrder.Article.Length / priorityOrder.Machine.MaterialPerPrint;
 
-                SetExpectedPrintDate(priorityOrder);
-
-                priorityOrder.Machine.OrdersQueue.Add(priorityOrder);
+                SetMachineForOrder(machines, priorityOrder);
             }
 
             foreach (var order in orders.Where(o => o.Id != orderId))
             {
-                order.Machine = machines
-                            .OrderBy(m => m.OrdersQueue.Sum(o => o.ExpectedPrintDuration.Ticks))
-                            .ThenBy(m => m.OrdersQueue.Count)
-                            .ThenBy(m => m.PrintTime)
-                            .First();
-                order.MachineId = order.Machine.Id;
-                order.ExpectedPrintDuration = order.Machine.PrintTime * order.Quantity * order.Article.Length / order.Machine.MaterialPerPrint;
+                SetMachineForOrder(machines, order);
 
-                SetExpectedPrintDate(order);
-
-                order.Machine.OrdersQueue.Add(order);
+                order.Machine!.OrdersQueue.Add(order);
             }
 
             await repo.SaveChangesAsync();
+        }
+
+        private void SetMachineForOrder(List<Machine> machines, Order order)
+        {
+            order.Machine = machines
+                             .OrderBy(m => m.OrdersQueue.Sum(o => o.ExpectedPrintDuration.Ticks))
+                             .ThenBy(m => m.OrdersQueue.Count)
+                             .ThenBy(m => m.PrintTime)
+                             .First();
+            order.MachineId = order.Machine.Id;
+
+            order.ExpectedPrintDuration =
+                    order.Machine.PrintTime
+                    * order.Quantity
+                    * order.Article.Length
+                    / order.Machine.MaterialPerPrint;
+
+            SetExpectedPrintDate(order);
+
+            order.Machine.OrdersQueue.Add(order);
         }
 
         /// <summary>
@@ -349,7 +354,7 @@
         {
             var lastOrderInMachine = order.Machine!.OrdersQueue.LastOrDefault();
 
-            if (lastOrderInMachine == null || 
+            if (lastOrderInMachine == null ||
                 lastOrderInMachine.ExpectedPrintDate < DateTime.UtcNow.Date
                )
             {
@@ -359,14 +364,14 @@
                 {
                     order.ExpectedPrintDate = SetDateAccordingWeekDay(order.ExpectedPrintDate.AddDays(1d));
                 }
-            }            
-            else if (lastOrderInMachine.ExpectedPrintDuration > TimeSpan.FromHours(10d))                    
+            }
+            else if (lastOrderInMachine.ExpectedPrintDuration > TimeSpan.FromHours(10d))
             {
                 var printDate = lastOrderInMachine.ExpectedPrintDate.AddDays(1d);
                 order.ExpectedPrintDate = SetDateAccordingWeekDay(printDate);
             }
             else
-            {    
+            {
                 var ordersForDay = order.Machine.OrdersQueue
                     .Where(o => o.ExpectedPrintDate == lastOrderInMachine.ExpectedPrintDate)
                     .ToList();
@@ -400,7 +405,7 @@
             }
 
             return dateTime;
-        }     
+        }
 
 
         /// <summary>

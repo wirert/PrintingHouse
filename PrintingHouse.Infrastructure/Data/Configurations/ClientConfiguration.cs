@@ -30,6 +30,14 @@
                     Email = "client@email.com",
                     PhoneNumber = "+056568645",
                     MerchantId = 2
+                },
+                new Client()
+                {
+                    Id = Guid.Parse("46b7d975-1579-4dad-bdc6-f9dbd0232eab"),
+                    Name = "Test test",
+                    Email = "clienttest@email.com",
+                    PhoneNumber = "+05656864545",
+                    MerchantId = 2
                 }
             });
         }

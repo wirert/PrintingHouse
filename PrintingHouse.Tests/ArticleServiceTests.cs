@@ -228,7 +228,7 @@
         }
 
         [Test]
-        public async Task GetSelectVeiwModelWithDataThrowsIfClientIdIsAltered()
+        public void GetSelectVeiwModelWithDataThrowsIfClientIdIsAltered()
         {
             var clientId = notExistingGuid;
             var articleId = validArticleId;

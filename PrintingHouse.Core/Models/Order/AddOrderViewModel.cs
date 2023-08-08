@@ -1,8 +1,7 @@
 ﻿namespace PrintingHouse.Core.Models.Order
 {
     using System.ComponentModel.DataAnnotations;
-    using Microsoft.EntityFrameworkCore;
-    using PrintingHouse.Infrastructure.Data.Entities.Enums;
+
     using static Infrastructure.Constants.DataConstants.Order;
 
     public class AddOrderViewModel
