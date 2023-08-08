@@ -29,7 +29,8 @@
                     MachineId = 3,
                     OrderTime = DateTime.UtcNow,
                     Quantity = 100,
-                    Status = OrderStatus.Waiting                    
+                    Status = OrderStatus.Waiting,
+                    MachinePrintOrderNumber = 1
                 },
                 new Order()
                 {
@@ -42,7 +43,8 @@
                     OrderTime = DateTime.UtcNow.AddMinutes(35),
                     Quantity = 1000,
                     Status = OrderStatus.NoConsumable,
-                    EndDate = DateTime.UtcNow.Date.AddDays(10)
+                    EndDate = DateTime.UtcNow.Date.AddDays(10),
+                    MachinePrintOrderNumber = 2,
                 },
                 new Order()
                 {
@@ -55,6 +57,7 @@
                     OrderTime = DateTime.UtcNow,
                     Quantity = 20,
                     Status = OrderStatus.Waiting,
+                    MachinePrintOrderNumber = 1
                 },
                 new Order()
                 {
@@ -67,6 +70,7 @@
                     OrderTime = DateTime.UtcNow.AddMinutes(5),
                     Quantity = 20,
                     Status = OrderStatus.NoConsumable,
+                    MachinePrintOrderNumber = 1
                 },
                 new Order()
                 {
@@ -79,6 +83,7 @@
                     OrderTime = DateTime.UtcNow.AddMinutes(10),
                     Quantity = 40,
                     Status = OrderStatus.Waiting,
+                    MachinePrintOrderNumber = 2
                 },
                 new Order()
                 {
@@ -91,6 +96,7 @@
                     OrderTime = DateTime.UtcNow,
                     Quantity = 10000,
                     Status = OrderStatus.Waiting,
+                    MachinePrintOrderNumber = 1
                 },
             };
         }

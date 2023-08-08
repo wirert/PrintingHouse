@@ -79,6 +79,18 @@
                                         </form>
                                     }
                                 }
+                                @if (order.MachinePrintOrderNumber > 1 &&
+                               (order.Status != OrderStatus.Printing || User.IsInRole(AdminRoleName) || User.IsInRole(MerchantRoleName)))
+                                {
+                                    <form asp-controller="Order" asp-action="MoveUp" method="post">
+                                        <input name="id" type="hidden" value="@order.Id" />
+                                        <input name="status" type="hidden" value="@OrderStatus.Completed">
+                                        <input name="returnUrl" type="hidden" , value="@returnUrl">
+                                        <button class="btn btn-warning rounded-circle me-3" title="Move Up" type="submit">
+                                            <i class="fa-solid fa-arrow-up"></i>
+                                        </button>
+                                    </form>
+                                }
                                 @if (User.IsInRole(AdminRoleName) || User.IsInRole(MerchantRoleName))
                                 {
                                     if (order.Status != OrderStatus.Printing)

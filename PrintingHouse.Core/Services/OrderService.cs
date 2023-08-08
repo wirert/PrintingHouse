@@ -146,6 +146,9 @@
             order.Machine = machine;
             order.ExpectedPrintDuration = machine.PrintTime * order.Quantity * article.Length / machine.MaterialPerPrint;
 
+            var previuosOrder = order.Machine.OrdersQueue.OrderByDescending(o => o.MachinePrintOrderNumber).FirstOrDefault();
+            order.MachinePrintOrderNumber = previuosOrder == null ? 1 : previuosOrder.MachinePrintOrderNumber + 1;
+
             SetExpectedPrintDate(order);
 
             await repo.AddAsync(order);
@@ -213,6 +216,7 @@
                             {
                                 throw new StatusException("The machine is buzy! Wait to finish current print.");
                             }
+                            order.MachinePrintOrderNumber = 0;
                             break;
                         case OrderStatus.Canceled:
                             var articleOfOrderToCancel = await repo.All<Article>(a => a.Id == order.ArticleId)
@@ -234,6 +238,7 @@
 
                             order.MachineId = null;
                             order.Status = status;
+                            order.MachinePrintOrderNumber = 0;
 
                             await repo.SaveChangesAsync();
 
@@ -264,6 +269,7 @@
                             break;
                         case OrderStatus.Canceled:
                             order.MachineId = null;
+                            order.MachinePrintOrderNumber = 0;
                             order.Status = status;
 
                             await repo.SaveChangesAsync();
@@ -291,6 +297,7 @@
                         case OrderStatus.Completed:
                         case OrderStatus.Canceled:
                             order.MachineId = null;
+                            order.MachinePrintOrderNumber = 0;
                             break;
                         case OrderStatus.Printing:
                             break;
@@ -338,6 +345,7 @@
             foreach (var order in orders)
             {
                 order.Machine!.OrdersQueue.Remove(order);
+                order.MachinePrintOrderNumber = 0;
                 order.MachineId = null;
                 order.Machine = null;
             }
@@ -367,13 +375,13 @@
                              .ThenBy(m => m.PrintTime)
                              .First();
             order.MachineId = order.Machine.Id;
-
             order.ExpectedPrintDuration =
                     order.Machine.PrintTime
                     * order.Quantity
                     * order.Article.Length
                     / order.Machine.MaterialPerPrint;
-
+            var previuosOrder = order.Machine.OrdersQueue.OrderByDescending(o => o.MachinePrintOrderNumber).FirstOrDefault();
+            order.MachinePrintOrderNumber = previuosOrder == null ? 1 : previuosOrder.MachinePrintOrderNumber + 1;
             SetExpectedPrintDate(order);
 
             order.Machine.OrdersQueue.Add(order);
@@ -385,7 +393,10 @@
         /// <param name="order">The order</param>
         private void SetExpectedPrintDate(Order order)
         {
-            var lastOrderInMachine = order.Machine!.OrdersQueue.LastOrDefault();
+            var lastOrderInMachine = order.Machine!
+                                          .OrdersQueue
+                                          .OrderByDescending(o => o.MachinePrintOrderNumber)
+                                          .FirstOrDefault();
 
             if (lastOrderInMachine == null ||
                 lastOrderInMachine.ExpectedPrintDate < DateTime.UtcNow.Date
@@ -439,7 +450,6 @@
 
             return dateTime;
         }
-
 
         /// <summary>
         /// Take needed quantity of material and colors if there is enough in stock

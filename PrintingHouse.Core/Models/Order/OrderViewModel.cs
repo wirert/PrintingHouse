@@ -28,6 +28,7 @@
 
         public string? ScrappedMaterial { get; set; }
 
+        public int MachinePrintOrderNumber { get; set; }
 
         public string ColorModel { get; set; } = null!;
 

@@ -64,6 +64,5 @@
 
         [ForeignKey(nameof(MachineId))]
         public virtual Machine? Machine { get; set; }
-
     }
 }

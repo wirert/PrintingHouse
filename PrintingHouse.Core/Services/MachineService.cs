@@ -46,6 +46,7 @@
                         ArticleName = o.Article.Name,
                         ArticleNo = o.Article.ArticleNumber,
                         ClientName = o.Article.Client.Name,
+                        MachinePrintOrderNumber = o.MachinePrintOrderNumber,
                         EndDate = o.EndDate,
                         ExpectedPrintDate = o.ExpectedPrintDate,
                         ColorModel = o.Article.MaterialColorModel.ColorModel.Name,
@@ -58,7 +59,7 @@
                         Status = o.Status,
                         Quantity = o.Quantity
                     })
-                    //.OrderBy(o => o.Status)
+                    .OrderBy(o => o.MachinePrintOrderNumber)
                     .ToList(),
                 })
                 .FirstOrDefaultAsync();
