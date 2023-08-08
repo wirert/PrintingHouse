@@ -38,6 +38,8 @@
         /// <exception cref="ArgumentException"></exception>
         Task MoveOrderInFrontAsync(Guid orderId, OrderStatus status);
 
+        Task MoveUpOnePositionInQueueAsync(Guid orderId, OrderStatus status);
+
         /// <summary>
         /// Changes status of an order
         /// </summary>

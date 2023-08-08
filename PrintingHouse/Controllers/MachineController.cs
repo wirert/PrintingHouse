@@ -10,6 +10,7 @@
     using Infrastructure.Data.Entities.Enums;
     using Microsoft.Extensions.Caching.Memory;
     using PrintingHouse.Core.Models.Machine;
+    using PrintingHouse.Core.Exceptions;
 
     public class MachineController : BaseController
     {
@@ -88,7 +89,7 @@
 
                 TempData[SuccessMessage] = "The order is moved in front of athors";
             }
-            catch (ArgumentException ae)
+            catch (OrderChangePositionException ae)
             {
                 logger.LogInformation(ae, ae.Message);
                 return BadRequest();
@@ -99,6 +100,27 @@
                 TempData[ErrorMessage] = "Unable to change possition of this order";
             }
 
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}, {PrinterRoleName}")]
+        public async Task<IActionResult> MoveUp(Guid id, OrderStatus status)
+        {
+            try
+            {
+                await orderService.MoveUpOnePositionInQueueAsync(id, status);
+            }
+            catch (OrderChangePositionException ae)
+            {
+                logger.LogInformation(ae, ae.Message);
+                TempData[WarningMessage] = ae.Message;                
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                TempData[ErrorMessage] = "Unable to change possition of this order";
+            }
             return RedirectToAction("Index");
         }
     }
