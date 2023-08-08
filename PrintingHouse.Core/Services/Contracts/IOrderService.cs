@@ -30,6 +30,15 @@
         Task<IEnumerable<OrderViewModel>> GetAllOrdersAsync();
 
         /// <summary>
+        /// Make order first in queue for printing
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        Task MoveOrderInFrontAsync(Guid orderId, OrderStatus status);
+
+        /// <summary>
         /// Changes status of an order
         /// </summary>
         /// <param name="id">Order identifier</param>

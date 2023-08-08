@@ -83,13 +83,8 @@
         public async Task<IActionResult> MoveInFront(Guid id, OrderStatus status)
         {
             try
-            {
-                if (status != OrderStatus.Waiting && status != OrderStatus.NoConsumable)
-                {
-                    throw new ArgumentException("Status of order is different of 'Waiting' or 'NoConsumable'");
-                }
-
-                await machineService.MoveOrderInFrontAsync(id);
+            {      
+                await orderService.MoveOrderInFrontAsync(id, status);
 
                 TempData[SuccessMessage] = "The order is moved in front of athors";
             }

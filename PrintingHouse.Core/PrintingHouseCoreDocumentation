@@ -522,14 +522,6 @@
             <returns></returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:PrintingHouse.Core.Services.Contracts.IMachineService.MoveOrderInFrontAsync(System.Guid)">
-            <summary>
-            Make order first in queue for printing
-            </summary>
-            <param name="orderId"></param>
-            <returns></returns>
-            <exception cref="T:System.ArgumentException"></exception>
-        </member>
         <member name="T:PrintingHouse.Core.Services.Contracts.IMaterialColorService">
             <summary>
             Material - Color model service interface for IoC
@@ -578,6 +570,14 @@
             Gets all orders
             </summary>
             <returns>Enumeration of Order View model</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IOrderService.MoveOrderInFrontAsync(System.Guid)">
+            <summary>
+            Make order first in queue for printing
+            </summary>
+            <param name="orderId"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.Contracts.IOrderService.ChangeStatusAsync(System.Guid,PrintingHouse.Infrastructure.Data.Entities.Enums.OrderStatus)">
             <summary>
@@ -663,14 +663,6 @@
             </summary>
             <returns>Machine select view model</returns>
         </member>
-        <member name="M:PrintingHouse.Core.Services.MachineService.MoveOrderInFrontAsync(System.Guid)">
-            <summary>
-            Make order first in queue for printing
-            </summary>
-            <param name="orderId"></param>
-            <returns></returns>
-            <exception cref="T:System.ArgumentException"></exception>
-        </member>
         <member name="T:PrintingHouse.Core.Services.MaterialColorService">
             <summary>
             Material - Color model service
@@ -719,6 +711,14 @@
             <returns></returns>
             <exception cref="T:System.ArgumentException"></exception>
             <exception cref="T:PrintingHouse.Core.Exceptions.OrderMachineException"></exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.OrderService.MoveOrderInFrontAsync(System.Guid)">
+            <summary>
+            Make order first in queue for printing
+            </summary>
+            <param name="orderId"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.OrderService.ChangeStatusAsync(System.Guid,PrintingHouse.Infrastructure.Data.Entities.Enums.OrderStatus)">
             <summary>

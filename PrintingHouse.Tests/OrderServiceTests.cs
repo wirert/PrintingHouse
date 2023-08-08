@@ -3,6 +3,7 @@
     using Core.Models.Order;
     using Infrastructure.Data.Entities.Enums;
     using PrintingHouse.Core.Exceptions;
+    using PrintingHouse.Core.Services;
 
     [TestFixture]
     public class OrderServiceTests
@@ -15,15 +16,7 @@
 
         private PrintingHouseDbContext dbContext;
         private IRepository repo;
-        private IOrderService orderService;
-
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
-        {
-           
-
-            
-        }
+        private IOrderService orderService;              
 
         [SetUp]
         public void SetUp()
@@ -232,6 +225,24 @@
                                     .SelectMany(m => m.OrdersQueue)
                                     .LastAsync();
             Assert.IsTrue(firstOrder.Id.Equals(orderInFrontId));
+        }
+
+        [Test]
+        public void MoveOrderInFrontThrowsIfNoValidOrderId()
+        {
+            var invalidId = Guid.NewGuid();
+
+            Assert.ThrowsAsync<ArgumentException>(async ()
+                => await orderService.MoveOrderInFrontAsync(invalidId, OrderStatus.Waiting));
+        }
+
+        [TestCase(OrderStatus.Printing)]
+        [TestCase(OrderStatus.Completed)]
+        [TestCase(OrderStatus.Canceled)]
+        public void MoveOrderInFrontThrowsIfNoValidStatus(OrderStatus status)
+        {
+            Assert.ThrowsAsync<ArgumentException>(async ()
+                => await orderService.MoveOrderInFrontAsync(validOrderId, status));
         }
 
         [TearDown]

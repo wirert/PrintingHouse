@@ -97,28 +97,6 @@
             return machines;
         }
 
-        /// <summary>
-        /// Make order first in queue for printing
-        /// </summary>
-        /// <param name="orderId"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
-        public async Task MoveOrderInFrontAsync(Guid orderId)
-        {
-           var order =  await repo.AllReadonly<Order>(o => o.Id == orderId)
-                .Select(o => new
-                {
-                    o.Article.MaterialId,
-                    o.Article.ColorModelId
-                })
-                .FirstOrDefaultAsync();
-
-            if (order == null)
-            {
-                throw new ArgumentException("Order Id is altered");
-            }
-
-            await orderService.RearangeAllOrderOfParticularTypeAsync(order.MaterialId, order.ColorModelId, orderId);
-        }
+       
     }
 }

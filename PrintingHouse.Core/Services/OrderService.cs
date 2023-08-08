@@ -153,6 +153,39 @@
         }
 
         /// <summary>
+        /// Make order first in queue for printing
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public async Task MoveOrderInFrontAsync(Guid orderId, OrderStatus status)
+        {
+            if (status != OrderStatus.Waiting && status != OrderStatus.NoConsumable)
+            {
+                throw new ArgumentException("Status of order is different of 'Waiting' or 'NoConsumable'");
+            }
+
+            var order = await repo
+                             .AllReadonly<Order>()
+                             .Where(o => o.Id == orderId &&
+                                   (o.Status == OrderStatus.Waiting || o.Status == OrderStatus.NoConsumable))
+                             .Select(o => new
+                             {
+                                 o.Article.MaterialId,
+                                 o.Article.ColorModelId
+                             })
+                             .FirstOrDefaultAsync();
+
+            if (order == null)
+            {
+                throw new ArgumentException("Order Id is altered");
+            }
+
+            await RearangeAllOrderOfParticularTypeAsync(order.MaterialId, order.ColorModelId, orderId);
+        }
+
+        /// <summary>
         /// Changes status of an order
         /// </summary>
         /// <param name="id">Order identifier</param>

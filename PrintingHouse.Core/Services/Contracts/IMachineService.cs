@@ -17,13 +17,5 @@
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
         Task<MachineOrderViewModel> GetMachineOrdersAsync(int machineId);
-
-        /// <summary>
-        /// Make order first in queue for printing
-        /// </summary>
-        /// <param name="orderId"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
-        Task MoveOrderInFrontAsync(Guid orderId);
     }
 }
