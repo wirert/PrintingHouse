@@ -15,12 +15,10 @@
     public class MachineService : IMachineService
     {
         private readonly IRepository repo;
-        private readonly IOrderService orderService;
 
-        public MachineService(IRepository _repo, IOrderService _orderService)
+        public MachineService(IRepository _repo)
         {
             repo = _repo;
-            orderService = _orderService;
         }
 
         /// <summary>
@@ -60,7 +58,7 @@
                         Status = o.Status,
                         Quantity = o.Quantity
                     })
-                    .OrderBy(o => o.Status)
+                    //.OrderBy(o => o.Status)
                     .ToList(),
                 })
                 .FirstOrDefaultAsync();

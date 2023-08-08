@@ -571,11 +571,12 @@
             </summary>
             <returns>Enumeration of Order View model</returns>
         </member>
-        <member name="M:PrintingHouse.Core.Services.Contracts.IOrderService.MoveOrderInFrontAsync(System.Guid)">
+        <member name="M:PrintingHouse.Core.Services.Contracts.IOrderService.MoveOrderInFrontAsync(System.Guid,PrintingHouse.Infrastructure.Data.Entities.Enums.OrderStatus)">
             <summary>
             Make order first in queue for printing
             </summary>
             <param name="orderId"></param>
+            <param name="status"></param>
             <returns></returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
@@ -712,11 +713,12 @@
             <exception cref="T:System.ArgumentException"></exception>
             <exception cref="T:PrintingHouse.Core.Exceptions.OrderMachineException"></exception>
         </member>
-        <member name="M:PrintingHouse.Core.Services.OrderService.MoveOrderInFrontAsync(System.Guid)">
+        <member name="M:PrintingHouse.Core.Services.OrderService.MoveOrderInFrontAsync(System.Guid,PrintingHouse.Infrastructure.Data.Entities.Enums.OrderStatus)">
             <summary>
             Make order first in queue for printing
             </summary>
             <param name="orderId"></param>
+            <param name="status"></param>
             <returns></returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>

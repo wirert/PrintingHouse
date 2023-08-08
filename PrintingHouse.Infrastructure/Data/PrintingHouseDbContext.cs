@@ -56,6 +56,7 @@
             builder.Entity<ArticleColor>().HasKey(k => new {k.ArticleId, k.ColorId});
 
             builder.Entity<Order>().Property(o => o.Number).ValueGeneratedOnAdd();
+            builder.Entity<Order>().Property(o => o.MachinePrintOrderNumber).HasDefaultValue(0);
 
             base.OnModelCreating(builder);
         }

@@ -15,6 +15,7 @@
         {
             OrderTime = DateTime.UtcNow;
             Id = Guid.NewGuid();
+            MachinePrintOrderNumber = 0;
         }
 
         [Comment("Order primary key")]
@@ -54,6 +55,9 @@
         [Comment("Additional information about the order.")]
         [MaxLength(MaxCommentLenght)]
         public string? Comment { get; set; }
+
+        [Comment("The order number in machine queue")]
+        public int MachinePrintOrderNumber { get; set; }
 
         [Comment("Expected printing machine Id for the order")]
         public int? MachineId { get; set; }

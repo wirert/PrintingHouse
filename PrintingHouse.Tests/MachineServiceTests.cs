@@ -7,7 +7,6 @@
     {
         private PrintingHouseDbContext dbContext;
         private IRepository repo;
-        private IOrderService orderService;
         private IMachineService machineService;
 
         [SetUp] 
@@ -18,8 +17,7 @@
                .Options;
             dbContext = new PrintingHouseDbContext(contextOptions);
             repo = new Repository(dbContext);
-            orderService = new OrderService(repo);
-            machineService = new MachineService(repo, orderService);
+            machineService = new MachineService(repo);
 
             dbContext.Database.EnsureDeleted();
             dbContext.Database.EnsureCreated();
@@ -63,8 +61,6 @@
 
             Assert.IsTrue(machineOrdersModel.Orders.Count().Equals(2));
         }
-
-       
 
         [TearDown]
         public void TearDown()

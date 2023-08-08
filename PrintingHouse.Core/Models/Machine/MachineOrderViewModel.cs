@@ -17,6 +17,6 @@
 
         public MachineStatus Status { get; set; }
 
-        public virtual IEnumerable<OrderViewModel> Orders { get; set; } = new List<OrderViewModel>();
+        public IEnumerable<OrderViewModel> Orders { get; set; } = new Queue<OrderViewModel>();
     }
 }
