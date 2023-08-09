@@ -105,11 +105,11 @@
 
         [HttpPost]
         [Authorize(Roles = $"{AdminRoleName}, {MerchantRoleName}, {PrinterRoleName}")]
-        public async Task<IActionResult> MoveUp(Guid id, OrderStatus status)
+        public async Task<IActionResult> MoveUp(Guid id)
         {
             try
             {
-                await orderService.MoveUpOnePositionInQueueAsync(id, status);
+                await orderService.MoveUpOnePositionInQueueAsync(id);
             }
             catch (OrderChangePositionException ae)
             {

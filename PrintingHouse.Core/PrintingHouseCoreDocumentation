@@ -580,6 +580,14 @@
             <returns></returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IOrderService.MoveUpOnePositionInQueueAsync(System.Guid)">
+            <summary>
+            Moves Order one position up in machine orders queue
+            </summary>
+            <param name="orderId">order id</param>
+            <returns></returns>
+            <exception cref="T:PrintingHouse.Core.Exceptions.OrderChangePositionException"></exception>
+        </member>
         <member name="M:PrintingHouse.Core.Services.Contracts.IOrderService.ChangeStatusAsync(System.Guid,PrintingHouse.Infrastructure.Data.Entities.Enums.OrderStatus)">
             <summary>
             Changes status of an order
@@ -721,6 +729,14 @@
             <param name="status"></param>
             <returns></returns>
             <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.OrderService.MoveUpOnePositionInQueueAsync(System.Guid)">
+            <summary>
+            Moves Order one position up in machine orders queue
+            </summary>
+            <param name="orderId">order id</param>
+            <returns></returns>
+            <exception cref="T:PrintingHouse.Core.Exceptions.OrderChangePositionException"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.OrderService.ChangeStatusAsync(System.Guid,PrintingHouse.Infrastructure.Data.Entities.Enums.OrderStatus)">
             <summary>

@@ -188,13 +188,14 @@
             await RearangeAllOrderOfParticularTypeAsync(order.MaterialId, order.ColorModelId, orderId);
         }
 
-        public async Task MoveUpOnePositionInQueueAsync(Guid orderId, OrderStatus status)
-        {
-            if (status != OrderStatus.Waiting && status != OrderStatus.NoConsumable)
-            {
-                throw new OrderChangePositionException("Status of order is different of 'Waiting' or 'NoConsumable'");
-            }
-
+        /// <summary>
+        /// Moves Order one position up in machine orders queue
+        /// </summary>
+        /// <param name="orderId">order id</param>
+        /// <returns></returns>
+        /// <exception cref="OrderChangePositionException"></exception>
+        public async Task MoveUpOnePositionInQueueAsync(Guid orderId)
+        {    
             var order = await repo
                              .All<Order>()
                              .Where(o => o.Id == orderId &&
@@ -202,8 +203,8 @@
                              .FirstOrDefaultAsync();
             if (order == null)
             {
-                throw new OrderChangePositionException("Order Id is altered");
-            }
+                throw new OrderChangePositionException("Order Id is altered or status incorrect");
+            }            
 
             if (order.MachinePrintOrderNumber < 2)
             {
@@ -213,12 +214,8 @@
             var orderToSwitchPlaces = await repo.All<Order>()
                 .Where(o => o.MachinePrintOrderNumber == order.MachinePrintOrderNumber - 1 &&
                             o.MachineId == order.MachineId)
-                .FirstOrDefaultAsync();
-
-            if (orderToSwitchPlaces == null)
-            {
-                throw new OrderChangePositionException("No privious order number found");
-            }
+                .FirstOrDefaultAsync()
+                ?? throw new OrderChangePositionException("No privious order number found");
 
             order.MachinePrintOrderNumber -= 1;
             orderToSwitchPlaces.MachinePrintOrderNumber += 1;
@@ -238,6 +235,11 @@
         {
             var order = await repo.GetByIdAsync<Order>(id)
                 ?? throw new ArgumentException("Order id is altered");
+
+            if (order.MachineId == null)
+            {
+                throw new ArgumentException("The order is completed!");
+            }
 
             switch (order.Status)
             {
@@ -277,12 +279,10 @@
                                 color.Color.InStock += returnColorQuantiry;
                             }
 
-                            if (order.MachineId != null)
-                            {
-                                int machineId = (int)order.MachineId!;
-                                await MoveUpMachineQueueAsync(machineId, order.MachinePrintOrderNumber);
-                                order.MachineId = null;
-                            }
+                            int machineId = (int)order.MachineId!;
+                            await MoveUpMachineQueueAsync(machineId, order.MachinePrintOrderNumber);
+
+                            order.MachineId = null;
                             order.MachinePrintOrderNumber = 0;
                             break;
                         case OrderStatus.NoConsumable:
@@ -306,12 +306,10 @@
                         case OrderStatus.NoConsumable:
                             break;
                         case OrderStatus.Canceled:
-                            if (order.MachineId != null)
-                            {
-                                await MoveUpMachineQueueAsync((int)order.MachineId!, order.MachinePrintOrderNumber);
-                                order.MachineId = null;
-                            }                            
-                            order.MachinePrintOrderNumber = 0;                            
+                            await MoveUpMachineQueueAsync((int)order.MachineId!, order.MachinePrintOrderNumber);
+
+                            order.MachineId = null;
+                            order.MachinePrintOrderNumber = 0;
                             break;
                         case OrderStatus.Printing:
                             throw new StatusException("There is no enough consumables!");
@@ -320,21 +318,16 @@
                             {
                                 throw new StatusException("There is no enough consumables!");
                             }
-
-                            order.Status = status;
                             break;
                     }
+                    order.Status = status;
                     break;
                 case OrderStatus.Printing:
                     switch (status)
                     {
                         case OrderStatus.Completed:
                         case OrderStatus.Canceled:
-                            if (order.MachineId != null)
-                            {
-                                await MoveUpMachineQueueAsync((int)order.MachineId!, order.MachinePrintOrderNumber);
-                                order.MachineId = null;
-                            }
+                            order.MachineId = null;
                             order.MachinePrintOrderNumber = 0;
                             break;
                         case OrderStatus.Printing:
@@ -436,6 +429,7 @@
                     / order.Machine.MaterialPerPrint;
             var previuosOrder = order.Machine.OrdersQueue.OrderByDescending(o => o.MachinePrintOrderNumber).FirstOrDefault();
             order.MachinePrintOrderNumber = previuosOrder == null ? 1 : previuosOrder.MachinePrintOrderNumber + 1;
+
             SetExpectedPrintDate(order);
 
             order.Machine.OrdersQueue.Add(order);

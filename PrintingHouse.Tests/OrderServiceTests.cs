@@ -134,7 +134,7 @@
         [TestCase(OrderStatus.Completed, OrderStatus.NoConsumable)]
         [TestCase(OrderStatus.Completed, OrderStatus.Waiting)]
         [TestCase(OrderStatus.Completed, OrderStatus.Printing)]
-        public async Task ChangeStatusThrowsOrderStatusError(OrderStatus orderStatus, OrderStatus wrongStatus)
+        public async Task ChangeStatusThrowsWhenTryInproperStatusChange(OrderStatus orderStatus, OrderStatus wrongStatus)
         {
             var order = await repo.GetByIdAsync<Order>(validOrderId);
             
@@ -143,6 +143,19 @@
 
             Assert.ThrowsAsync<StatusException>(async ()
                 => await orderService.ChangeStatusAsync(validOrderId, wrongStatus));
+        }
+
+        [Test]
+        public async Task ChangeStatusThrowsIfOrderHaveNoMachineId()
+        {
+            var order = await repo.GetByIdAsync<Order>(validOrderId);
+            order!.MachineId = null;
+
+            await repo.SaveChangesAsync();
+
+            Assert.ThrowsAsync<ArgumentException>(async ()
+                => await orderService.ChangeStatusAsync(validOrderId, OrderStatus.Printing),
+                 "The machine is buzy! Wait to finish current print.");
         }
 
         [Test]
@@ -220,10 +233,31 @@
 
             await orderService.RearangeAllOrderOfParticularTypeAsync(materialId, colorModelId, orderInFrontId);
 
-            var firstOrder
-                        = await repo.AllReadonly<Machine>(m => m.Id == 3)
-                                    .SelectMany(m => m.OrdersQueue)
-                                    .LastAsync();
+            var firstOrder = await repo.AllReadonly<Order>(o => o.MachineId == 3 && o.MachinePrintOrderNumber == 1)
+                                   .FirstAsync();
+            Assert.IsTrue(firstOrder.Id.Equals(orderInFrontId));
+        }
+
+        [TestCase("2023-08-12")]
+        [TestCase("2023-08-11")]
+        public async Task RearangeAllOrderOfParticularTypeTestWithDateChange(string date)
+        {
+            var firstOrder = await repo.GetByIdAsync<Order>(validOrderId);
+            
+            firstOrder!.ExpectedPrintDate = DateTime.Parse(date);
+            firstOrder.ExpectedPrintDuration = TimeSpan.FromHours(11);
+            await repo.SaveChangesAsync();
+
+            await orderService.ChangeStatusAsync(firstOrder.Id, OrderStatus.Printing);
+
+            var colorModelId = 1;
+            var materialId = 1;
+            var orderInFrontId = Guid.Parse("5a167a8c-5136-4c74-90b2-2c958ae54b20");
+
+            await orderService.RearangeAllOrderOfParticularTypeAsync(materialId, colorModelId, orderInFrontId);
+
+            firstOrder = await repo.AllReadonly<Order>(o => o.MachineId == 3 && o.MachinePrintOrderNumber == 1)
+                                    .FirstAsync();
             Assert.IsTrue(firstOrder.Id.Equals(orderInFrontId));
         }
 
@@ -232,17 +266,69 @@
         {
             var invalidId = Guid.NewGuid();
 
-            Assert.ThrowsAsync<ArgumentException>(async ()
+            Assert.ThrowsAsync<OrderChangePositionException>(async ()
                 => await orderService.MoveOrderInFrontAsync(invalidId, OrderStatus.Waiting));
         }
 
         [TestCase(OrderStatus.Printing)]
         [TestCase(OrderStatus.Completed)]
         [TestCase(OrderStatus.Canceled)]
-        public void MoveOrderInFrontThrowsIfNoValidStatus(OrderStatus status)
+        public void MoveOrderInFrontThrowsIfNoValidStatus(OrderStatus incorrectStatus)
         {
-            Assert.ThrowsAsync<ArgumentException>(async ()
-                => await orderService.MoveOrderInFrontAsync(validOrderId, status));
+            Assert.ThrowsAsync<OrderChangePositionException>(async ()
+                => await orderService.MoveOrderInFrontAsync(validOrderId, incorrectStatus));
+        }
+
+        [TestCase(OrderStatus.Printing)]
+        [TestCase(OrderStatus.Canceled)]
+        [TestCase(OrderStatus.Completed)]        
+        public async Task MoveUpOnePositionInQueueThrowsIfStatusNotWaitingOrNoConsumables(OrderStatus incorrectOrderStatus)
+        {
+            var order = await repo.GetByIdAsync<Order>(validOrderId);
+
+            order!.Status = incorrectOrderStatus;
+            await repo.SaveChangesAsync();
+
+            Assert.ThrowsAsync<OrderChangePositionException>(async ()
+                => await orderService.MoveUpOnePositionInQueueAsync(validOrderId),
+                "Status of order is different of 'Waiting' or 'NoConsumable'");
+        }
+
+        [Test]
+        public void MoveUpOnePositionInQueueThrowsIfOrderIdInvalid()
+        {
+            Assert.ThrowsAsync<OrderChangePositionException>(async ()
+                => await orderService.MoveUpOnePositionInQueueAsync(notExistingGuid),
+                "Order Id is altered");
+        }
+
+        [Test]
+        public void MoveUpOnePositionInQueueThrowsIfOrderNumberLessThan2()
+        {
+            Assert.ThrowsAsync<OrderChangePositionException>(async ()
+                => await orderService.MoveUpOnePositionInQueueAsync(validOrderId),
+                "Order can't move up");
+        }
+
+        [Test]
+        public async Task MoveUpOnePositionInQueueThrowsIfNoPriviousNumberFound()
+        {
+            var order = await repo.GetByIdAsync<Order>(validOrderId);
+
+            order!.MachinePrintOrderNumber = 5;
+            await repo.SaveChangesAsync();
+
+            Assert.ThrowsAsync<OrderChangePositionException>(async ()
+                => await orderService.MoveUpOnePositionInQueueAsync(validOrderId),
+                "No privious order number found");
+        }
+
+        [Test]
+        public async Task MoveUpOnePositionInQueueTest()
+        {
+            var orderToMoveUpId = Guid.Parse("5a167a8c-5136-4c74-90b2-2c958ae54b20");
+
+            await orderService.MoveUpOnePositionInQueueAsync(orderToMoveUpId);
         }
 
         [TearDown]
