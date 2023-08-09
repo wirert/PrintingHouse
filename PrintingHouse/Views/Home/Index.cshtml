@@ -1,14 +1,27 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity;
+@using PrintingHouse.Infrastructure.Data.Entities.Account;
+@inject SignInManager<ApplicationUser> SignInManager;
+
+@{
     ViewData["Title"] = "Home Page";
 }
 <div class="container">
-<div class="text-center bg-b">
-    <div class="flex-column flex-md-column text-capitalize">
-        <div class="mb-3">
-            <h1 class="display-4 text-black-50">WELCOME TO THE <strong>PRINGING HOUSE</strong></h1>
-            <h2 class="text-black-50">Great place to work and prosper</h2>
+    <div class="text-center bg-b">
+        <div class="flex-column flex-md-column text-capitalize">
+            <div class="mb-3">
+                <h1 class="display-4 text-black-50">WELCOME TO THE <strong>PRINGING HOUSE</strong></h1>
+                <h2 class="text-black-50">Great place to work and prosper</h2>
+            </div>
+            @if (!SignInManager.IsSignedIn(User))
+            {
+                <div class="mb-2">
+                    <a class="btn btn-warning btn-lg " asp-action="Login" asp-controller="Account">
+                        LOG IN
+                    </a>
+                </div>
+            }
+            <img class="img-fluid" src="pictures/modern-printing-house.jpg" alt="Modern printing house" />
         </div>
-        <img class="img-fluid" src="pictures/modern-printing-house.jpg" alt="Modern printing house" />        
+
     </div>
-</div>
 </div>
