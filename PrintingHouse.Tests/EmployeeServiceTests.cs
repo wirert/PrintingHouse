@@ -2,11 +2,8 @@
 {
     using Microsoft.AspNetCore.Identity;
     using Moq;
-    using PrintingHouse.Core.AdminModels.Employee;
-    using PrintingHouse.Core.Models.Order;
     using PrintingHouse.Core.Services.Admin;
     using PrintingHouse.Infrastructure.Data.Entities.Account;
-    using System.Text;
 
     [TestFixture]
     public class EmployeeServiceTests

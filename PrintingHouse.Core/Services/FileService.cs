@@ -17,7 +17,7 @@
         public FileService(IMinIoRepository _repo)
         {
             repo = _repo;
-        }
+        } 
 
         /// <summary>
         /// Retrieve file from MinIO object store by bucket name and file name
