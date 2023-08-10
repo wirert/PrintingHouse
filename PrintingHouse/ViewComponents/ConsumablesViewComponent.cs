@@ -14,18 +14,20 @@
         private readonly IArticleService articleService;
         private readonly IColorService colorService;
         private readonly ILogger logger;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
         public ConsumablesViewComponent(
             IMaterialService _materialService,
             IArticleService _articleService,
             IColorService _colorService,
-            ILogger<ConsumablesViewComponent> _logger)
+            ILogger<ConsumablesViewComponent> _logger,
+            IHttpContextAccessor _httpContextAccessor)
         {
             materialService = _materialService;
             articleService = _articleService;
             colorService = _colorService;
             logger = _logger;
-
+            httpContextAccessor = _httpContextAccessor;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(Guid articleId)
@@ -40,22 +42,22 @@
             {
                 logger.LogInformation(ae.Message);
                 TempData[WarningMessage] = ae.Message;
-                throw;
+                httpContextAccessor.HttpContext!.Response.Redirect("/Article/All");
             }
             catch (Exception e)
             {
                 logger.LogError(e, e.Message);
-                throw;
+                httpContextAccessor.HttpContext!.Response.Redirect("/Home/Error");
             }
 
-           
+            return View(new ConsumablesViewModel());
         }
 
         private async Task<ConsumablesViewModel> GetConsumablesAsync(Guid articleId)
         {              
             var artModel = await articleService.GetEditViewModelWithData(null, null, articleId);
-            var materialInStock = await materialService.GetMaterialQuantityById(artModel.MaterialId);
-            var colorsInStock = await colorService.GetAllAsync(artModel.ColorModelId);
+            var materialInStock = await materialService.GetMaterialQuantityByIdAsync(artModel.MaterialId);
+            var colorsInStock = await colorService.GetAllByColorModelIdAsync(artModel.ColorModelId);
 
             var model = new ConsumablesViewModel()
             {

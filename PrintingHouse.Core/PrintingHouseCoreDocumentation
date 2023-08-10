@@ -305,9 +305,15 @@
             <returns>color name</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:PrintingHouse.Core.Services.ColorService.GetAllAsync(System.Nullable{System.Int32})">
+        <member name="M:PrintingHouse.Core.Services.ColorService.GetAllAsync">
             <summary>
-            Get all colors or by color model
+            Get all colors
+            </summary>
+            <returns>Enumeration of Color view model</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.ColorService.GetAllByColorModelIdAsync(System.Int32)">
+            <summary>
+            Get all colors of color model
             </summary>
             <param name="colorModelId"></param>
             <returns>Enumeration of Color view model</returns>
@@ -450,9 +456,15 @@
             <returns>Collection of Color model view model</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:PrintingHouse.Core.Services.Contracts.IColorService.GetAllAsync(System.Nullable{System.Int32})">
+        <member name="M:PrintingHouse.Core.Services.Contracts.IColorService.GetAllAsync">
             <summary>
-            Get all colors or by color model
+            Get all colors
+            </summary>
+            <returns>Enumeration of Color view model</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IColorService.GetAllByColorModelIdAsync(System.Int32)">
+            <summary>
+            Get all colors of color model
             </summary>
             <param name="colorModelId"></param>
             <returns>Enumeration of Color view model</returns>
@@ -595,7 +607,7 @@
             <returns>Material name</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:PrintingHouse.Core.Services.Contracts.IMaterialService.GetMaterialQuantityById(System.Int32)">
+        <member name="M:PrintingHouse.Core.Services.Contracts.IMaterialService.GetMaterialQuantityByIdAsync(System.Int32)">
             <summary>
             Get material quantity in stock
             </summary>
@@ -768,7 +780,7 @@
             <returns>material name</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:PrintingHouse.Core.Services.MaterialService.GetMaterialQuantityById(System.Int32)">
+        <member name="M:PrintingHouse.Core.Services.MaterialService.GetMaterialQuantityByIdAsync(System.Int32)">
             <summary>
             Get material quantity in stock
             </summary>

@@ -90,5 +90,20 @@
             Assert.NotNull(materials);
             Assert.IsTrue(materials.Count().Equals(2));
         }
+
+        [Test]
+        public void GetMaterialQuantityByIdThrowsIfNoMaterialFound()
+        {
+            Assert.ThrowsAsync<ArgumentException>(async ()
+                => await materialService.GetMaterialQuantityByIdAsync(0));
+        }
+
+        [Test]
+        public async Task GetMaterialQuantityByIdTest()
+        {
+            var materialQuantity = await materialService.GetMaterialQuantityByIdAsync(1);
+
+            Assert.NotNull(materialQuantity);
+        }
     }
 }

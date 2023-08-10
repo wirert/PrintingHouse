@@ -22,7 +22,7 @@
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var model = await colorService.GetAllAsync(null);
+            var model = await colorService.GetAllAsync();
 
             return View(model);
         }

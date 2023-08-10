@@ -28,7 +28,7 @@
         /// <param name="quantity">quantity to add</param>
         /// <returns>Material name</returns>
         /// <exception cref="ArgumentException"></exception>
-        Task<string> AddToStoreHouseAsync(int id, int quantitiy);
+        Task<string> AddToStoreHouseAsync(int id, int quantity);
 
         /// <summary>
         /// Get material quantity in stock
@@ -36,6 +36,6 @@
         /// <param name="id"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        Task<int> GetMaterialQuantityById(int id);
+        Task<int> GetMaterialQuantityByIdAsync(int id);
     }
 }

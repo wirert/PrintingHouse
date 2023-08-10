@@ -51,11 +51,29 @@
         }
 
         /// <summary>
-        /// Get all colors or by color model
+        /// Get all colors
+        /// </summary>
+        /// <returns>Enumeration of Color view model</returns>
+        public async Task<IEnumerable<ColorViewModel>> GetAllAsync()
+        {   
+            return await repo.AllReadonly<Color>()
+                .Select(c => new ColorViewModel()
+                {
+                    Id = c.Id,
+                    Name = c.Type,
+                    InStock = c.InStock,
+                    Price = c.Price,
+                    ColorModel = c.ColorModel.Name
+                })
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Get all colors of color model
         /// </summary>
         /// <param name="colorModelId"></param>
         /// <returns>Enumeration of Color view model</returns>
-        public async Task<IEnumerable<ColorViewModel>> GetAllAsync(int? colorModelId = null)
+        public async Task<IEnumerable<ColorViewModel>> GetAllByColorModelIdAsync(int colorModelId)
         {
             return await repo.AllReadonly<Color>(c => c.ColorModelId == colorModelId)
                 .Select(c => new ColorViewModel()

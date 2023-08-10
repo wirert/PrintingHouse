@@ -33,7 +33,7 @@
         }
 
         [Test]
-        public async Task AddToStoreHouseThrowsIfMaterialNotFound()
+        public void AddToStoreHouseThrowsIfMaterialNotFound()
         {
             Assert.ThrowsAsync<ArgumentException>(async ()
                 => await colorService.AddToStoreHouseAsync(0, 20));
@@ -65,6 +65,21 @@
 
             Assert.NotNull(materials);
             Assert.IsTrue(materials.Count().Equals(7));
+        }
+
+        [Test]
+        public async Task GetAllByColorModelIdTest()
+        {
+            var materials = await colorService.GetAllByColorModelIdAsync(1);
+
+            Assert.NotNull(materials);
+            Assert.IsTrue(materials.Count().Equals(3));
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            dbContext.Dispose();
         }
     }
 }

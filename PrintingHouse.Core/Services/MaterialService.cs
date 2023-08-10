@@ -106,7 +106,7 @@
         /// <param name="id"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public async Task<int> GetMaterialQuantityById(int id)
+        public async Task<int> GetMaterialQuantityByIdAsync(int id)
         {
             var material = await repo.GetByIdAsync<Material>(id);
 
