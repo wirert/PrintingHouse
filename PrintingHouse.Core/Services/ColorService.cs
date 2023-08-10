@@ -51,12 +51,13 @@
         }
 
         /// <summary>
-        /// Get all colors
+        /// Get all colors or by color model
         /// </summary>
+        /// <param name="colorModelId"></param>
         /// <returns>Enumeration of Color view model</returns>
-        public async Task<IEnumerable<ColorViewModel>> GetAllAsync()
+        public async Task<IEnumerable<ColorViewModel>> GetAllAsync(int? colorModelId = null)
         {
-            return await repo.AllReadonly<Color>()
+            return await repo.AllReadonly<Color>(c => c.ColorModelId == colorModelId)
                 .Select(c => new ColorViewModel()
                 {
                     Id = c.Id,

@@ -1,0 +1,18 @@
+﻿@using PrintingHouse.ViewComponents.Models
+@model ConsumablesViewModel
+
+<div>
+    <h4 class="bg-info">@Model.MaterialName:</h4>
+    <span>In stock: @Model.MaterialQuantityInStock</span>
+</div>
+<div>
+    @foreach(var color in Model.Colors)
+    {
+        <hr />
+            <h4 class="bg-info">@color.Name:</h4>
+        <p>
+            <span>In stock: @color.InStock</span>
+        </p>
+        <p>Needed per article: @color.NeededQuantity</p>
+    }
+</div>

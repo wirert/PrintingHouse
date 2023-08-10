@@ -305,10 +305,11 @@
             <returns>color name</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:PrintingHouse.Core.Services.ColorService.GetAllAsync">
+        <member name="M:PrintingHouse.Core.Services.ColorService.GetAllAsync(System.Nullable{System.Int32})">
             <summary>
-            Get all colors
+            Get all colors or by color model
             </summary>
+            <param name="colorModelId"></param>
             <returns>Enumeration of Color view model</returns>
         </member>
         <member name="T:PrintingHouse.Core.Services.Contracts.IArticleService">
@@ -449,10 +450,11 @@
             <returns>Collection of Color model view model</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:PrintingHouse.Core.Services.Contracts.IColorService.GetAllAsync">
+        <member name="M:PrintingHouse.Core.Services.Contracts.IColorService.GetAllAsync(System.Nullable{System.Int32})">
             <summary>
-            Get all colors
+            Get all colors or by color model
             </summary>
+            <param name="colorModelId"></param>
             <returns>Enumeration of Color view model</returns>
         </member>
         <member name="M:PrintingHouse.Core.Services.Contracts.IColorService.AddToStoreHouseAsync(System.Int32,System.Int32)">
@@ -591,6 +593,14 @@
             <param name="id">material id</param>
             <param name="quantity">quantity to add</param>
             <returns>Material name</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IMaterialService.GetMaterialQuantityById(System.Int32)">
+            <summary>
+            Get material quantity in stock
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.Contracts.IOrderService.CreateAddModelByArticleIdAsync(System.Guid)">
@@ -756,6 +766,14 @@
             </summary>
             <param name="materialId">material identifier</param>
             <returns>material name</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.MaterialService.GetMaterialQuantityById(System.Int32)">
+            <summary>
+            Get material quantity in stock
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.OrderService.GetAllOrdersAsync">

@@ -29,5 +29,13 @@
         /// <returns>Material name</returns>
         /// <exception cref="ArgumentException"></exception>
         Task<string> AddToStoreHouseAsync(int id, int quantitiy);
+
+        /// <summary>
+        /// Get material quantity in stock
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        Task<int> GetMaterialQuantityById(int id);
     }
 }

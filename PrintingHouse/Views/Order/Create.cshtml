@@ -1,36 +1,39 @@
 ﻿@model AddOrderViewModel
+<div class="row align-items-center">
+    <div class="col-md-4">
+        <h1 class="mb-4">Add new order</h1>
+        <h2>Article: @Model.ArticleName</h2>
+        <section>
+            <form method="post">
+                <input type="hidden" asp-for="@Model.ArticleId" />
+                <input type="hidden" asp-for="@Model.ArticleName" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating mt-4">
+                    <input asp-for="@Model.Quantity" class="form-control" aria-required="true" type="number" step="1" min="1" />
+                    <label asp-for="@Model.Quantity">Article quantity (pieces):</label>
+                    <span asp-validation-for="@Model.Quantity" class="text-danger"></span>
+                </div>
+                <div class="form-floating mt-4">
+                    <input asp-for="@Model.EndDate" class="form-control" aria-required="true" type="date" min="@DateTime.Now.Date" />
+                    <label asp-for="@Model.EndDate">Deadline:</label>
+                    <span asp-validation-for="@Model.EndDate" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-4">
+                    <label asp-for="@Model.Comment"></label>
+                    <textarea class="form-control" asp-for="Comment" rows="3"></textarea>
+                    <span asp-validation-for="@Model.Comment" class="text-danger"></span>
+                </div>
+                <div>
+                    <button type="submit" class="w-100 btn btn-lg btn-primary mt-3">Create</button>
+                </div>
 
-<div class="row col-md-4">
-    <h1 class="mb-4">Add new order</h1>
-    <h2>Article: @Model.ArticleName</h2>
-    <section>
-        <form method="post">
-            <input type="hidden" asp-for="@Model.ArticleId" />
-            <input type="hidden" asp-for="@Model.ArticleName" />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating mt-4">                
-                <input asp-for="@Model.Quantity" class="form-control" aria-required="true" type="number" step="1" min="1" />
-                <label asp-for="@Model.Quantity">Article quantity (pieces):</label>
-                <span asp-validation-for="@Model.Quantity" class="text-danger"></span>
-            </div>
-            <div class="form-floating mt-4">
-                <input asp-for="@Model.EndDate" class="form-control" aria-required="true" type="date" min="@DateTime.Now.Date" />
-                <label asp-for="@Model.EndDate">Deadline:</label>
-                <span asp-validation-for="@Model.EndDate" class="text-danger"></span>
-            </div>
-            <div class="form-group mt-4">
-                <label asp-for="@Model.Comment"></label>
-                <textarea class="form-control" asp-for="Comment" rows="3"></textarea>
-                <span asp-validation-for="@Model.Comment" class="text-danger"></span>
-            </div>
-            <div>
-                <button type="submit" class="w-100 btn btn-lg btn-primary mt-3">Create</button>
-            </div>
-
-        </form>
-    </section>
+            </form>
+        </section>
+    </div>
+    <div class="col-md-3 border-dark bg-info">
+        @await Component.InvokeAsync("Consumables", new { articleId = @Model.ArticleId })
+    </div>
 </div>
-
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -5,10 +5,11 @@
     public interface IColorService
     {
         /// <summary>
-        /// Get all colors
+        /// Get all colors or by color model
         /// </summary>
+        /// <param name="colorModelId"></param>
         /// <returns>Enumeration of Color view model</returns>
-        Task<IEnumerable<ColorViewModel>> GetAllAsync();
+        Task<IEnumerable<ColorViewModel>> GetAllAsync(int? colorModelId);
 
         /// <summary>
         /// Add color quantity to db

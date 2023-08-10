@@ -68,7 +68,7 @@
                     InStock = m.InStock,
                     Lenght = m.Lenght,
                     Width = m.Width,
-                    MeasureUnit = m.MeasureUnit,
+                    MeasureUnit = m.MeasureUnit, 
                     Price = m.Price                    
                 })
                 .ToListAsync();
@@ -98,6 +98,24 @@
             }
 
             return material;
+        }
+
+        /// <summary>
+        /// Get material quantity in stock
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public async Task<int> GetMaterialQuantityById(int id)
+        {
+            var material = await repo.GetByIdAsync<Material>(id);
+
+            if (material == null)
+            {
+                throw new ArgumentException("No material found.");
+            }
+
+            return material.InStock;
         }
     }
 }
