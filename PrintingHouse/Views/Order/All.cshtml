@@ -23,7 +23,7 @@
                         <option value="30">30</option>
                         <option value="40">40</option>
                     </select>
-                    <input type="text" id="Search" />
+                    <input type="text" onkeyup="quickSearch(this)" placeholder="--Search--" class="text-center"/>
                 </form>
                 <button id="hide_completed_btn" class="btn btn-sm btn-warning">Hide Completed and Canceled</button>
             </div>
@@ -52,7 +52,7 @@
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="order-table-body">
                 @foreach (var order in Model)
                 {
                     <tr>
@@ -106,7 +106,31 @@
 </div>
 
 @section Scripts{
-    <script type="text/javascript">quickSearch(input);</script>
+    <script type="text/javascript">
+        function quickSearch(input) {
+            var input, filter, table, tr, td, i, j, all_td, have_text;
+            filter = input.value.toUpperCase();
+            table = document.getElementById("order-table-body");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                all_td = tr[i].getElementsByTagName("td");
+                have_text = false;
+                for (var j = 0; j < all_td.length; j++) {
+                    if (all_td[j]) {
+                        if (all_td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            have_text = true;
+                        }
+                    }
+                }
+
+                if (have_text === true) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    </script>
     <script>table_sort();</script>
     <script>
         $('#hide_completed_btn').on('click', function (e) {
