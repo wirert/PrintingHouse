@@ -548,6 +548,12 @@
             <returns>material name</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IMaterialService.GetAllMaterialsAsync">
+            <summary>
+            Gets all active materials
+            </summary>
+            <returns>Enumeration of material view model</returns>
+        </member>
         <member name="M:PrintingHouse.Core.Services.Contracts.IOrderService.CreateAddModelByArticleIdAsync(System.Guid)">
             <summary>
             Creates a View model for Create a new order for a article
@@ -689,6 +695,12 @@
             <summary>
             Material service
             </summary>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.MaterialService.GetAllMaterialsAsync">
+            <summary>
+            Gets all active materials
+            </summary>
+            <returns>Enumeration of material view model</returns>
         </member>
         <member name="M:PrintingHouse.Core.Services.MaterialService.GetMaterialByIdAsync(System.Nullable{System.Int32})">
             <summary>

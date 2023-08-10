@@ -5,6 +5,7 @@
     using PrintingHouse.Core.Services.Contracts;
     using PrintingHouse.Infrastructure.Data.Common.Contracts;
     using PrintingHouse.Infrastructure.Data.Entities;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -17,6 +18,53 @@
         public MaterialService(IRepository _repo)
         {
             repo = _repo;
+        }
+
+        public async Task<string> AddToStoreHouseAsync(int id, int quantitiy)
+        {
+            if (quantitiy < 0)
+            {
+                throw new ArgumentException("Quantity must be between 0 and 100000");
+            }
+            var material = await repo.GetByIdAsync<Material>(id);
+
+            if (material == null)
+            {
+                throw new ArgumentException("Incorrect Material id");
+            }
+
+            if (material.InStock > int.MaxValue - quantitiy)
+            {
+                throw new ArgumentException("Too much materials");
+            }
+
+            material.InStock += quantitiy;
+            await repo.SaveChangesAsync();
+           
+            return material.Type;
+        }
+
+        /// <summary>
+        /// Gets all active materials
+        /// </summary>
+        /// <returns>Enumeration of material view model</returns>
+        public async Task<IEnumerable<MaterialViewModel>> GetAllMaterialsAsync()
+        {
+            var materials = await repo
+                .AllReadonly<Material>(m => m.IsActive)
+                .Select(m => new MaterialViewModel()
+                {
+                    Id = m.Id,
+                    Type = m.Type,
+                    InStock = m.InStock,
+                    Lenght = m.Lenght,
+                    Width = m.Width,
+                    MeasureUnit = m.MeasureUnit,
+                    Price = m.Price                    
+                })
+                .ToListAsync();
+
+            return materials;
         }
 
         /// <summary>

@@ -14,5 +14,13 @@
         /// <returns>material name</returns>
         /// <exception cref="ArgumentException"></exception>
         Task<MaterialSelectViewModel> GetMaterialByIdAsync(int? materialId);
+
+        /// <summary>
+        /// Gets all active materials
+        /// </summary>
+        /// <returns>Enumeration of material view model</returns>
+        Task<IEnumerable<MaterialViewModel>> GetAllMaterialsAsync();
+
+        Task<string> AddToStoreHouseAsync(int id, int quantitiy);
     }
 }

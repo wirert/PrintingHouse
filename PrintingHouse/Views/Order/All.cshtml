@@ -8,7 +8,25 @@
     <div class="table-responsive col-sm-12">
         <div>
             <h1 class="d-inline-block">All Orders</h1>
-            <button id="hide_completed_btn" class="btn btn-warning d-inline-block ms-5 mb-1">Hide Completed and Canceled</button>
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <form>
+                    <div id="SHowButton">
+                        @for (int i = 1; i <= ViewBag.UsersCount; i++)
+                        {
+                            <input type="button" id="@i" value="@i" onclick="SortData(@i)" />
+                        }
+                    </div>
+                    <select class="pagesize" onchange="Display()" id="drpdwn">
+                        <option selected="selected" value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="40">40</option>
+                    </select>
+                    <input type="text" id="Search" />
+                </form>
+                <button id="hide_completed_btn" class="btn btn-sm btn-warning">Hide Completed and Canceled</button>
+            </div>
         </div>
 
         <table style="font-size:small" id="orders-table" class="table table-bordered table-hover dataTable dtr-inline" aria-describedby="example2_info">
@@ -82,10 +100,14 @@
             </tbody>
 
         </table>
+
     </div>
+</div>
 </div>
 
 @section Scripts{
+    <script type="text/javascript">quickSearch(input);</script>
+    <script>table_sort();</script>
     <script>
         $('#hide_completed_btn').on('click', function (e) {
             e.preventDefault();
@@ -95,12 +117,12 @@
             var button_hide = document.getElementById("hide_completed_btn");
             var all_tr = table_1.getElementsByTagName("tr");
 
-            if (button_hide.textContent === "Hide Completed and Canceled"){
+            if (button_hide.textContent === "Hide Completed and Canceled") {
                 button_hide.textContent = "Show Completed and Canceled";
                 button_hide.style.backgroundColor = "#0dcaf0";
                 button_hide.style.borderColor = "#0dcaf0";
             }
-            else{
+            else {
                 button_hide.textContent = "Hide Completed and Canceled";
                 button_hide.style.backgroundColor = "#ffc107";
                 button_hide.style.borderColor = "#ffc107";
@@ -159,6 +181,4 @@
         }
 
     </script>
-
-    <script>table_sort();</script>
 }
