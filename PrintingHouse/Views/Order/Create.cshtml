@@ -24,14 +24,14 @@
                     <span asp-validation-for="@Model.Comment" class="text-danger"></span>
                 </div>
                 <div>
-                    <button type="submit" class="w-100 btn btn-lg btn-primary mt-3">Create</button>
+                    <button type="submit" class="w-100 btn btn-lg btn-primary mt-3 mb-2">Create</button>
                 </div>
 
             </form>
         </section>
     </div>
-    <div class="col-md-3 border-dark bg-info">
-        @await Component.InvokeAsync("Consumables", new { articleId = @Model.ArticleId })
+    <div class="col-md-3 border-dark bg-warning">
+        @await Component.InvokeAsync("OrderConsumables", new { articleId = @Model.ArticleId })
     </div>
 </div>
 

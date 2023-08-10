@@ -2,14 +2,14 @@
 @model ConsumablesViewModel
 
 <div>
-    <h4 class="bg-info">@Model.MaterialName:</h4>
+    <h4 class="text-black-50">@Model.MaterialName:</h4>
     <span>In stock: @Model.MaterialQuantityInStock</span>
 </div>
 <div>
     @foreach(var color in Model.Colors)
     {
         <hr />
-            <h4 class="bg-info">@color.Name:</h4>
+            <h4 class="text-danger">@color.Name:</h4>
         <p>
             <span>In stock: @color.InStock</span>
         </p>

@@ -8,7 +8,7 @@
     using PrintingHouse.ViewComponents.Models;
     using static Core.Constants.MessageConstants;
 
-    public class ConsumablesViewComponent : ViewComponent
+    public class OrderConsumablesViewComponent : ViewComponent
     {
         private readonly IMaterialService materialService;
         private readonly IArticleService articleService;
@@ -16,11 +16,11 @@
         private readonly ILogger logger;
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public ConsumablesViewComponent(
+        public OrderConsumablesViewComponent(
             IMaterialService _materialService,
             IArticleService _articleService,
             IColorService _colorService,
-            ILogger<ConsumablesViewComponent> _logger,
+            ILogger<OrderConsumablesViewComponent> _logger,
             IHttpContextAccessor _httpContextAccessor)
         {
             materialService = _materialService;
