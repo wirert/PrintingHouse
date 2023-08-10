@@ -1,9 +1,11 @@
 ﻿namespace PrintingHouse.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    
+
     using Core.Services.Contracts;
     using static Core.Constants.MessageConstants;
+    using static Core.Constants.ApplicationConstants;
 
     public class ColorController : BaseController
     {
@@ -28,6 +30,7 @@
         }
 
         [HttpPost]
+        [Authorize(Roles = AdminRoleName)]
         public async Task<IActionResult> Buy(int id, int quantity)
         {
             try
