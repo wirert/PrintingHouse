@@ -20,25 +20,25 @@
             repo = _repo;
         }
 
-        public async Task<string> AddToStoreHouseAsync(int id, int quantitiy)
+        public async Task<string> AddToStoreHouseAsync(int id, int quantity)
         {
-            if (quantitiy < 0)
+            if (quantity < 0 || quantity > 100000)
             {
                 throw new ArgumentException("Quantity must be between 0 and 100000");
             }
             var material = await repo.GetByIdAsync<Material>(id);
 
-            if (material == null)
+            if (material == null || material.IsActive == false)
             {
                 throw new ArgumentException("Incorrect Material id");
             }
 
-            if (material.InStock > int.MaxValue - quantitiy)
+            if (material.InStock > int.MaxValue - quantity)
             {
                 throw new ArgumentException("Too much materials");
             }
 
-            material.InStock += quantitiy;
+            material.InStock += quantity;
             await repo.SaveChangesAsync();
            
             return material.Type;

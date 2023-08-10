@@ -6,9 +6,9 @@
         private IRepository repo;
         private PrintingHouseDbContext dbContext;
         private IMaterialService materialService;
-
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
+       
+        [SetUp]
+        public void SetUp()
         {
             var contextOptions = new DbContextOptionsBuilder<PrintingHouseDbContext>()
                 .UseInMemoryDatabase("PrintingHouseDb")
@@ -16,11 +16,7 @@
             dbContext = new PrintingHouseDbContext(contextOptions);
             repo = new Repository(dbContext);
             materialService = new MaterialService(repo);
-        }
 
-        [SetUp]
-        public void SetUp()
-        {
             dbContext.Database.EnsureDeleted();
             dbContext.Database.EnsureCreated();
         }
@@ -39,6 +35,60 @@
             var material = await materialService.GetMaterialByIdAsync(1);
 
             Assert.IsTrue(material.Type == expectedName);
+        }
+
+        [TestCase(-20)]
+        [TestCase(100001)]
+        [TestCase(-1)]
+        public void AddToStoreHouseThrowsIfQuantityIncorrect(int quantity)
+        {
+            Assert.ThrowsAsync<ArgumentException>(async ()
+                => await materialService.AddToStoreHouseAsync(1, quantity));
+        }
+
+        [Test]
+        public async Task AddToStoreHouseThrowsIfMaterialNotFound()
+        {
+            var material = await repo.GetByIdAsync<Material>(1);
+            material!.IsActive = false;
+            await repo.SaveChangesAsync();
+
+            Assert.ThrowsAsync<ArgumentException>(async ()
+                => await materialService.AddToStoreHouseAsync(material.Id, 20));
+            Assert.ThrowsAsync<ArgumentException>(async ()
+                => await materialService.AddToStoreHouseAsync(0, 20));
+        }
+
+        [Test]
+        public async Task AddToStoreHouseThrowsIfMaterialTooMuch()
+        {
+            var material = await repo.GetByIdAsync<Material>(1);
+            material!.InStock = int.MaxValue - 10;
+            await repo.SaveChangesAsync();
+
+            Assert.ThrowsAsync<ArgumentException>(async ()
+                => await materialService.AddToStoreHouseAsync(material.Id, 20));
+        }
+
+        [Test]
+        public async Task AddToStoreHouseTest()
+        {
+            var materialName = await materialService.AddToStoreHouseAsync(1, 20);
+
+            Assert.NotNull(materialName);
+        }
+
+        [Test]
+        public async Task GetAllMaterialTest()
+        {
+            var material = await repo.GetByIdAsync<Material>(1);
+            material!.IsActive = false;
+            await repo.SaveChangesAsync();
+
+            var materials = await materialService.GetAllMaterialsAsync();
+
+            Assert.NotNull(materials);
+            Assert.IsTrue(materials.Count().Equals(2));
         }
     }
 }
