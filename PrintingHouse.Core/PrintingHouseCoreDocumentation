@@ -296,6 +296,21 @@
             <returns>List of color View model</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
+        <member name="M:PrintingHouse.Core.Services.ColorService.AddToStoreHouseAsync(System.Int32,System.Int32)">
+            <summary>
+            Add color quantity to db
+            </summary>
+            <param name="id">color id</param>
+            <param name="quantity">quantity</param>
+            <returns>color name</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.ColorService.GetAllAsync">
+            <summary>
+            Get all colors
+            </summary>
+            <returns>Enumeration of Color view model</returns>
+        </member>
         <member name="T:PrintingHouse.Core.Services.Contracts.IArticleService">
             <summary>
             Article service interface for IoC
@@ -434,6 +449,21 @@
             <returns>Collection of Color model view model</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IColorService.GetAllAsync">
+            <summary>
+            Get all colors
+            </summary>
+            <returns>Enumeration of Color view model</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IColorService.AddToStoreHouseAsync(System.Int32,System.Int32)">
+            <summary>
+            Add color quantity to db
+            </summary>
+            <param name="id">color id</param>
+            <param name="quantity">quantity</param>
+            <returns>color name</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
         <member name="T:PrintingHouse.Core.Services.Contracts.IEmployeeService">
             <summary>
             Employee service interface for IoC
@@ -553,6 +583,15 @@
             Gets all active materials
             </summary>
             <returns>Enumeration of material view model</returns>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.Contracts.IMaterialService.AddToStoreHouseAsync(System.Int32,System.Int32)">
+            <summary>
+            Adds materials in db
+            </summary>
+            <param name="id">material id</param>
+            <param name="quantity">quantity to add</param>
+            <returns>Material name</returns>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.Contracts.IOrderService.CreateAddModelByArticleIdAsync(System.Guid)">
             <summary>
@@ -695,6 +734,15 @@
             <summary>
             Material service
             </summary>
+        </member>
+        <member name="M:PrintingHouse.Core.Services.MaterialService.AddToStoreHouseAsync(System.Int32,System.Int32)">
+            <summary>
+            Adds materials in db
+            </summary>
+            <param name="id">material id</param>
+            <param name="quantity">quantity to add</param>
+            <returns>Material name</returns>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:PrintingHouse.Core.Services.MaterialService.GetAllMaterialsAsync">
             <summary>

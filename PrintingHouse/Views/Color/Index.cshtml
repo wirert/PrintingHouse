@@ -1,0 +1,35 @@
+﻿@model IEnumerable<ColorViewModel>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Color model</th>
+            <th scope="col">Price</th>
+            <th scope="col">InStock</th>
+            <th scope="col">Add</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var material in Model)
+        {
+            <tr>
+                <td>@material.Name</td>
+                <td>@material.ColorModel</td>
+                <td>@material.Price.ToString("f2")</td>
+                <td>@material.InStock</td>
+                <td>
+                    <form asp-controller="Color" asp-action="Buy" method="post">
+                        <input name="id" type="hidden" value="@material.Id" />
+                        <input name="quantity" class="form-control-sm" size="5" type="number" min="1" max="100000" />
+                        <button class="btn btn-success" type="submit">Add</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+
+}

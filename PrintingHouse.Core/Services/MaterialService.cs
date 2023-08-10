@@ -1,12 +1,14 @@
 ﻿namespace PrintingHouse.Core.Services
 {
-    using Microsoft.EntityFrameworkCore;
-    using PrintingHouse.Core.Models.Material;
-    using PrintingHouse.Core.Services.Contracts;
-    using PrintingHouse.Infrastructure.Data.Common.Contracts;
-    using PrintingHouse.Infrastructure.Data.Entities;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
+    using Microsoft.EntityFrameworkCore;
+
+    using Contracts;
+    using Models.Material;
+    using Infrastructure.Data.Common.Contracts;
+    using Infrastructure.Data.Entities;
 
     /// <summary>
     /// Material service
@@ -20,6 +22,13 @@
             repo = _repo;
         }
 
+        /// <summary>
+        /// Adds materials in db
+        /// </summary>
+        /// <param name="id">material id</param>
+        /// <param name="quantity">quantity to add</param>
+        /// <returns>Material name</returns>
+        /// <exception cref="ArgumentException"></exception>
         public async Task<string> AddToStoreHouseAsync(int id, int quantity)
         {
             if (quantity < 0 || quantity > 100000)

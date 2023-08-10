@@ -21,6 +21,13 @@
         /// <returns>Enumeration of material view model</returns>
         Task<IEnumerable<MaterialViewModel>> GetAllMaterialsAsync();
 
+        /// <summary>
+        /// Adds materials in db
+        /// </summary>
+        /// <param name="id">material id</param>
+        /// <param name="quantity">quantity to add</param>
+        /// <returns>Material name</returns>
+        /// <exception cref="ArgumentException"></exception>
         Task<string> AddToStoreHouseAsync(int id, int quantitiy);
     }
 }
