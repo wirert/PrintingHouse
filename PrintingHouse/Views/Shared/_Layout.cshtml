@@ -17,7 +17,7 @@
 <body>
     <partial name="_UserMessages" />
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark text-light box-shadow mb-3">
+        <nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-lg navbar-dark bg-dark text-light box-shadow">
             <div class="container-fluid">
                 <a class="navbar-brand text-opacity-50 text-danger me-3" asp-area="" asp-controller="Home" asp-action="Index">PrintingHouse</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -25,7 +25,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">                        
+                    <ul class="navbar-nav flex-grow-1">
                         @if (User.Identity?.IsAuthenticated ?? false)
                         {
                             <li class="nav-item">
@@ -41,37 +41,30 @@
                                 <a class="nav-link text-info" asp-area="" asp-controller="Machine" asp-action="Index">MACHINES</a>
                             </li>
                             <li class="nav-item ms-4">
-                                <a class="nav-link text-warning" asp-area="" asp-controller="Material" asp-action="Index">MATERIALS</a>
+                                <a class="nav-link text-opacity-50 text-warning" asp-area="" asp-controller="Material" asp-action="Index">MATERIALS</a>
                             </li>
                             <li class="nav-item ms-4">
-                                <a class="nav-link text-warning" asp-area="" asp-controller="Color" asp-action="Index">COLORS</a>
+                                <a class="nav-link text-opacity-50 text-warning" asp-area="" asp-controller="Color" asp-action="Index">COLORS</a>
                             </li>
                         }
-
-                        @if (User.IsInRole(AdminRoleName))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-info ms-3" asp-area="Admin" asp-controller="Home" asp-action="Index">ADMIN AREA</a>
-                            </li>
-                        }
-                       
                     </ul>
+                    
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="container mt-5">
+        <main role="main" class="pb-3 mt-5">
             @RenderBody()
         </main>
     </div>
 
     <footer class="border-top footer text-muted bg-dark">
         <div class="container">
-            &copy; 2023@(DateTime.Now.Year.ToString() == "2023" ? "" : $" - {DateTime.Now.Year}") PrintingHouse 
+            &copy; 2023@(DateTime.Now.Year.ToString() == "2023" ? "" : $" - {DateTime.Now.Year}") PrintingHouse
         </div>
-    </footer>    
+    </footer>
     <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
