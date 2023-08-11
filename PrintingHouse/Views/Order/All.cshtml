@@ -9,26 +9,10 @@
         <div>
             <h1 class="d-inline-block">All Orders</h1>
             <div class="d-flex justify-content-between align-items-center mb-1">
-                <form>
-                    <div id="SHowButton">
-                        @for (int i = 1; i <= ViewBag.UsersCount; i++)
-                        {
-                            <input type="button" id="@i" value="@i" onclick="SortData(@i)" />
-                        }
-                    </div>
-                    @*<select class="pagesize" onchange="Display()" id="drpdwn">
-                        <option selected="selected" value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="30">30</option>
-                        <option value="40">40</option>
-                    </select>*@
-                    <input type="text" onkeyup="quickSearch(this)" placeholder="--Search--" class="text-center"/>
-                </form>
+                <input type="text" onkeyup="quickSearch(this)" placeholder="--Search--" class="text-center" />
                 <button id="hide_completed_btn" class="btn btn-sm btn-warning">Hide Completed and Canceled</button>
             </div>
         </div>
-
         <table style="font-size:small" id="orders-table" class="table table-bordered table-hover dataTable dtr-inline" aria-describedby="example2_info">
             <thead style="font-size:x-small" class="table-dark">
                 <tr>
@@ -103,7 +87,6 @@
 
     </div>
 </div>
-</div>
 
 @section Scripts{
     <script type="text/javascript">
@@ -122,7 +105,6 @@
                         }
                     }
                 }
-
                 if (have_text === true) {
                     tr[i].style.display = "";
                 } else {
@@ -203,6 +185,5 @@
                 node.style.fontSize = "12px";
             }
         }
-
     </script>
 }
