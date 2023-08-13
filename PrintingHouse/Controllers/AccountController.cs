@@ -135,19 +135,7 @@
 
                 if (result.Succeeded)
                 {
-                    if (!User.IsInRole(AdminRoleName) ||
-                        !User.IsInRole(MerchantRoleName) ||
-                        !User.IsInRole(EmployeeRoleName) ||
-                        !User.IsInRole(PrinterRoleName))
-                    {
-                        await signInManager.SignOutAsync();
-                        TempData[MessageConstants.WarningMessage] = "You are not yet assigned to position. Try later or contact administration.";
-
-                        return RedirectToAction("Index", "Home");
-                    }
-
                     TempData[MessageConstants.SuccessMessage] = $"Welcome back {user.FirstName} {user.LastName}!";
-
 
                     if (model.ReturnUrl != null)
                     {
