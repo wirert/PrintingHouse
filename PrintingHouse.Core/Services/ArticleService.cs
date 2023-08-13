@@ -115,7 +115,7 @@
 
             var rnd = new Random();
             var extention = model.DesignFile!.FileName.Split('.', StringSplitOptions.RemoveEmptyEntries).Last();
-            article.ImageName = $"{article.ArticleNumber}_{rnd.Next(10000)}.{extention}";
+            article.ImageName = $"{article.ArticleNumber}_{rnd.Next(10000)}.{WebUtility.HtmlEncode(extention)}";
 
             foreach (var color in model.Colors)
             {
@@ -253,7 +253,7 @@
             {
                 var rnd = new Random();
                 var extention = model.DesignFile.FileName.Split('.', StringSplitOptions.RemoveEmptyEntries).Last();
-                var newFileName = $"{article.ArticleNumber}_{rnd.Next(10000)}.{extention}";
+                var newFileName = $"{article.ArticleNumber}_{rnd.Next(10000)}.{WebUtility.HtmlEncode(extention)}";
 
                 await fileService.SaveFileAsync(article.Id, newFileName, model.DesignFile);
 

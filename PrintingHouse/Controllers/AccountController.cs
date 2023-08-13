@@ -9,8 +9,8 @@
 
     using Core.Models.Account;
     using Core.Constants;
-    using Extensions;
     using Infrastructure.Data.Entities.Account;
+    using static Core.Constants.ApplicationConstants;
 
     public class AccountController : BaseController
     {
@@ -103,7 +103,7 @@
         [AllowAnonymous]
         public IActionResult Login(string? returnUrl = null)
         {
-            //await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            //await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);            
 
             var model = new LoginViewModel()
             {
@@ -135,7 +135,19 @@
 
                 if (result.Succeeded)
                 {
+                    if (!User.IsInRole(AdminRoleName) ||
+                        !User.IsInRole(MerchantRoleName) ||
+                        !User.IsInRole(EmployeeRoleName) ||
+                        !User.IsInRole(PrinterRoleName))
+                    {
+                        await signInManager.SignOutAsync();
+                        TempData[MessageConstants.WarningMessage] = "You are not yet assigned to position. Try later or contact administration.";
+
+                        return RedirectToAction("Index", "Home");
+                    }
+
                     TempData[MessageConstants.SuccessMessage] = $"Welcome back {user.FirstName} {user.LastName}!";
+
 
                     if (model.ReturnUrl != null)
                     {

@@ -78,16 +78,16 @@
                                             <button class="btn btn-warning rounded-circle me-3" title="Complete" type="submit"><i class="fas fa-power-off fa-sm"></i></button>
                                         </form>
                                     }
-                                }
-                                @if (order.MachinePrintOrderNumber > 1 &&
-                               (order.Status != OrderStatus.Printing || User.IsInRole(AdminRoleName) || User.IsInRole(MerchantRoleName)))
-                                {
-                                    <form asp-controller="Machine" asp-action="MoveUp" method="post">
-                                        <input name="id" type="hidden" value="@order.Id" />                                        
-                                        <button class="btn btn-warning rounded-circle me-3" title="Move Up" type="submit">
-                                            <i class="fa-solid fa-arrow-up"></i>
-                                        </button>
-                                    </form>
+                                    @if (order.MachinePrintOrderNumber > 1 &&
+                                   (order.Status != OrderStatus.Printing || User.IsInRole(AdminRoleName) || User.IsInRole(MerchantRoleName)))
+                                    {
+                                        <form asp-controller="Machine" asp-action="MoveUp" method="post">
+                                            <input name="id" type="hidden" value="@order.Id" />
+                                            <button class="btn btn-warning rounded-circle me-3" title="Move Up" type="submit">
+                                                <i class="fa-solid fa-arrow-up"></i>
+                                            </button>
+                                        </form>
+                                    }
                                 }
                                 @if (User.IsInRole(AdminRoleName) || User.IsInRole(MerchantRoleName))
                                 {

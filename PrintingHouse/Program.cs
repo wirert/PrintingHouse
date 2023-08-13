@@ -4,6 +4,7 @@ using PrintingHouse.Extensions;
 using PrintingHouse.Infrastructure.Data;
 using PrintingHouse.Infrastructure.Data.Entities.Account;
 using PrintingHouse.ModelBinders;
+using PrintingHouse.Core.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +32,6 @@ builder.Services.AddControllersWithViews()
     {
         options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
         options.ModelBinderProviders.Insert(1, new DoubleModelBinderProvider());
-        //options.ModelBinderProviders.Insert(2, new DateTimeModelBinderProvider(FormattingConstants.DateTimeFormat));
     });
 
 builder.Services.AddAntiforgery(options =>
@@ -41,8 +41,9 @@ builder.Services.AddAntiforgery(options =>
     options.SuppressXFrameOptionsHeader = false;
 });
 
+
 builder.Services.ConfigureApplicationCookie(cfg =>
-{
+{    
     cfg.Cookie.SameSite = SameSiteMode.Strict;
     cfg.Cookie.HttpOnly = true;
     cfg.LoginPath = "/Account/Login";
