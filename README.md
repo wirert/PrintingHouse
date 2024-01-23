@@ -3,7 +3,7 @@
 <p>A simple inhouse web application for monitoring and controlling the production process in a printing house for advertising and commercial materials. </p>
 <p>It's designed to be used only from employees.</p>
 
-# Technologies
+## Technologies
  	.NET Core 6.0
  	ASP.NET Core
  	Entity Framework Core    
@@ -21,3 +21,5 @@ There are 4 types of roles that can be given from Administrator or someone else 
   - The Merchant can add new clients and create articles and orders
   - The employees with admin role can create and cancel orders. Also can buy materials and colors.
   
+## Database Diagram:
+![DB diagram](https://github.com/wirert/PrintingHouse/blob/main/DB%20diagram.png)
