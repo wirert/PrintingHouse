@@ -20,7 +20,7 @@
 
         [Comment("Color model name")]
         [Required]
-        [MaxLength(MaxNameLenght)]
+        [MaxLength(MaxNameLength)]
         public string Name { get; set; } = null!;
 
         public ICollection<MaterialColorModel> MaterialsColorModel { get; set; }

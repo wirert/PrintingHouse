@@ -22,7 +22,7 @@
 
         [Comment("Material type name")]
         [Required]
-        [MaxLength(MaxTypeLenght)]
+        [MaxLength(MaxTypeLength)]
         public string Type { get; set; } = null!;
 
         [Comment("Material width")]

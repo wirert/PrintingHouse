@@ -12,7 +12,7 @@
         public Guid? Id { get; set; }
 
         [Required]
-        [StringLength(Article.MaxNameLenght, MinimumLength = Article.MinNameLenght)]
+        [StringLength(Article.MaxNameLength, MinimumLength = Article.MinNameLength)]
         public string Name { get; set; } = null!;
 
         public IFormFile? DesignFile { get; set; }

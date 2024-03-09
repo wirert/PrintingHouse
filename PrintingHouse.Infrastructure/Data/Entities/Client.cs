@@ -25,17 +25,17 @@
 
         [Comment("Client name")]
         [Required]
-        [MaxLength(MaxNameLenght)]
+        [MaxLength(MaxNameLength)]
         public string Name { get; set; } = null!;
 
         [Comment("Client e-mail")]
         [Required]
-        [MaxLength(MaxEmailLenght)]
+        [MaxLength(MaxEmailLength)]
         public string Email { get; set; } = null!;
 
         [Comment("Client phone number")]
         [Required]
-        [MaxLength(MaxPhoneLenght)]
+        [MaxLength(MaxPhoneLength)]
         public string PhoneNumber { get; set; } = null!;
 
         [Comment("Client's merchant id")]

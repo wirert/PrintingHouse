@@ -21,11 +21,11 @@
 
         [Comment("Printing machine name")]
         [Required]
-        [MaxLength(MaxNameLenght)]
+        [MaxLength(MaxNameLength)]
         public string Name { get; set; } = null!;
 
         [Comment("Printing machine model (optional)")]
-        [MaxLength(MaxModelLenght)]
+        [MaxLength(MaxModelLength)]
         public string? Model { get; set; }
 
         [Comment("Machine printing time for single unit")]

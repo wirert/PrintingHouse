@@ -53,7 +53,7 @@
         public OrderStatus Status { get; set; }
 
         [Comment("Additional information about the order.")]
-        [MaxLength(MaxCommentLenght)]
+        [MaxLength(MaxCommentLength)]
         public string? Comment { get; set; }
 
         [Comment("The order number in machine queue")]

@@ -14,7 +14,7 @@
         /// Employee Username for login
         /// </summary>
         [Required]
-        [StringLength(MaxUserNameLenght, MinimumLength = MinUserNameLenght,
+        [StringLength(MaxUserNameLength, MinimumLength = MinUserNameLength,
             ErrorMessage = UserNameErrorMessage)]
         public string UserName { get; set; } = null!;
 
@@ -44,7 +44,7 @@
         /// Employee first name
         /// </summary>
         [Required]
-        [StringLength(MaxFirstNameLenght, MinimumLength = MinFirstNameLenght, 
+        [StringLength(MaxFirstNameLength, MinimumLength = MinFirstNameLength, 
             ErrorMessage = FirstNameErrorMessage)]
         public string FirstName { get; set; } = null!;
 
@@ -52,7 +52,7 @@
         /// Employee last name
         /// </summary>
         [Required]
-        [StringLength(MaxLastNameLenght, MinimumLength = MinLastNameLenght, 
+        [StringLength(MaxLastNameLength, MinimumLength = MinLastNameLength, 
             ErrorMessage = LastNameErrorMessage)]
         public string LastName { get; set; } = null!;
 

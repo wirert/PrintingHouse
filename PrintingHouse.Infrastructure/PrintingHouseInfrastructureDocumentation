@@ -14,27 +14,27 @@
             Article model constants
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Article.MaxNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Article.MaxNameLength">
             <summary>
-            Article name maximum lenght
+            Article name maximum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Article.MinNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Article.MinNameLength">
             <summary>
-            Article name minimum lenght
+            Article name minimum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Article.MaxImageNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Article.MaxImageNameLength">
             <summary>
-            Article design image name maximum lenght
+            Article design image name maximum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Article.MinImageNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Article.MinImageNameLength">
             <summary>
-            Article design image name minimum lenght
+            Article design image name minimum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Article.MaxArticleNoLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Article.MaxArticleNoLength">
             <summary>
             Maximum lenght of Article number string
             </summary>
@@ -44,29 +44,29 @@
             Client model constants
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Client.MaxNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Client.MaxNameLength">
             <summary>
-            Client name maximum lenght
+            Client name maximum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Client.MinNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Client.MinNameLength">
             <summary>
-            Client name minimum lenght
+            Client name minimum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Client.MaxEmailLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Client.MaxEmailLength">
             <summary>
-            Client e-mail maximum lenght
+            Client e-mail maximum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Client.MinEmailLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Client.MinEmailLength">
             <summary>
-            Client e-mail minimum lenght
+            Client e-mail minimum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Client.MaxPhoneLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Client.MaxPhoneLength">
             <summary>
-            Client phone number maximum lenght
+            Client phone number maximum length
             </summary>
         </member>
         <member name="T:PrintingHouse.Infrastructure.Constants.DataConstants.Order">
@@ -74,9 +74,14 @@
             Order model constants
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Order.MaxCommentLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Order.MaxCommentLength">
             <summary>
-            Order comment maximum lenght
+            Order comment maximum length
+            </summary>
+        </member>
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Order.MaxQuantity">
+            <summary>
+            Order maximum quantity
             </summary>
         </member>
         <member name="T:PrintingHouse.Infrastructure.Constants.DataConstants.Machine">
@@ -84,24 +89,24 @@
             Printing machine model constants
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Machine.MaxNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Machine.MaxNameLength">
             <summary>
-            Machine name maximum lenght
+            Machine name maximum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Machine.MinNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Machine.MinNameLength">
             <summary>
-            Machine name minimum lenght
+            Machine name minimum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Machine.MaxModelLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Machine.MaxModelLength">
             <summary>
-            Machine name maximum lenght
+            Machine name maximum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Machine.MinModelLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Machine.MinModelLength">
             <summary>
-            Machine name minimum lenght
+            Machine name minimum length
             </summary>
         </member>
         <member name="T:PrintingHouse.Infrastructure.Constants.DataConstants.ColorModel">
@@ -109,14 +114,14 @@
             ColorModel model constants
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ColorModel.MaxNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ColorModel.MaxNameLength">
             <summary>
-            ColorModel name maximum lenght
+            ColorModel name maximum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ColorModel.MinNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ColorModel.MinNameLength">
             <summary>
-            ColorModel minimum lenght
+            ColorModel minimum length
             </summary>
         </member>
         <member name="T:PrintingHouse.Infrastructure.Constants.DataConstants.Consumable">
@@ -124,14 +129,14 @@
             Consumable model constants
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Consumable.MaxTypeLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Consumable.MaxTypeLength">
             <summary>
-            Consumable type name maximum lenght
+            Consumable type name maximum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Consumable.MinTypeLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Consumable.MinTypeLength">
             <summary>
-            Consumable type minimum lenght
+            Consumable type minimum length
             </summary>
         </member>
         <member name="T:PrintingHouse.Infrastructure.Constants.DataConstants.Material">
@@ -139,14 +144,14 @@
             Consumable model constants
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Material.MaxTypeLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Material.MaxTypeLength">
             <summary>
-            Material type name maximum lenght
+            Material type name maximum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Material.MinTypeLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Material.MinTypeLength">
             <summary>
-            Material type minimum lenght
+            Material type minimum length
             </summary>
         </member>
         <member name="T:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser">
@@ -154,44 +159,44 @@
             Application user model constants
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MaxFirstNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MaxFirstNameLength">
             <summary>
-            First name maximum lenght
+            First name maximum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MinFirstNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MinFirstNameLength">
             <summary>
-            First name minimum lenght
+            First name minimum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MaxLastNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MaxLastNameLength">
             <summary>
-            Last name maximum lenght
+            Last name maximum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MinLastNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MinLastNameLength">
             <summary>
-            Last name minimum lenght
+            Last name minimum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MaxUserNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MaxUserNameLength">
             <summary>
-            Username maximum lenght
+            Username maximum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MinUserNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MinUserNameLength">
             <summary>
-            Username minimum lenght
+            Username minimum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MaxImageNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MaxImageNameLength">
             <summary>
-            Article design image name maximum lenght
+            Article design image name maximum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MinImageNameLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.ApplicationUser.MinImageNameLength">
             <summary>
-            Article design image name minimum lenght
+            Article design image name minimum length
             </summary>
         </member>
         <member name="T:PrintingHouse.Infrastructure.Constants.DataConstants.Position">
@@ -199,14 +204,14 @@
             Office position model constants
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Position.MaxPositionLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Position.MaxPositionLength">
             <summary>
-            Office position maximum lenght
+            Office position maximum length
             </summary>
         </member>
-        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Position.MinPositionLenght">
+        <member name="F:PrintingHouse.Infrastructure.Constants.DataConstants.Position.MinPositionLength">
             <summary>
-            Office position minimum lenght
+            Office position minimum length
             </summary>
         </member>
         <member name="T:PrintingHouse.Infrastructure.Data.Common.Contracts.IMinIoRepository">

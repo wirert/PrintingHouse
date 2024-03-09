@@ -18,7 +18,7 @@
 
         public DateTime? EndDate { get; set; }
 
-        [MaxLength(MaxCommentLenght)]
+        [MaxLength(MaxCommentLength)]
         public string? Comment { get; set; }
     }
 }

@@ -22,7 +22,7 @@
 
         [Comment("Color type name")]
         [Required]
-        [MaxLength(MaxTypeLenght)]
+        [MaxLength(MaxTypeLength)]
         public string Type { get; set; } = null!;
 
         [Comment("Color current quantit in stock")]

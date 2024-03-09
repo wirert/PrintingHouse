@@ -23,17 +23,17 @@
 
         [Comment("Article custom number")]
         [Required]
-        [MaxLength(MaxArticleNoLenght)]
+        [MaxLength(MaxArticleNoLength)]
         public string ArticleNumber { get; set; } = null!;
 
         [Comment("Article name.")]
         [Required]
-        [MaxLength(MaxNameLenght)]
+        [MaxLength(MaxNameLength)]
         public string Name { get; set; } = null!;
 
         [Comment("Name of design image")]
         [Required]
-        [MaxLength(MaxImageNameLenght)]
+        [MaxLength(MaxImageNameLength)]
         public string ImageName { get; set; } = null!;
 
         [Comment("Article length")]

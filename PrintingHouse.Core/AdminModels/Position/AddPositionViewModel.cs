@@ -7,7 +7,7 @@
     public class AddPositionViewModel
     {
         [Required]
-        [StringLength(MaxPositionLenght, MinimumLength = MinPositionLenght)]
+        [StringLength(MaxPositionLength, MinimumLength = MinPositionLength)]
         public string Name { get; set; } = null!;
     }
 }

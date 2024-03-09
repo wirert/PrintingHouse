@@ -7,17 +7,17 @@
     public class AddClientViewModel
     {
         [Required]
-        [StringLength(MaxNameLenght, MinimumLength = MinNameLenght)]
+        [StringLength(MaxNameLength, MinimumLength = MinNameLength)]
         public string Name { get; set; } = null!;
 
         [Required]
         [EmailAddress]
-        [StringLength(MaxEmailLenght, MinimumLength = MinEmailLenght)]
+        [StringLength(MaxEmailLength, MinimumLength = MinEmailLength)]
         public string Email { get; set; } = null!;
 
         [Required]
         [Phone]
-        [StringLength(MaxPhoneLenght)]
+        [StringLength(MaxPhoneLength)]
         [Display(Name = "Phone number")]
         public string PhoneNumber { get; set; } = null!;
 

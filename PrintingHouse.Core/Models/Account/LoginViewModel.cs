@@ -14,7 +14,7 @@
         /// Employee login username 
         /// </summary>
         [Required]
-        [StringLength(MaxUserNameLenght, MinimumLength = MinUserNameLenght,
+        [StringLength(MaxUserNameLength, MinimumLength = MinUserNameLength,
             ErrorMessage = UserNameErrorMessage)]
         public string UserName { get; set; } = null!;
 

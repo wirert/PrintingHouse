@@ -14,15 +14,15 @@
     public class ApplicationUser : IdentityUser<Guid>
     {
         [Comment("Employee first name")]
-        [MaxLength(MaxFirstNameLenght)]
+        [MaxLength(MaxFirstNameLength)]
         public string? FirstName { get; set; }
 
         [Comment("Employee last name")]
-        [MaxLength(MaxLastNameLenght)]
+        [MaxLength(MaxLastNameLength)]
         public string? LastName { get; set; }
 
         [Comment("Picture name of the user (nullable)")]
-        [MaxLength(MaxImageNameLenght)]
+        [MaxLength(MaxImageNameLength)]
         public string? PictureName { get; set; }
 
         [Comment("Is active employee (soft delete property)")]

@@ -11,26 +11,26 @@
         public static class Article
         {
             /// <summary>
-            /// Article name maximum lenght
+            /// Article name maximum length
             /// </summary>
-            public const int MaxNameLenght = 60;
+            public const int MaxNameLength = 60;
             /// <summary>
-            /// Article name minimum lenght
+            /// Article name minimum length
             /// </summary>
-            public const int MinNameLenght = 5;
+            public const int MinNameLength = 5;
             /// <summary>
-            /// Article design image name maximum lenght
+            /// Article design image name maximum length
             /// </summary>
-            public const int MaxImageNameLenght = 100;
+            public const int MaxImageNameLength = 100;
             /// <summary>
-            /// Article design image name minimum lenght
+            /// Article design image name minimum length
             /// </summary>
-            public const int MinImageNameLenght = 1;
+            public const int MinImageNameLength = 1;
 
             /// <summary>
             /// Maximum lenght of Article number string
             /// </summary>
-            public const int MaxArticleNoLenght = 20;
+            public const int MaxArticleNoLength = 20;
 
             public const double MaxLength = 1000;
         }
@@ -41,27 +41,27 @@
         public static class Client
         {
             /// <summary>
-            /// Client name maximum lenght
+            /// Client name maximum length
             /// </summary>
-            public const int MaxNameLenght = 60;
+            public const int MaxNameLength = 60;
             /// <summary>
-            /// Client name minimum lenght
+            /// Client name minimum length
             /// </summary>
-            public const int MinNameLenght = 2;
+            public const int MinNameLength = 2;
 
             /// <summary>
-            /// Client e-mail maximum lenght
+            /// Client e-mail maximum length
             /// </summary>
-            public const int MaxEmailLenght = 70;
+            public const int MaxEmailLength = 70;
             /// <summary>
-            /// Client e-mail minimum lenght
+            /// Client e-mail minimum length
             /// </summary>
-            public const int MinEmailLenght = 10;
+            public const int MinEmailLength = 10;
 
             /// <summary>
-            /// Client phone number maximum lenght
+            /// Client phone number maximum length
             /// </summary>
-            public const int MaxPhoneLenght = 20;
+            public const int MaxPhoneLength = 20;
         }
 
         /// <summary>
@@ -70,10 +70,12 @@
         public static class Order
         {
             /// <summary>
-            /// Order comment maximum lenght
+            /// Order comment maximum length
             /// </summary>
-            public const int MaxCommentLenght = 600;
-
+            public const int MaxCommentLength = 600;
+            /// <summary>
+            /// Order maximum quantity
+            /// </summary>
             public const int MaxQuantity = 500000;
         }
 
@@ -83,22 +85,22 @@
         public static class Machine
         {
             /// <summary>
-            /// Machine name maximum lenght
+            /// Machine name maximum length
             /// </summary>
-            public const int MaxNameLenght = 30;
+            public const int MaxNameLength = 30;
             /// <summary>
-            /// Machine name minimum lenght
+            /// Machine name minimum length
             /// </summary>
-            public const int MinNameLenght = 2;
+            public const int MinNameLength = 2;
 
             /// <summary>
-            /// Machine name maximum lenght
+            /// Machine name maximum length
             /// </summary>
-            public const int MaxModelLenght = 40;
+            public const int MaxModelLength = 40;
             /// <summary>
-            /// Machine name minimum lenght
+            /// Machine name minimum length
             /// </summary>
-            public const int MinModelLenght = 2;
+            public const int MinModelLength = 2;
         }
 
         /// <summary>
@@ -107,13 +109,13 @@
         public static class ColorModel
         {
             /// <summary>
-            /// ColorModel name maximum lenght
+            /// ColorModel name maximum length
             /// </summary>
-            public const int MaxNameLenght = 10;
+            public const int MaxNameLength = 10;
             /// <summary>
-            /// ColorModel minimum lenght
+            /// ColorModel minimum length
             /// </summary>
-            public const int MinNameLenght = 1;
+            public const int MinNameLength = 1;
         }
 
         /// <summary>
@@ -122,13 +124,13 @@
         public static class Consumable
         {
             /// <summary>
-            /// Consumable type name maximum lenght
+            /// Consumable type name maximum length
             /// </summary>
-            public const int MaxTypeLenght = 10;
+            public const int MaxTypeLength = 10;
             /// <summary>
-            /// Consumable type minimum lenght
+            /// Consumable type minimum length
             /// </summary>
-            public const int MinTypeLenght = 1;
+            public const int MinTypeLength = 1;
         }
 
 
@@ -138,13 +140,13 @@
         public static class Material
         {
             /// <summary>
-            /// Material type name maximum lenght
+            /// Material type name maximum length
             /// </summary>
-            public const int MaxTypeLenght = 15;
+            public const int MaxTypeLength = 15;
             /// <summary>
-            /// Material type minimum lenght
+            /// Material type minimum length
             /// </summary>
-            public const int MinTypeLenght = 2;
+            public const int MinTypeLength = 2;
         }
 
         /// <summary>
@@ -153,40 +155,40 @@
         public static class ApplicationUser
         {
             /// <summary>
-            /// First name maximum lenght
+            /// First name maximum length
             /// </summary>
-            public const int MaxFirstNameLenght = 20;
+            public const int MaxFirstNameLength = 20;
             /// <summary>
-            /// First name minimum lenght
+            /// First name minimum length
             /// </summary>
-            public const int MinFirstNameLenght = 2;
+            public const int MinFirstNameLength = 2;
 
             /// <summary>
-            /// Last name maximum lenght
+            /// Last name maximum length
             /// </summary>
-            public const int MaxLastNameLenght = 20;
+            public const int MaxLastNameLength = 20;
             /// <summary>
-            /// Last name minimum lenght
+            /// Last name minimum length
             /// </summary>
-            public const int MinLastNameLenght = 2;
+            public const int MinLastNameLength = 2;
 
             /// <summary>
-            /// Username maximum lenght
+            /// Username maximum length
             /// </summary>
-            public const int MaxUserNameLenght = 15;
+            public const int MaxUserNameLength = 15;
             /// <summary>
-            /// Username minimum lenght
+            /// Username minimum length
             /// </summary>
-            public const int MinUserNameLenght = 5;
+            public const int MinUserNameLength = 5;
 
             /// <summary>
-            /// Article design image name maximum lenght
+            /// Article design image name maximum length
             /// </summary>
-            public const int MaxImageNameLenght = 60;
+            public const int MaxImageNameLength = 60;
             /// <summary>
-            /// Article design image name minimum lenght
+            /// Article design image name minimum length
             /// </summary>
-            public const int MinImageNameLenght = 1;
+            public const int MinImageNameLength = 1;
         }
 
         /// <summary>
@@ -195,13 +197,13 @@
         public static class Position
         {
             /// <summary>
-            /// Office position maximum lenght
+            /// Office position maximum length
             /// </summary>
-            public const int MaxPositionLenght = 20;
+            public const int MaxPositionLength = 20;
             /// <summary>
-            /// Office position minimum lenght
+            /// Office position minimum length
             /// </summary>
-            public const int MinPositionLenght = 3;
+            public const int MinPositionLength = 3;
         }
     }
 }

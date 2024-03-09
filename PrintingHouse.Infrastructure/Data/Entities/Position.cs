@@ -16,7 +16,7 @@
 
         [Comment("Position name")]
         [Required]
-        [MaxLength(MaxPositionLenght)]
+        [MaxLength(MaxPositionLength)]
         public string Name { get; set; } = null!;
 
         public virtual ICollection<Employee> Employees { get; set; } = new HashSet<Employee>();
