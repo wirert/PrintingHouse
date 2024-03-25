@@ -38,12 +38,21 @@
             dbContext.Database.EnsureCreated();
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            dbContext.Dispose();
+            repo.Dispose();
+            userManager.Dispose();
+            roleManager.Dispose();
+        }
+
         [Test]
         public async Task GetAllTest()
         {
             var emp = await employeeService.GetAllAsync();
 
-            Assert.IsNotNull(emp);
+            Assert.That(emp != null);
         }
 
         [Test]
@@ -54,14 +63,10 @@
             var result = await employeeService.GetByIdAsync(1);
             var nullResult = await employeeService.GetByIdAsync(2);
 
-            Assert.IsNotNull(result);
-            Assert.IsNull(nullResult);
+            Assert.That(result != null);
+            Assert.That(nullResult == null);
         }
         
-         [TearDown]
-        public void TearDown()
-        {
-            dbContext.Dispose();
-        }
+        
     }
 }

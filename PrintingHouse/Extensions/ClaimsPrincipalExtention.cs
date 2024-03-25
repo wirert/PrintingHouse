@@ -14,6 +14,6 @@
         public static string FullName(this ClaimsPrincipal user)
         {
             return user.Claims.SingleOrDefault(c => c.Type == ApplicationConstants.FullNameClaim)?.Value ?? string.Empty;
-    }
+        }
     }
 }

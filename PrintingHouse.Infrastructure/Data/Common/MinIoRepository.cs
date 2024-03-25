@@ -9,6 +9,7 @@
     using Contracts;
     using Microsoft.AspNetCore.Http;
     using System.Net;
+    using Minio.DataModel.Args;
 
     /// <summary>
     /// Implementation of repository access methods

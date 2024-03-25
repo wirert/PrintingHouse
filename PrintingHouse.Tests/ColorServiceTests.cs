@@ -23,6 +23,14 @@
             dbContext.Database.EnsureCreated();
         }
 
+
+        [TearDown]
+        public void TearDown()
+        {
+            dbContext.Dispose();
+            repo.Dispose();
+        }
+
         [TestCase(-20)]
         [TestCase(100001)]
         [TestCase(-1)]
@@ -55,7 +63,7 @@
         {
             var colorName = await colorService.AddToStoreHouseAsync(1, 20);
 
-            Assert.NotNull(colorName);
+            Assert.That(colorName != null);
         }
 
         [Test]
@@ -63,8 +71,8 @@
         {   
             var materials = await colorService.GetAllAsync();
 
-            Assert.NotNull(materials);
-            Assert.IsTrue(materials.Count().Equals(7));
+            Assert.That(materials != null);
+            Assert.That(materials!.Count().Equals(7));
         }
 
         [Test]
@@ -72,14 +80,9 @@
         {
             var materials = await colorService.GetAllByColorModelIdAsync(1);
 
-            Assert.NotNull(materials);
-            Assert.IsTrue(materials.Count().Equals(3));
+            Assert.That(materials != null);
+            Assert.That(materials!.Count().Equals(3));
         }
 
-        [TearDown]
-        public void TearDown()
-        {
-            dbContext.Dispose();
-        }
     }
 }

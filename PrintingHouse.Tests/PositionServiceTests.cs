@@ -25,6 +25,13 @@ namespace PrintingHouse.UnitTests
             positionService = new PositionService(repo);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            repo.Dispose();
+            dbContext.Dispose();
+        }
+
         [Test]
         public async Task GetAllReturnsAllActivePositions()
         {

@@ -42,6 +42,13 @@
             colorModelService = new ColorModelService(repo);
         }
 
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            dbContext.Dispose();
+            repo.Dispose();
+        }
+
         [SetUp]
         public void SetUp()
         {
@@ -92,15 +99,15 @@
 
             bool result = await articleService.ExistByIdAsync(realId);
 
-            Assert.IsTrue(result);
+            Assert.That(result == true);
 
             result = await articleService.ExistByIdAsync(null);
 
-            Assert.IsFalse(result);
+            Assert.That(result == false);
 
             result = await articleService.ExistByIdAsync(notExistingGuid);
 
-            Assert.IsFalse(result);
+            Assert.That(result == false);
         }
 
         [Test]
@@ -126,7 +133,7 @@
 
             var deletedArticle = await repo.GetByIdAsync<Article>(artId);
 
-            Assert.IsTrue(deletedArticle!.IsActive == false);
+            Assert.That(deletedArticle!.IsActive == false);
 
         }
 
@@ -152,7 +159,7 @@
 
             var resultName = await articleService.GetFileNameByIdAsync(id);
 
-            Assert.IsTrue(resultName.Equals(expectedName));
+            Assert.That(resultName.Equals(expectedName));
         }
 
         [Test]
@@ -161,12 +168,12 @@
             Guid? clientId = null;
             var allArticles = await articleService.GetAllAsync(clientId);
 
-            Assert.IsTrue(allArticles.Count().Equals(3));
+            Assert.That(allArticles.Count().Equals(3));
 
             clientId = validClientId;
             var clientArticles = await articleService.GetAllAsync(clientId);
 
-            Assert.IsTrue(clientArticles.Count().Equals(2));
+            Assert.That(clientArticles.Count().Equals(2));
         }
 
         [Test]
@@ -214,7 +221,7 @@
 
             var articles = await articleService.GetAllAsync(null);
 
-            Assert.IsTrue(articles.Count().Equals(4));
+            Assert.That(articles.Count().Equals(4));
         }
 
         [Test]
@@ -245,11 +252,11 @@
 
             var result = await articleService.GetSelectVeiwModelWithDataAsync(clientId, articleId);
 
-            Assert.IsTrue(result.ClientId.Equals(clientId));
-            Assert.IsTrue(result.ArticleId.Equals(articleId));
-            Assert.IsTrue(result.Materials.Any());
-            Assert.IsTrue(result.Materials.Count() == 4);
-            Assert.IsTrue(result.ColorModels.Count() == 1);
+            Assert.That(result.ClientId.Equals(clientId));
+            Assert.That(result.ArticleId.Equals(articleId));
+            Assert.That(result.Materials.Any());
+            Assert.That(result.Materials.Count() == 4);
+            Assert.That(result.ColorModels.Count() == 1);
         }
 
         [Test]
@@ -300,14 +307,14 @@
             await articleService.EditAsync(articleViewModel);
             var editedArticle = await repo.GetByIdAsync<Article>(validArticleId);
 
-            Assert.IsTrue(editedArticle!.Name.Equals(articleViewModel.Name));
+            Assert.That(editedArticle!.Name.Equals(articleViewModel.Name));
 
             articleViewModel.DesignFile = null;
             articleViewModel.Name = "Changed name";
             await articleService.EditAsync(articleViewModel);
             editedArticle = await repo.GetByIdAsync<Article>(validArticleId);
 
-            Assert.IsTrue(editedArticle!.Name.Equals("Changed name"));
+            Assert.That(editedArticle!.Name.Equals("Changed name"));
         }
 
         [TestCase(-20)]
@@ -373,9 +380,9 @@
 
            var result = await articleService.GetCreateViewModelWithData(materialId, colorModelId, validClientId, clientName);
 
-            Assert.IsTrue(result.Colors.Any());
-            Assert.IsTrue(result.Colors.Count().Equals(3));
-            Assert.IsTrue(result.Length.Equals(1));
+            Assert.That(result.Colors.Any());
+            Assert.That(result.Colors.Count().Equals(3));
+            Assert.That(result.Length.Equals(1));
         }
 
         [Test]
@@ -422,7 +429,7 @@
 
             var result = await articleService.GetEditViewModelWithData(materialId, colorModelId, validArticleId);
 
-            Assert.NotNull(result);
+            Assert.That(result != null);
         }
     }
 }

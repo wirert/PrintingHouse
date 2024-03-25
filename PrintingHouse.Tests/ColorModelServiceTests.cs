@@ -18,6 +18,12 @@
             colorModelService = new ColorModelService(repo);
         }
 
+        [OneTimeTearDown] public void OneTimeTearDown()
+        {
+            dbContext.Dispose();
+            repo.Dispose();
+        }
+
         [SetUp]
         public void SetUp()
         {
@@ -36,11 +42,11 @@
         {
             var result = await colorModelService.GetColorModelByMaterialIdAsync("0");
 
-            Assert.IsTrue(result.Count() == 0);
+            Assert.That(result.Count() == 0);
 
             result = await colorModelService.GetColorModelByMaterialIdAsync("1");
 
-            Assert.IsTrue(result.Count() == 1);
+            Assert.That(result.Count() == 1);
         }
 
         [Test]
@@ -54,7 +60,7 @@
         {
             var result = await colorModelService.GetColorModelColorsAsync(1);
 
-            Assert.IsTrue(result.Count() == 3);
+            Assert.That(result.Count() == 3);
         }
     }
 }

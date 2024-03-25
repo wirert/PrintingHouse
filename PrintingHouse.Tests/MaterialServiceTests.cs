@@ -21,6 +21,13 @@
             dbContext.Database.EnsureCreated();
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            dbContext.Dispose();
+            repo.Dispose();
+        }
+
         [Test]
         public void GetMaterialByIdThrowsIfIdInvalid()
         {
@@ -34,7 +41,7 @@
 
             var material = await materialService.GetMaterialByIdAsync(1);
 
-            Assert.IsTrue(material.Type == expectedName);
+            Assert.That(material.Type == expectedName);
         }
 
         [TestCase(-20)]
@@ -75,7 +82,7 @@
         {
             var materialName = await materialService.AddToStoreHouseAsync(1, 20);
 
-            Assert.NotNull(materialName);
+            Assert.That(materialName != null);
         }
 
         [Test]
@@ -87,8 +94,8 @@
 
             var materials = await materialService.GetAllMaterialsAsync();
 
-            Assert.NotNull(materials);
-            Assert.IsTrue(materials.Count().Equals(2));
+            Assert.That(materials != null);
+            Assert.That(materials!.Count().Equals(2));
         }
 
         [Test]
@@ -103,7 +110,7 @@
         {
             var materialQuantity = await materialService.GetMaterialQuantityByIdAsync(1);
 
-            Assert.NotNull(materialQuantity);
+            Assert.That(materialQuantity != null);
         }
     }
 }

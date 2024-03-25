@@ -28,7 +28,7 @@
         {
             var result = await fileService.GetFileAsync(validArticleId, validFileName);
 
-            Assert.IsNotNull(result);
+            Assert.That(result != null);
         }
 
         [Test]

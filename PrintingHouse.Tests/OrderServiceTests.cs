@@ -50,13 +50,21 @@
             dbContext.Database.EnsureCreated();
         }
 
+
+        [TearDown]
+        public void TearDown()
+        {
+            dbContext.Dispose();
+            repo.Dispose();
+        }
+
         [Test]
         public async Task GetAllOrdersTest()
         {
             var result = await orderService.GetAllOrdersAsync();
 
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.Count().Equals(6));
+            Assert.That(result != null);
+            Assert.That(result!.Count().Equals(6));
         }
 
         [Test]
@@ -80,8 +88,8 @@
         {
             var result = await orderService.CreateAddModelByArticleIdAsync(validArticleId);
 
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.ArticleId.Equals(validArticleId));
+            Assert.That(result != null);
+            Assert.That(result!.ArticleId.Equals(validArticleId));
         }
 
         [Test]
@@ -221,7 +229,7 @@
 
             order = await repo.GetByIdAsync<Order>(validOrderId);
 
-            Assert.IsTrue(order!.Status.Equals(newStatus));
+            Assert.That(order!.Status.Equals(newStatus));
         }
 
         [Test]
@@ -235,7 +243,7 @@
 
             var firstOrder = await repo.AllReadonly<Order>(o => o.MachineId == 3 && o.MachinePrintOrderNumber == 1)
                                    .FirstAsync();
-            Assert.IsTrue(firstOrder.Id.Equals(orderInFrontId));
+            Assert.That(firstOrder.Id.Equals(orderInFrontId));
         }
 
         [TestCase("2023-08-12")]
@@ -258,7 +266,7 @@
 
             firstOrder = await repo.AllReadonly<Order>(o => o.MachineId == 3 && o.MachinePrintOrderNumber == 1)
                                     .FirstAsync();
-            Assert.IsTrue(firstOrder.Id.Equals(orderInFrontId));
+            Assert.That(firstOrder.Id.Equals(orderInFrontId));
         }
 
         [Test]
@@ -331,10 +339,5 @@
             await orderService.MoveUpOnePositionInQueueAsync(orderToMoveUpId);
         }
 
-        [TearDown]
-        public void TearDown()
-        {
-            dbContext.Dispose();
-        }
     }
 }

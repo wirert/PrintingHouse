@@ -23,13 +23,20 @@
             dbContext.Database.EnsureCreated();
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            dbContext.Dispose();
+            repo.Dispose();
+        }
+
         [Test]
         public async Task GetMachinesIdsTest()
         {
             var machines = await machineService.GetMachinesIdsAsync();
 
-            Assert.IsTrue(machines.Any());
-            Assert.IsTrue(machines.Count().Equals(5));
+            Assert.That(machines.Any());
+            Assert.That(machines.Count().Equals(5));
 
             var scrapMachine = await repo.All<Machine>().FirstAsync();
             scrapMachine.Status = MachineStatus.Scrapped;
@@ -37,7 +44,7 @@
 
             machines = await machineService.GetMachinesIdsAsync();
 
-            Assert.IsTrue(machines.Count().Equals(4));
+            Assert.That(machines.Count().Equals(4));
         }
 
         [TestCase(0)]
@@ -59,13 +66,8 @@
         {
             var machineOrdersModel = await machineService.GetMachineOrdersAsync(3);
 
-            Assert.IsTrue(machineOrdersModel.Orders.Count().Equals(2));
+            Assert.That(machineOrdersModel.Orders.Count().Equals(2));
         }
 
-        [TearDown]
-        public void TearDown()
-        {
-            dbContext.Dispose();
-        }
     }
 }

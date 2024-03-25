@@ -23,6 +23,13 @@
             clientService = new ClientService(repo);
         }
 
+        [OneTimeTearDown] 
+        public void OneTimeTearDown()
+        {
+            dbContext.Dispose();
+            repo.Dispose();
+        }
+
         [SetUp]
         public void SetUp()
         {
@@ -131,12 +138,12 @@
             await repo.SaveChangesAsync();
             var deletedClient = await repo.GetByIdAsync<Client>(clientId);
 
-            Assert.NotNull(deletedClient);
-            Assert.IsTrue(deletedClient.IsActive == false);
+            Assert.That(deletedClient != null);
+            Assert.That(deletedClient!.IsActive == false);
 
             var deletedArticle = await repo.GetByIdAsync<Article>(article.Id);
 
-            Assert.IsFalse(deletedArticle!.IsActive);
+            Assert.That(deletedArticle!.IsActive == false);
         }
 
         [Test]
@@ -146,11 +153,11 @@
             var validName = "Test Client";
             var isExist = await clientService.ExistsByIdAndNameAsync(validClientId, validName);
 
-            Assert.True(isExist);
+            Assert.That(isExist);
 
             isExist = await clientService.ExistsByIdAndNameAsync(validClientId, "Wrong name");
 
-            Assert.False(isExist);
+            Assert.That(!isExist);
         }
 
         [Test]
