@@ -3,7 +3,6 @@
     using Microsoft.EntityFrameworkCore;
 
     using Minio;
-    using Minio.AspNetCore;
 
     using PrintingHouse.Core.Services;
     using PrintingHouse.Core.Services.Admin;
@@ -65,22 +64,12 @@
         /// <returns></returns>
         public static IServiceCollection AddMinIO(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IMinioClient, MinioClient>(cfg => cfg.GetRequiredService<MinioClient>());
             services.AddScoped<IMinIoRepository, MinIoRepository>();
-
             services.AddMinio(options =>
             {
-                options.Endpoint = configuration.GetValue<string>("MinIo:Endpoint")!;
-                options.AccessKey = configuration.GetValue<string>("MinIo:AccessKey")!;
-                options.SecretKey = configuration.GetValue<string>("MinIo:SecretKey")!;
-
-                options.ConfigureClient(client =>
-                {
-                    client.WithEndpoint(options.Endpoint)
-                        .WithCredentials(options.AccessKey, options.SecretKey)
-                        .WithSSL(false)
-                        .Build();
-                });
+                options.WithEndpoint(configuration.GetValue<string>("MinIo:Endpoint")!);
+                options.WithCredentials( configuration.GetValue<string>("MinIo:AccessKey")!, configuration.GetValue<string>("MinIo:SecretKey")!);
+                options.WithSSL(false);               
             });
 
             return services;

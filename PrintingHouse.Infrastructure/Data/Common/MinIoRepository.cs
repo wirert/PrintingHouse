@@ -54,7 +54,7 @@
         }
 
         /// <summary>
-        /// Get object form database by bucket name and object name
+        /// Get object from database by bucket name and object name
         /// </summary>
         /// <param name="BucketName">Bucket name (guid)</param>
         /// <param name="fileName">Object name</param>

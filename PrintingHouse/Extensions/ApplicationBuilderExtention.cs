@@ -17,8 +17,8 @@
 
             var services = scopedServices.ServiceProvider;
 
-            var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-            var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+            var userManager = services.GetService<UserManager<ApplicationUser>>();
+            var roleManager = services.GetService<RoleManager<IdentityRole<Guid>>>();
             
 
             if (!await roleManager.RoleExistsAsync(AdminRoleName))
@@ -31,7 +31,7 @@
 
                 await userManager.AddToRoleAsync(user, AdminRoleName);
 
-                var minIoRepo = services.GetRequiredService<MinIoRepository>();
+                var minIoRepo = services.GetService<MinIoRepository>();
 
                 using (FileStream fs = File.OpenRead(@"DesignPictures\Inquisition Scene 1816.jpg"))
                 {
